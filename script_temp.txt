@@ -1,0 +1,118 @@
+#!/bin/bash
+
+# ============================================
+# Rokadiyo Hotel Management - pnpm Setup Script
+# ============================================
+
+echo "🏨 Starting Rokadiyo Hotel Management Setup..."
+
+# ============================================
+# 1. Check if pnpm is installed
+# ============================================
+if ! command -v pnpm &> /dev/null
+then
+    echo "❌ pnpm not found. Installing pnpm..."
+    npm install -g pnpm
+fi
+
+echo "✅ Using pnpm version: $(pnpm --version)"
+
+# ============================================
+# 2. Install Dependencies
+# ============================================
+echo "📦 Installing dependencies with pnpm..."
+pnpm install
+
+# ============================================
+# 3. Generate Encryption Key
+# ============================================
+echo "🔐 Generating encryption key..."
+ENCRYPTION_KEY=$(openssl rand -hex 32)
+echo "Generated ENCRYPTION_KEY: $ENCRYPTION_KEY"
+
+# ============================================
+# 4. Create .env file if not exists
+# ============================================
+if [ ! -f .env ]; then
+    echo "📝 Creating .env file..."
+    cat > .env << EOF
+# =======================
+# Application
+# =======================
+APP_NAME=Rokadiyo Hotel Management
+APP_VERSION=1.0.0
+NODE_ENV=development
+PORT=3060
+APP_URL=http://localhost:3060
+FRONTEND_URL=http://localhost:3000
+API_PREFIX=api
+API_VERSION=1
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+
+# =======================
+# SQL Server
+# =======================
+DB_HOST=localhost
+DB_PORT=1433
+DB_USERNAME=sa
+DB_PASSWORD=YourPassword
+DB_DATABASE=rokadiyo_hotel_db
+DB_ENCRYPT=false
+DB_TRUST_CERT=true
+DB_POOL_MAX=10
+DB_POOL_MIN=2
+
+# =======================
+# Encryption
+# =======================
+ENCRYPTION_KEY=$ENCRYPTION_KEY
+ENCRYPTION_ENABLED_BY_DEFAULT=false
+
+# =======================
+# JWT
+# =======================
+JWT_SECRET=$(openssl rand -hex 32)
+JWT_ACCESS_EXPIRY=7d
+JWT_REFRESH_EXPIRY=7d
+JWT_ISSUER=rokadiyo-platform
+JWT_AUDIENCE=rokadiyo-api
+
+# =======================
+# Social Auth (Optional)
+# =======================
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+MICROSOFT_CLIENT_ID=
+MICROSOFT_CLIENT_SECRET=
+EOF
+    echo "✅ .env file created!"
+else
+    echo "⚠️  .env file already exists, skipping..."
+fi
+
+# ============================================
+# 5. Build the project
+# ============================================
+echo "🔨 Building project..."
+pnpm run build
+
+echo ""
+echo "=========================================="
+echo "✅ Setup Complete!"
+echo "=========================================="
+echo ""
+echo "Next steps:"
+echo "1. Update .env with your SQL Server credentials"
+echo "2. Run SQL scripts to create tables and stored procedures"
+echo "3. Run: pnpm run start:dev"
+echo ""
+echo "🏨 Server will be available at: http://localhost:3060"
+echo "📚 API Docs: http://localhost:3060/api/docs"
+echo ""
+echo "Useful pnpm commands:"
+echo "  pnpm install          - Install dependencies"
+echo "  pnpm run start:dev    - Start development server"
+echo "  pnpm run build        - Build for production"
+echo "  pnpm run lint         - Run linter"
+echo "  pnpm run test         - Run tests"
+echo ""
