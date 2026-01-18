@@ -12,7 +12,6 @@ export class ResponseInterceptor implements NestInterceptor {
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = context.switchToHttp().getRequest();
     const reply = context.switchToHttp().getResponse();
     const isUnencrypted = this.reflector.get<boolean>('unencrypted', context.getHandler());
 
@@ -24,10 +23,8 @@ export class ResponseInterceptor implements NestInterceptor {
           message: data?.message || 'Success',
           data: data?.data !== undefined ? data.data : data,
           timestamp: new Date().toISOString(),
-          correlationId: request.correlationId || 'unknown',
         };
 
-        // Add pagination if exists
         if (data?.pagination) {
           response['pagination'] = data.pagination;
         }

@@ -4,12 +4,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { DatabaseModule } from './core/database/database.module';
 import { EncryptionService } from './core/encryption/encryption.service';
 import { JwtAuthGuard } from './core/guards/jwt-auth.guard';
-import { CorrelationMiddleware } from './core/middlewares/correlation.middleware';
 import { TenantContextMiddleware } from './core/middlewares/tenant-context.middleware';
 import { AuthModule } from './modules/auth/auth.module';
-// import { UsersModule } from './modules/users/users.module';
-// import { TenantsModule } from './modules/tenants/tenants.module';
-// import { InvitationsModule } from './modules/invitations/invitations.module';
+import { HealthModule } from './modules/health/health.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import encryptionConfig from './config/encryption.config';
@@ -23,9 +20,7 @@ import jwtConfig from './config/jwt.config';
     }),
     DatabaseModule,
     AuthModule,
-    // UsersModule,
-    // TenantsModule,
-    // InvitationsModule,
+    HealthModule,
   ],
   providers: [
     EncryptionService,
@@ -34,8 +29,6 @@ import jwtConfig from './config/jwt.config';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(CorrelationMiddleware, TenantContextMiddleware)
-      .forRoutes('*');
+    consumer.apply(TenantContextMiddleware).forRoutes('*');
   }
 }

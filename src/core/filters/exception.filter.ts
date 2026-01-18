@@ -29,10 +29,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       message: typeof message === 'string' ? message : (message as any).message,
-      correlationId: request['correlationId'] || 'unknown',
     };
 
-    this.logger.error(`Error: ${errorResponse.message}`, exception instanceof Error ? exception.stack : '');
+    this.logger.error(`${status} ${errorResponse.message}`, exception instanceof Error ? exception.stack : '');
 
     // Log to database
     this.logToDatabase(exception, request, status, errorResponse.message)
@@ -44,7 +43,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   private async logToDatabase(exception: unknown, request: any, status: number, errorMessage: string) {
     try {
       await this.db.execute('sp_CreateErrorLog', {
-        tenant_id: request.tenant?.id || null,
+        tenant_id: request.user?.tenantId || null,
         user_id: request.user?.id || null,
         error_type: exception instanceof Error ? exception.name : 'UnknownError',
         error_message: errorMessage.substring(0, 4000),

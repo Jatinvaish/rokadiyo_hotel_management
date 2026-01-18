@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { SqlServerService } from 'src/core/database/sql-server.service';
 import { EncryptionService } from 'src/core/encryption/encryption.service';
+import { UserType } from 'src/common/constants/user-types.constant';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -31,6 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       const user = await this.sql.query(
         `SELECT 
           u.id, u.email, u.username, u.user_type, u.tenant_id, u.status,
+          u.first_name, u.last_name, u.onboarding_completed_at,
           (SELECT STRING_AGG(r.name, ',') FROM user_roles ur 
            JOIN roles r ON ur.role_id = r.id 
            WHERE ur.user_id = u.id AND ur.is_active = 1) as roles,
@@ -56,6 +58,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         username: userData.username,
         userType: userData.user_type,
         tenantId: userData.tenant_id,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
+        onboardingCompleted: userData.user_type === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
         roles: userData.roles?.split(',').filter(Boolean) || [],
         permissions: userData.permissions?.split(',').filter(Boolean) || [],
       };
