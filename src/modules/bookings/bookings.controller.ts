@@ -2,11 +2,13 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { CheckAvailabilityDto, CreateBookingDto, RecordPaymentDto } from './dto/booking.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('api/v1/bookings')
+@ApiTags('Bookings')
+@Controller({ path: 'bookings', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class BookingsController {
-  constructor(private bookingsService: BookingsService) {}
+  constructor(private bookingsService: BookingsService) { }
 
   @Post('check-availability')
   async checkAvailability(@Request() req, @Body() checkAvailabilityDto: CheckAvailabilityDto) {

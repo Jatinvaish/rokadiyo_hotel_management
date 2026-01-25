@@ -2,11 +2,13 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { CheckinService } from './checkin.service';
 import { CompleteCheckInDto, CalculateBillDto, CompleteCheckOutDto } from './dto/checkin.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('api/v1')
+@ApiTags('Checkin') 
+@Controller({ path: 'checkin', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class CheckinController {
-  constructor(private checkinService: CheckinService) {}
+  constructor(private checkinService: CheckinService) { }
 
   @Post('checkin/complete')
   async completeCheckIn(@Request() req, @Body() completeCheckInDto: CompleteCheckInDto) {

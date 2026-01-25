@@ -2,10 +2,10 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
 
-@Controller('api/v1/dashboard')
+@Controller({ path: 'api/v1/dashboard', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class DashboardController {
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService) { }
 
   @Post('overview')
   async getOverview(@Request() req, @Body() filters?: { hotel_id?: number }) {

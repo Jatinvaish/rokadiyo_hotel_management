@@ -2,11 +2,13 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { GuestsService } from './guests.service';
 import { CreateGuestDto } from './dto/create-guest.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('api/v1/guests')
+@ApiTags('Guests')
+@Controller({ path: 'guests', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class GuestsController {
-  constructor(private guestsService: GuestsService) {}
+  constructor(private guestsService: GuestsService) { }
 
   @Post('create')
   async create(@Request() req, @Body() createGuestDto: CreateGuestDto) {
@@ -21,5 +23,15 @@ export class GuestsController {
   @Post('history')
   async getGuestHistory(@Request() req, @Body('guest_id') guestId: number) {
     return this.guestsService.getGuestHistory(req.user.tenantId, guestId);
+  }
+
+  @Post('list')
+  async list(@Request() req) {
+    return this.guestsService.list(req.user.tenantId);
+  }
+
+  @Post('update')
+  async update(@Request() req, @Body() data: any) {
+    return this.guestsService.update(req.user.tenantId, data.id, data);
   }
 }

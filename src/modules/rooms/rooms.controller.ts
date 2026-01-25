@@ -1,21 +1,25 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
-import { CreateRoomTypeDto, BulkCreateRoomsDto } from './dto/create-room.dto';
+import { BulkCreateRoomsDto } from './dto/create-room.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('api/v1')
+@ApiTags('Rooms')
+@Controller({ path: 'rooms', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class RoomsController {
-  constructor(private roomsService: RoomsService) {}
+  constructor(private roomsService: RoomsService) { }
 
   @Post('room-types/create')
-  async createRoomType(@Request() req, @Body() createRoomTypeDto: CreateRoomTypeDto) {
-    return this.roomsService.createRoomType(req.user.tenantId, createRoomTypeDto);
+  async createRoomType(@Request() req, @Body() body: any) {
+    const hotelId = body.hotel_id || 1;
+    return this.roomsService.createRoomType(hotelId, body);
   }
 
   @Post('room-types/list')
-  async getRoomTypes(@Request() req) {
-    return this.roomsService.getRoomTypes(req.user.tenantId);
+  async getRoomTypes(@Request() req, @Body() body: { hotel_id?: number }) {
+    const hotelId = body.hotel_id || 1;
+    return this.roomsService.getRoomTypes(hotelId);
   }
 
   @Post('rooms/bulk-create')
@@ -23,13 +27,28 @@ export class RoomsController {
     return this.roomsService.bulkCreateRooms(req.user.tenantId, bulkCreateDto);
   }
 
-  @Post('rooms/list')
+  @Post('list')
   async getRooms(@Request() req, @Body() filters?: { hotel_id?: number; status?: string }) {
-    return this.roomsService.getRooms(req.user.tenantId, filters?.hotel_id, filters?.status);
+    return this.roomsService.getRooms(filters?.hotel_id, filters?.status);
   }
 
-  @Post('rooms/update-status')
+  @Post('update-status')
   async updateRoomStatus(@Request() req, @Body() data: { room_id: number; status: string }) {
-    return this.roomsService.updateRoomStatus(req.user.tenantId, data.room_id, data.status);
+    return this.roomsService.updateStatus(data.room_id, data.status);
+  }
+
+  @Post('create')
+  async createRoom(@Request() req, @Body() createRoomDto: any) {
+    return this.roomsService.createRoom(createRoomDto);
+  }
+
+  @Post('update')
+  async updateRoom(@Request() req, @Body() data: any) {
+    return this.roomsService.updateRoom(data.id, data);
+  }
+
+  @Post('room-types/update')
+  async updateRoomType(@Request() req, @Body() data: any) {
+    return this.roomsService.updateRoomType(data.id, data);
   }
 }

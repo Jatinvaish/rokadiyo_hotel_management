@@ -2,11 +2,13 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { HotelsService } from './hotels.service';
 import { CreateHotelDto } from './dto/create-hotel.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('api/v1/hotels')
+@ApiTags('Hotels')  
+@Controller({ path: 'hotels', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class HotelsController {
-  constructor(private hotelsService: HotelsService) {}
+  constructor(private hotelsService: HotelsService) { }
 
   @Post('create')
   async create(@Request() req, @Body() createHotelDto: CreateHotelDto) {
@@ -15,6 +17,7 @@ export class HotelsController {
 
   @Post('list')
   async findAll(@Request() req) {
+    console.log("ssssssssssssssssssssssssssssssssssssssssssssssssss");
     return this.hotelsService.findAll(req.user.tenantId);
   }
 

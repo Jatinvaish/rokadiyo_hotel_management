@@ -23,4 +23,20 @@ export class CreateHotelDto {
   @IsOptional()
   @IsBoolean()
   is_headquarters?: boolean;
+
+  @IsOptional()
+  @IsString()
+  state?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsOptional()
+  @IsString()
+  zip_code?: string;
+
+  @IsOptional()
+  @IsString()
+  website?: string;
 }

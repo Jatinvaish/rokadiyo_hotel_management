@@ -2,11 +2,13 @@ import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { PricingService } from './pricing.service';
 import { CreateHourlyRuleDto, CreateSeasonalRateDto, CalculatePriceDto } from './dto/pricing.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('api/v1/pricing')
+@ApiTags('Pricing') 
+@Controller({ path: 'pricing', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class PricingController {
-  constructor(private pricingService: PricingService) {}
+  constructor(private pricingService: PricingService) { }
 
   @Post('hourly-rules/create')
   async createHourlyRule(@Request() req, @Body() createHourlyRuleDto: CreateHourlyRuleDto) {
