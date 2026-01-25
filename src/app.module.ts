@@ -7,6 +7,13 @@ import { JwtAuthGuard } from './core/guards/jwt-auth.guard';
 import { TenantContextMiddleware } from './core/middlewares/tenant-context.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
+import { HotelsModule } from './modules/hotels/hotels.module';
+import { RoomsModule } from './modules/rooms/rooms.module';
+import { PricingModule } from './modules/pricing/pricing.module';
+import { GuestsModule } from './modules/guests/guests.module';
+import { BookingsModule } from './modules/bookings/bookings.module';
+import { CheckinModule } from './modules/checkin/checkin.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import encryptionConfig from './config/encryption.config';
@@ -21,6 +28,13 @@ import jwtConfig from './config/jwt.config';
     DatabaseModule,
     AuthModule,
     HealthModule,
+    HotelsModule,
+    RoomsModule,
+    PricingModule,
+    GuestsModule,
+    BookingsModule,
+    CheckinModule,
+    DashboardModule,
   ],
   providers: [
     EncryptionService,
