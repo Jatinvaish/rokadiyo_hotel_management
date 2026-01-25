@@ -4,7 +4,8 @@ import { SqlServerService } from 'src/core/database/sql-server.service';
 import { EncryptionService } from 'src/core/encryption/encryption.service';
 import { LoggingService } from 'src/core/database/logging.service';
 import { UserType } from 'src/common/constants/user-types.constant';
-
+import * as nodemailer from 'nodemailer';
+import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
@@ -12,13 +13,13 @@ export class AuthService {
     private jwt: JwtService,
     private encryption: EncryptionService,
     private logging: LoggingService,
-  ) {}
+  ) { }
 
   // ==================== REGISTER ====================
-  async register(data: { 
-    email: string; 
-    username: string; 
-    password: string; 
+  async register(data: {
+    email: string;
+    username: string;
+    password: string;
     firstName?: string;
     lastName?: string;
   }) {
@@ -160,7 +161,7 @@ export class AuthService {
       // 1. Create Tenant
       const tenantCode = `TNT-${Date.now()}`;
       const tenantRequest = transaction.request();
-      
+
       tenantRequest.input('tenant_code', tenantCode);
       tenantRequest.input('company_name', data.companyName);
       tenantRequest.input('primary_email', data.email);
@@ -273,8 +274,8 @@ export class AuthService {
     expiryDays?: number;
   }) {
     // Check permission
-    if (currentUser.userType !== UserType.SUPER_ADMIN && 
-        currentUser.userType !== UserType.TENANT_ADMIN) {
+    if (currentUser.userType !== UserType.SUPER_ADMIN &&
+      currentUser.userType !== UserType.TENANT_ADMIN) {
       throw new ForbiddenException('Only admins can send invitations');
     }
 
@@ -448,4 +449,123 @@ export class AuthService {
 
     return { message: 'Invitation rejected' };
   }
+
+  async forgotPassword(email: string) {
+    const user = await this.sql.query(
+      'SELECT id, email, username FROM users WHERE email = @email AND status = @status',
+      { email, status: 'active' }
+    );
+
+    if (!user || user.length === 0) {
+      // Don't reveal if email exists (security best practice)
+      return { message: 'If email exists, reset link sent' };
+    }
+
+    const userData = user[0];
+    const resetToken = this.encryption.generateToken(32);
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1); // 1 hour expiry
+    await this.sql.execute('sp_CreatePasswordReset', {
+      user_id: userData.id,
+      reset_token: resetToken,
+      expires_at: expiresAt,
+    });
+
+    // Send email
+    await this.sendResetEmail(email, resetToken);
+
+    await this.logging.logActivity({
+      userId: userData.id,
+      activityType: 'auth',
+      action: 'forgot_password',
+      description: 'Password reset requested',
+    });
+
+    return { message: 'If email exists, reset link sent' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const reset = await this.sql.query(
+      `SELECT pr.*, u.email 
+     FROM password_resets pr
+     JOIN users u ON pr.user_id = u.id
+     WHERE pr.reset_token = @token 
+     AND pr.used = 0
+     AND pr.expires_at > GETUTCDATE()`,
+      { token }
+    );
+
+    if (!reset || reset.length === 0) {
+      throw new BadRequestException('Invalid or expired reset token');
+    }
+
+    const resetData = reset[0];
+    const passwordHash = await this.encryption.hashPassword(newPassword);
+    await this.sql.transaction(async (transaction) => {
+      // Update password
+      const updateRequest = transaction.request();
+      updateRequest.input('user_id', resetData.user_id);
+      updateRequest.input('password_hash', passwordHash);
+
+      await updateRequest.query(`
+      UPDATE users 
+      SET password_hash = @password_hash, updated_at = GETUTCDATE()
+      WHERE id = @user_id
+    `);
+
+      // Mark token as used
+      const markRequest = transaction.request();
+      markRequest.input('token', token);
+
+      await markRequest.query(`
+      UPDATE password_resets 
+      SET used = 1, used_at = GETUTCDATE()
+      WHERE reset_token = @token
+    `);
+    });
+
+    await this.logging.logActivity({
+      userId: resetData.user_id,
+      activityType: 'auth',
+      action: 'reset_password',
+      description: 'Password reset successful',
+    });
+
+    return { message: 'Password reset successful' };
+  }
+
+  private async sendResetEmail(email: string, token: string) {
+    const config = this.sql['config'] as ConfigService; // Access via injection
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    const resetUrl = `${process.env.APP_URL || 'http://localhost:3000'}/reset-password?token=${token}`;
+
+    await transporter.sendMail({
+      from: `"${process.env.SMTP_FROM_NAME}" <${process.env.SMTP_FROM}>`,
+      to: email,
+      subject: 'Reset Your Password - Rokadio',
+      html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2>Reset Your Password</h2>
+        <p>Click the button below to reset your password. This link expires in 1 hour.</p>
+        <a href="${resetUrl}" 
+           style="display: inline-block; padding: 12px 24px; background: #4F46E5; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0;">
+          Reset Password
+        </a>
+        <p>Or copy this link: <br/><a href="${resetUrl}">${resetUrl}</a></p>
+        <p style="color: #666; font-size: 12px;">If you didn't request this, ignore this email.</p>
+      </div>
+    `,
+    });
+  }
+
 }

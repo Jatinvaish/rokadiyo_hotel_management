@@ -15,7 +15,7 @@ import { SendInvitationDto, AcceptInvitationDto, RejectInvitationDto } from './d
 @ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService) { }
 
   // ==================== PUBLIC ENDPOINTS ====================
 
@@ -102,5 +102,29 @@ export class AuthController {
   ) {
     await this.auth.rejectInvitation(token, dto.reason);
     return { message: 'Invitation rejected' };
+  }
+
+  @Public()
+  @Post('forgot-password')
+  @ApiOperation({ summary: 'Request password reset' })
+  async forgotPassword(@Body() dto: { email: string }) {
+    const result = await this.auth.forgotPassword(dto.email);
+    return { message: result.message };
+  }
+
+  @Public()
+  @Post('reset-password')
+  @ApiOperation({ summary: 'Reset password with token' })
+  async resetPassword(@Body() dto: { token: string; password: string }) {
+    const result = await this.auth.resetPassword(dto.token, dto.password);
+    return { message: result.message };
+  }
+
+  @Post('logout')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'User logout' })
+  @ApiResponse({ status: 200, description: 'Logout successful' })
+  async logout(@CurrentUser() user: any) {
+    return { message: 'Logout successful' };
   }
 }
