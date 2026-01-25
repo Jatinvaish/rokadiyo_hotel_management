@@ -26,8 +26,12 @@ export class GuestsController {
   }
 
   @Post('list')
-  async list(@Request() req) {
-    return this.guestsService.list(req.user.tenantId);
+  async list(@Request() req, @Body() filters?: { page?: number; limit?: number; search?: string }) {
+    return this.guestsService.list(req.user.tenantId, {
+      page: filters?.page,
+      limit: filters?.limit,
+      search: filters?.search
+    });
   }
 
   @Post('update')

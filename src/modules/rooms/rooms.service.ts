@@ -104,7 +104,18 @@ export class RoomsService {
     return { created_count: rooms.length, rooms };
   }
 
-  async getRooms(tenantId: number, firmId?: number, branchId?: number, status?: string) {
+  async getRooms(tenantId: number, options: {
+    page?: number;
+    limit?: number;
+    firm_id?: number;
+    branch_id?: number;
+    status?: string;
+    search?: string;
+  }) {
+    const page = options.page || 1;
+    const limit = options.limit || 10;
+    const offset = (page - 1) * limit;
+
     let query = `
       SELECT r.*, rt.type_name as room_type_name, rt.base_rate_hourly, rt.base_rate_daily, f.firm_name
       FROM rooms r
@@ -112,23 +123,55 @@ export class RoomsService {
       LEFT JOIN firms f ON r.firm_id = f.id
       WHERE r.is_active = 1 AND r.tenant_id = @tenantId
     `;
+
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM rooms r
+      WHERE r.is_active = 1 AND r.tenant_id = @tenantId
+    `;
+
     const params: any = { tenantId };
 
-    if (firmId) {
-      query += ' AND r.firm_id = @firmId';
-      params.firmId = firmId;
+    let filterClause = '';
+    if (options.firm_id) {
+      filterClause += ' AND r.firm_id = @firmId';
+      params.firmId = options.firm_id;
     }
-    if (branchId) {
-      query += ' AND r.branch_id = @branchId';
-      params.branchId = branchId;
+    if (options.branch_id) {
+      filterClause += ' AND r.branch_id = @branchId';
+      params.branchId = options.branch_id;
     }
-    if (status) {
-      query += ' AND r.status = @status';
-      params.status = status;
+    if (options.status) {
+      filterClause += ' AND r.status = @status';
+      params.status = options.status;
+    }
+    if (options.search) {
+      filterClause += ' AND (r.room_number LIKE @search OR rt.type_name LIKE @search)';
+      params.search = `%${options.search}%`;
     }
 
-    query += ' ORDER BY r.room_number';
-    return this.sql.query(query, params);
+    const fullQuery = query + filterClause + ` ORDER BY r.room_number OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY`;
+    const fullCountQuery = countQuery + filterClause;
+
+    params.offset = offset;
+    params.limit = limit;
+
+    const [data, countResult] = await Promise.all([
+      this.sql.query(fullQuery, params),
+      this.sql.query(fullCountQuery, params)
+    ]);
+
+    const total = countResult[0]?.total || 0;
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    };
   }
 
   async updateStatus(roomId: number, status: string) {

@@ -81,10 +81,53 @@ export class GuestsService {
     `, { tenantId, guestId });
   }
 
-  async list(tenantId: number) {
-    return this.sql.query(`
-      SELECT * FROM guests WHERE tenant_id = @tenantId ORDER BY created_at DESC
-    `, { tenantId });
+  async list(tenantId: number, options: {
+    page?: number;
+    limit?: number;
+    search?: string;
+  }) {
+    const page = options.page || 1;
+    const limit = options.limit || 10;
+    const offset = (page - 1) * limit;
+
+    let query = `SELECT * FROM guests WHERE tenant_id = @tenantId`;
+    const countQuery = `SELECT COUNT(*) as total FROM guests WHERE tenant_id = @tenantId`;
+    const params: any = { tenantId };
+
+    let filterClause = '';
+    if (options.search) {
+      filterClause += ` AND (
+        first_name LIKE @search OR 
+        last_name LIKE @search OR 
+        email LIKE @search OR 
+        phone LIKE @search OR
+        guest_code LIKE @search
+      )`;
+      params.search = `%${options.search}%`;
+    }
+
+    const fullQuery = query + filterClause + ` ORDER BY created_at DESC OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY`;
+    const fullCountQuery = countQuery + filterClause;
+
+    params.offset = offset;
+    params.limit = limit;
+
+    const [data, countResult] = await Promise.all([
+      this.sql.query(fullQuery, params),
+      this.sql.query(fullCountQuery, params)
+    ]);
+
+    const total = countResult[0]?.total || 0;
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    };
   }
 
   async update(tenantId: number, guestId: number, updateGuestDto: Partial<CreateGuestDto>) {

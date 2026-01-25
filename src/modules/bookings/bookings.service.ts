@@ -31,7 +31,6 @@ export class BookingsService {
       checkOut: checkAvailabilityDto.check_out
     };
 
-    // Use hotel_ids as firm_ids for backward compatibility if needed, or ignore
     if (checkAvailabilityDto.hotel_ids?.length) {
       const firmIds = checkAvailabilityDto.hotel_ids.join(',');
       query += ` AND r.firm_id IN (${firmIds})`;
@@ -42,7 +41,6 @@ export class BookingsService {
   }
 
   async create(tenantId: number, firmId: number, branchId: number, createBookingDto: any) {
-    // Fallback if firm/branch missing
     if (!firmId || !branchId) {
       const defaults = await this.sql.query(`
          SELECT TOP 1 f.id as firm_id, b.id as branch_id
@@ -58,10 +56,8 @@ export class BookingsService {
       }
     }
 
-    // Generate booking code
     const bookingCode = `B${Date.now().toString().slice(-8)}`;
 
-    // If guest info provided, create guest first
     let guestId = createBookingDto.guest_id;
     if (!guestId && createBookingDto.guest) {
       const guestCode = `G${Date.now().toString().slice(-6)}`;
@@ -84,7 +80,6 @@ export class BookingsService {
       guestId = guestResult[0].id;
     }
 
-    // Handle alias dates
     const checkInRaw = createBookingDto.check_in || createBookingDto.check_in_date;
     const checkOutRaw = createBookingDto.check_out || createBookingDto.check_out_date;
 
@@ -96,14 +91,8 @@ export class BookingsService {
     }
 
     if (!firmId) {
-      throw new Error('No active firm found for this tenant. Please create a firm first (e.g. via onboarding or settings).');
+      throw new Error('No active firm found for this tenant. Please create a firm first.');
     }
-
-    console.log('--- Debug Booking Insert ---');
-    console.log('Tenant:', tenantId);
-    console.log('Firm:', firmId, 'Branch:', branchId);
-    console.log('CheckIn (Obj):', checkIn);
-    console.log('CheckOut (Obj):', checkOut);
 
     const result = await this.sql.query(`
       INSERT INTO bookings (
@@ -127,7 +116,7 @@ export class BookingsService {
       branchId: branchId || null,
       bookingCode,
       guestId,
-      roomId: createBookingDto.room_id, // Mapping room_id to assigned_to
+      roomId: createBookingDto.room_id,
       checkIn: checkIn,
       checkOut: checkOut,
       totalHours: createBookingDto.total_hours,
@@ -140,7 +129,6 @@ export class BookingsService {
       specialRequests: createBookingDto.special_requests
     });
 
-    // Update room status
     if (createBookingDto.booking_type !== 'advance') {
       await this.sql.query(`
         UPDATE rooms SET status = 'occupied', updated_at = GETUTCDATE()
@@ -156,7 +144,18 @@ export class BookingsService {
     return result[0];
   }
 
-  async findAll(tenantId: number, firmId?: number, status?: string) {
+  async findAll(tenantId: number, options: {
+    page?: number,
+    limit?: number,
+    firm_id?: number,
+    status?: string,
+    fromDate?: string,
+    toDate?: string
+  }) {
+    const page = options.page || 1;
+    const limit = options.limit || 10;
+    const offset = (page - 1) * limit;
+
     let query = `
       SELECT b.*, g.first_name, g.last_name, g.email, g.phone,
              f.firm_name, r.room_number, rt.type_name as room_type_name
@@ -168,47 +167,114 @@ export class BookingsService {
       WHERE b.tenant_id = @tenantId
     `;
 
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM bookings b
+      WHERE b.tenant_id = @tenantId
+    `;
+
     const params: any = { tenantId };
 
-    if (firmId) {
-      query += ' AND b.firm_id = @firmId';
-      params.firmId = firmId;
+    let filterClause = '';
+    if (options.firm_id) {
+      filterClause += ' AND b.firm_id = @firmId';
+      params.firmId = options.firm_id;
     }
-    if (status) {
-      query += ' AND b.booking_status = @status';
-      params.status = status;
+    if (options.status) {
+      filterClause += ' AND b.booking_status = @status';
+      params.status = options.status;
+    }
+    if (options.fromDate && options.toDate) {
+      filterClause += ' AND b.check_in >= @fromDate AND b.check_in <= @toDate';
+      params.fromDate = options.fromDate;
+      params.toDate = options.toDate;
     }
 
-    query += ' ORDER BY b.check_in DESC';
-    return this.sql.query(query, params);
+    const fullQuery = query + filterClause + ` ORDER BY b.check_in DESC OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY`;
+    const fullCountQuery = countQuery + filterClause;
+
+    params.offset = offset;
+    params.limit = limit;
+
+    const [data, countResult] = await Promise.all([
+      this.sql.query(fullQuery, params),
+      this.sql.query(fullCountQuery, params)
+    ]);
+
+    const total = countResult[0]?.total || 0;
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    };
   }
 
   async recordPayment(tenantId: number, recordPaymentDto: RecordPaymentDto) {
     const { booking_id, amount, payment_method, reference_number } = recordPaymentDto;
 
+    // Force id to integer
+    const bookingIdInt = parseInt(booking_id?.toString(), 10);
+    if (isNaN(bookingIdInt)) {
+      throw new Error('Invalid booking ID');
+    }
+
+    console.log(`Recording Payment: BookingID=${bookingIdInt}, Amount=${amount}, Method=${payment_method}`);
+
+    // Validate amount to prevent overflow
+    if (amount > 99999999.99) {
+      throw new Error('Payment amount exceeds limit');
+    }
+
     // Verify booking
     const bookingCheck = await this.sql.query(`
       SELECT b.id FROM bookings b
       WHERE b.id = @bookingId AND b.tenant_id = @tenantId
-    `, { bookingId: booking_id, tenantId });
+    `, { bookingId: bookingIdInt, tenantId });
 
     if (!bookingCheck.length) {
+      console.error(`Booking not found: ${bookingIdInt}`);
       throw new Error('Invalid booking or unauthorized access');
     }
 
-    // Update booking
+    // Insert into booking_payments history
+    await this.sql.query(`
+      INSERT INTO booking_payments (
+        booking_id, payment_type, payment_method, amount, 
+        transaction_id, payment_date, created_at, created_by
+      )
+      VALUES (
+        @bookingId, 'payment', @paymentMethod, @amount,
+        @transactionId, GETUTCDATE(), GETUTCDATE(), NULL
+      )
+    `, {
+      bookingId: bookingIdInt,
+      paymentMethod: payment_method,
+      amount,
+      transactionId: reference_number || null
+    });
+
+    console.log('Payment Inserted. Updating Booking Summary...');
+
+    // Update booking paid_amount and status based on history sum
     await this.sql.query(`
       UPDATE bookings
-      SET paid_amount = COALESCE(paid_amount, 0) + @amount,
+      SET paid_amount = (SELECT ISNULL(SUM(amount), 0) FROM booking_payments WHERE booking_id = @bookingId),
           payment_status = CASE 
-            WHEN COALESCE(paid_amount, 0) + @amount >= total_amount THEN 'paid'
-            WHEN COALESCE(paid_amount, 0) + @amount > 0 THEN 'partial'
+            WHEN (SELECT ISNULL(SUM(amount), 0) FROM booking_payments WHERE booking_id = @bookingId) >= total_amount THEN 'paid'
+            WHEN (SELECT ISNULL(SUM(amount), 0) FROM booking_payments WHERE booking_id = @bookingId) > 0 THEN 'partial'
             ELSE 'pending'
           END,
           updated_at = GETUTCDATE()
       WHERE id = @bookingId
-    `, { bookingId: booking_id, amount });
+    `, { bookingId: bookingIdInt });
 
-    return { success: true, message: 'Payment recorded' };
+    console.log('Booking Summary Updated.');
+
+    return { success: true, message: 'Payment recorded and history updated' };
   }
 }

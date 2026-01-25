@@ -17,7 +17,6 @@ export class HotelsController {
 
   @Post('list')
   async findAll(@Request() req) {
-    console.log("ssssssssssssssssssssssssssssssssssssssssssssssssss");
     return this.hotelsService.findAll(req.user.tenantId);
   }
 

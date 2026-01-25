@@ -21,8 +21,22 @@ export class BookingsController {
   }
 
   @Post('list')
-  async findAll(@Request() req, @Body() filters?: { firm_id?: number; status?: string }) {
-    return this.bookingsService.findAll(req.user.tenantId, filters?.firm_id || req.user.firmId, filters?.status);
+  async findAll(@Request() req, @Body() filters?: {
+    page?: number;
+    limit?: number;
+    firm_id?: number;
+    status?: string;
+    fromDate?: string;
+    toDate?: string
+  }) {
+    return this.bookingsService.findAll(req.user.tenantId, {
+      page: filters?.page,
+      limit: filters?.limit,
+      firm_id: filters?.firm_id || req.user.firmId,
+      status: filters?.status,
+      fromDate: filters?.fromDate,
+      toDate: filters?.toDate
+    });
   }
 
   @Post('payment/record')

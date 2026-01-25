@@ -9,7 +9,7 @@ export class ResponseInterceptor implements NestInterceptor {
   constructor(
     private reflector: Reflector,
     private encryption: EncryptionService,
-  ) {}
+  ) { }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const reply = context.switchToHttp().getResponse();
@@ -17,16 +17,19 @@ export class ResponseInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
+        // If data has meta/pagination, don't flatten the 'data' property
+        const isPaginated = !!(data?.meta || data?.pagination);
+
         const response = {
           success: true,
           statusCode: reply.statusCode || 200,
           message: data?.message || 'Success',
-          data: data?.data !== undefined ? data.data : data,
+          data: (data?.data !== undefined && !isPaginated) ? data.data : data,
           timestamp: new Date().toISOString(),
         };
 
-        if (data?.pagination) {
-          response['pagination'] = data.pagination;
+        if (data?.pagination || data?.meta) {
+          response['pagination'] = data.pagination || data.meta;
         }
 
         if (isUnencrypted) return response;

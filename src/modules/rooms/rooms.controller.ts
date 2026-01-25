@@ -26,13 +26,22 @@ export class RoomsController {
   }
 
   @Post('list')
-  async getRooms(@Request() req, @Body() filters?: { firm_id?: number; branch_id?: number; status?: string }) {
-    return this.roomsService.getRooms(
-      req.user.tenantId,
-      filters?.firm_id || req.user.firmId,
-      filters?.branch_id || req.user.branchId,
-      filters?.status
-    );
+  async getRooms(@Request() req, @Body() filters?: {
+    page?: number;
+    limit?: number;
+    firm_id?: number;
+    branch_id?: number;
+    status?: string;
+    search?: string;
+  }) {
+    return this.roomsService.getRooms(req.user.tenantId, {
+      page: filters?.page,
+      limit: filters?.limit,
+      firm_id: filters?.firm_id || req.user.firmId,
+      branch_id: filters?.branch_id || req.user.branchId,
+      status: filters?.status,
+      search: filters?.search
+    });
   }
 
   @Post('update-status')

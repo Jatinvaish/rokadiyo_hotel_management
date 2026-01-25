@@ -1,7 +1,7 @@
 USE [rokadiyo_hotel_mgmt]
 GO
 
-/****** Object:  Table [dbo].[occupancy_reports]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[occupancy_reports]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -25,7 +25,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[daily_reports]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[daily_reports]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -59,7 +59,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[revenue_reports]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[revenue_reports]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -87,7 +87,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[loyalty_transactions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[loyalty_transactions]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -111,7 +111,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_blocks]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_blocks]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -138,7 +138,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[notifications]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[notifications]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -163,7 +163,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[lost_and_found]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[lost_and_found]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -198,7 +198,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[loyalty_programs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[loyalty_programs]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -222,7 +222,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[email_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[email_logs]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -246,7 +246,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[sms_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[sms_logs]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -270,7 +270,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[corporate_contracts]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[corporate_contracts]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -300,7 +300,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_communications]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_communications]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -327,7 +327,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[promo_usage]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[promo_usage]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -348,7 +348,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_reviews]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_reviews]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -384,7 +384,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[travel_agent_commissions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[travel_agent_commissions]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -410,7 +410,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[staff_attendance]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[staff_attendance]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -434,7 +434,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[promotions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[promotions]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -470,7 +470,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[staff_schedules]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[staff_schedules]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -493,7 +493,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[staff_leaves]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[staff_leaves]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -519,7 +519,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[shifts]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[shifts]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -541,7 +541,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[laundry_items]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[laundry_items]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -564,7 +564,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[laundry_services]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[laundry_services]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -588,7 +588,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[departments]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[departments]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -609,7 +609,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[spa_services]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[spa_services]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -631,7 +631,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_services]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_services]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -665,7 +665,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[transport_services]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[transport_services]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -692,7 +692,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[services]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[services]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -720,7 +720,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[service_categories]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[service_categories]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -740,7 +740,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[kitchen_orders]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[kitchen_orders]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -763,7 +763,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[food_order_items]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[food_order_items]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -788,7 +788,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[food_orders]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[food_orders]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -828,7 +828,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[restaurants]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[restaurants]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -852,7 +852,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[menu_categories]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[menu_categories]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -873,7 +873,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[menu_item_variants]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[menu_item_variants]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -894,7 +894,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[menu_items]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[menu_items]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -927,7 +927,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_suppliers]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[inventory_suppliers]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -953,7 +953,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_categories]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[inventory_categories]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -974,7 +974,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_alerts]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[inventory_alerts]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -997,7 +997,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_items]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[inventory_items]    Script Date: 26-01-2026 00:55:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1032,7 +1032,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_transactions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[inventory_transactions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1060,7 +1060,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[maintenance_vendors]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[maintenance_vendors]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1088,7 +1088,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[maintenance_schedules]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[maintenance_schedules]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1114,7 +1114,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[housekeeping_staff_assignments]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[housekeeping_staff_assignments]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1139,7 +1139,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_maintenance]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_maintenance]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1176,7 +1176,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[cleaning_checklist_items]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[cleaning_checklist_items]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1197,7 +1197,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[cleaning_checklist_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[cleaning_checklist_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1218,7 +1218,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[cleaning_checklists]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[cleaning_checklists]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1239,7 +1239,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_cleaning_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_cleaning_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1275,7 +1275,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_inventory]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_inventory]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1297,7 +1297,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_rates]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_rates]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1322,7 +1322,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_sync_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_sync_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1347,7 +1347,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_bookings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_bookings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1380,7 +1380,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_rate_mappings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_rate_mappings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1403,7 +1403,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[housekeeping_tasks]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[housekeeping_tasks]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1426,7 +1426,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_room_mappings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_room_mappings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1448,7 +1448,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[payment_gateways]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[payment_gateways]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1475,7 +1475,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_integrations]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channel_integrations]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1503,7 +1503,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channels]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[channels]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1527,7 +1527,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[invoices]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[invoices]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1559,7 +1559,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[invoice_items]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[invoice_items]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1583,7 +1583,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[refunds]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[refunds]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1611,7 +1611,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[check_in_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[check_in_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1640,7 +1640,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_status_transitions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_status_transitions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1664,7 +1664,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[check_out_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[check_out_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1695,7 +1695,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[early_late_requests]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[early_late_requests]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1720,7 +1720,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_payments]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[booking_payments]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1751,7 +1751,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_cancellations]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[booking_cancellations]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1776,7 +1776,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_waitlist]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[booking_waitlist]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1804,7 +1804,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_amendments]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[booking_amendments]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1835,7 +1835,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_guests]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[booking_guests]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1860,7 +1860,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_rooms]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[booking_rooms]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1887,7 +1887,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[advance_bookings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[advance_bookings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1916,7 +1916,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[group_bookings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[group_bookings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1951,7 +1951,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[bookings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[bookings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1961,7 +1961,6 @@ GO
 CREATE TABLE [dbo].[bookings](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[booking_code] [nvarchar](50) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
 	[guest_id] [bigint] NOT NULL,
 	[rate_plan_id] [bigint] NULL,
 	[booking_source] [nvarchar](50) NULL,
@@ -2007,6 +2006,9 @@ CREATE TABLE [dbo].[bookings](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[tenant_id] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2014,7 +2016,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_preferences]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_preferences]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2034,7 +2036,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_documents]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_documents]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2058,7 +2060,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_companions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_companions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2081,7 +2083,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_addresses]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guest_addresses]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2107,7 +2109,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[seasonal_rates]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[seasonal_rates]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2132,7 +2134,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guests]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[guests]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2168,6 +2170,8 @@ CREATE TABLE [dbo].[guests](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2175,7 +2179,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_amenity_inventory]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_amenity_inventory]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2197,7 +2201,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hourly_pricing_rules]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[hourly_pricing_rules]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2223,7 +2227,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[rate_schedules]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[rate_schedules]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2261,7 +2265,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[rate_plans]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[rate_plans]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2294,7 +2298,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[dynamic_pricing_rules]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[dynamic_pricing_rules]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2323,7 +2327,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_type_amenities]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_type_amenities]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2344,7 +2348,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_type_images]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_type_images]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2365,7 +2369,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_types]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[room_types]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2374,7 +2378,6 @@ GO
 
 CREATE TABLE [dbo].[room_types](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
 	[type_code] [nvarchar](50) NOT NULL,
 	[type_name] [nvarchar](100) NOT NULL,
 	[description] [nvarchar](max) NULL,
@@ -2401,6 +2404,9 @@ CREATE TABLE [dbo].[room_types](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[tenant_id] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2408,7 +2414,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[rooms]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[rooms]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2417,7 +2423,6 @@ GO
 
 CREATE TABLE [dbo].[rooms](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
 	[room_type_id] [bigint] NOT NULL,
 	[room_number] [nvarchar](20) NOT NULL,
 	[floor_number] [int] NULL,
@@ -2435,6 +2440,9 @@ CREATE TABLE [dbo].[rooms](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[tenant_id] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2442,7 +2450,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotel_amenities]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[hotel_amenities]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2465,7 +2473,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotel_images]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[hotel_images]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2487,7 +2495,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotel_policies]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[hotel_policies]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2511,7 +2519,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotels]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[hotels]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2554,6 +2562,8 @@ CREATE TABLE [dbo].[hotels](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2561,7 +2571,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[branches]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[branches]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2593,7 +2603,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[firms]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[firms]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2610,6 +2620,18 @@ CREATE TABLE [dbo].[firms](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[address] [nvarchar](max) NULL,
+	[city] [nvarchar](100) NULL,
+	[state] [nvarchar](100) NULL,
+	[country] [nvarchar](100) NULL,
+	[postal_code] [nvarchar](20) NULL,
+	[phone] [nvarchar](20) NULL,
+	[email] [nvarchar](320) NULL,
+	[website] [nvarchar](500) NULL,
+	[logo_url] [nvarchar](500) NULL,
+	[tax_id] [nvarchar](100) NULL,
+	[currency] [nvarchar](10) NULL,
+	[timezone] [nvarchar](50) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2619,10 +2641,10 @@ UNIQUE NONCLUSTERED
 	[tenant_id] ASC,
 	[firm_code] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[password_resets]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[password_resets]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2648,7 +2670,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[activities]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[activities]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2678,7 +2700,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[audit_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[audit_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2709,7 +2731,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[error_logs]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[error_logs]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2748,7 +2770,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_features]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[subscription_features]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2773,7 +2795,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[invitations]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[invitations]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2808,7 +2830,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_feature_permissions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[subscription_feature_permissions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2834,7 +2856,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_offers]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[subscription_offers]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2874,7 +2896,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_history]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[subscription_history]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2903,7 +2925,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[menu_permissions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[menu_permissions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2927,7 +2949,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[role_permissions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[role_permissions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2949,7 +2971,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[permissions]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[permissions]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2980,7 +3002,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[roles]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[roles]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3008,7 +3030,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[user_roles]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[user_roles]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3033,7 +3055,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[users]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[users]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3080,7 +3102,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_plans]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[subscription_plans]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3130,7 +3152,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[tenant_settings]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[tenant_settings]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3156,7 +3178,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[tenants]    Script Date: 25-01-2026 14:13:00 ******/
+/****** Object:  Table [dbo].[tenants]    Script Date: 26-01-2026 00:55:20 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3206,6 +3228,12 @@ ALTER TABLE [dbo].[branches] ADD  DEFAULT ((1)) FOR [is_active]
 GO
 
 ALTER TABLE [dbo].[firms] ADD  DEFAULT ((1)) FOR [is_active]
+GO
+
+ALTER TABLE [dbo].[firms] ADD  DEFAULT ('USD') FOR [currency]
+GO
+
+ALTER TABLE [dbo].[firms] ADD  DEFAULT ('UTC') FOR [timezone]
 GO
 
 ALTER TABLE [dbo].[password_resets] ADD  DEFAULT ((0)) FOR [used]
@@ -3360,99 +3388,3 @@ GO
 
 ALTER TABLE [dbo].[tenants] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
-
-ALTER TABLE [dbo].[branches]  WITH CHECK ADD FOREIGN KEY([firm_id])
-REFERENCES [dbo].[firms] ([id])
-GO
-
-ALTER TABLE [dbo].[firms]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[password_resets]  WITH CHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-GO
-
-ALTER TABLE [dbo].[activities]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[activities]  WITH CHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-GO
-
-ALTER TABLE [dbo].[audit_logs]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[audit_logs]  WITH CHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-GO
-
-ALTER TABLE [dbo].[error_logs]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[error_logs]  WITH CHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-GO
-
-ALTER TABLE [dbo].[invitations]  WITH CHECK ADD FOREIGN KEY([invited_by])
-REFERENCES [dbo].[users] ([id])
-GO
-
-ALTER TABLE [dbo].[invitations]  WITH CHECK ADD FOREIGN KEY([role_id])
-REFERENCES [dbo].[roles] ([id])
-GO
-
-ALTER TABLE [dbo].[invitations]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[subscription_feature_permissions]  WITH CHECK ADD FOREIGN KEY([feature_id])
-REFERENCES [dbo].[subscription_features] ([id])
-GO
-
-ALTER TABLE [dbo].[subscription_history]  WITH CHECK ADD FOREIGN KEY([from_plan_id])
-REFERENCES [dbo].[subscription_plans] ([id])
-GO
-
-ALTER TABLE [dbo].[subscription_history]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[subscription_history]  WITH CHECK ADD FOREIGN KEY([to_plan_id])
-REFERENCES [dbo].[subscription_plans] ([id])
-GO
-
-ALTER TABLE [dbo].[menu_permissions]  WITH CHECK ADD FOREIGN KEY([permission_id])
-REFERENCES [dbo].[permissions] ([id])
-GO
-
-ALTER TABLE [dbo].[role_permissions]  WITH CHECK ADD FOREIGN KEY([permission_id])
-REFERENCES [dbo].[permissions] ([id])
-GO
-
-ALTER TABLE [dbo].[role_permissions]  WITH CHECK ADD FOREIGN KEY([role_id])
-REFERENCES [dbo].[roles] ([id])
-GO
-
-ALTER TABLE [dbo].[roles]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[user_roles]  WITH CHECK ADD FOREIGN KEY([role_id])
-REFERENCES [dbo].[roles] ([id])
-GO
-
-ALTER TABLE [dbo].[user_roles]  WITH CHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-GO
-
-ALTER TABLE [dbo].[users]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO
-
-ALTER TABLE [dbo].[tenant_settings]  WITH CHECK ADD FOREIGN KEY([tenant_id])
-REFERENCES [dbo].[tenants] ([id])
-GO 
