@@ -7,7 +7,7 @@ import { CreateGuestDto } from './dto/create-guest.dto';
 export class GuestsService {
   constructor(private sql: SqlServerService) { }
 
-  async create(tenantId: number, createGuestDto: CreateGuestDto) {
+  async create(tenantId: number, firmId: number, branchId: number, createGuestDto: CreateGuestDto) {
     // Generate guest code
     const guestCode = `G${Date.now().toString().slice(-8)}`;
 
@@ -21,16 +21,33 @@ export class GuestsService {
       idProofNumber: createGuestDto.id_number
     });
 
-    if (existing.length > 0) {
-      return { guest_id: existing[0].id, message: 'Guest already exists' };
+    // Fallback: If firmId/branchId are missing, fetch defaults from Tenant
+    let finalFirmId = firmId;
+    let finalBranchId = branchId;
+
+    if (!finalFirmId || !finalBranchId) {
+      const defaults = await this.sql.query(`
+        SELECT TOP 1 f.id as firm_id, b.id as branch_id
+        FROM firms f
+        LEFT JOIN branches b ON b.firm_id = f.id
+        WHERE f.tenant_id = @tenantId AND f.is_active = 1
+        ORDER BY f.created_at ASC
+      `, { tenantId });
+
+      if (defaults.length > 0) {
+        finalFirmId = finalFirmId || defaults[0].firm_id;
+        finalBranchId = finalBranchId || defaults[0].branch_id;
+      }
     }
 
     const result = await this.sql.query(`
-      INSERT INTO guests (tenant_id, guest_code, first_name, last_name, email, phone, id_proof_type, id_proof_number, date_of_birth, nationality, notes, created_at)
+      INSERT INTO guests (tenant_id, firm_id, branch_id, guest_code, first_name, last_name, email, phone, id_proof_type, id_proof_number, date_of_birth, nationality, notes, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenantId, @guestCode, @firstName, @lastName, @email, @phone, @idProofType, @idProofNumber, @dateOfBirth, @nationality, @notes, GETUTCDATE())
+      VALUES (@tenantId, @firmId, @branchId, @guestCode, @firstName, @lastName, @email, @phone, @idProofType, @idProofNumber, @dateOfBirth, @nationality, @notes, GETUTCDATE())
     `, {
       tenantId,
+      firmId: finalFirmId || null,
+      branchId: finalBranchId || null,
       guestCode,
       firstName: createGuestDto.first_name,
       lastName: createGuestDto.last_name,

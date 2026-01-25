@@ -12,7 +12,7 @@ export class GuestsController {
 
   @Post('create')
   async create(@Request() req, @Body() createGuestDto: CreateGuestDto) {
-    return this.guestsService.create(req.user.tenantId, createGuestDto);
+    return this.guestsService.create(req.user.tenantId, req.user.firmId, req.user.branchId, createGuestDto);
   }
 
   @Post('search')

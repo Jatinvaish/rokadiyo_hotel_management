@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: any) {
     this.logger.log('========== JWT VALIDATION START ==========');
     this.logger.log(`Payload: ${JSON.stringify(payload)}`);
-    
+
     try {
       // Decrypt JWT payload
       this.logger.log('Decrypting JWT payload...');
@@ -68,13 +68,15 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         username: userData.username,
         userType: userData.user_type,
         tenantId: userData.tenant_id,
+        firmId: decrypted.firmId,
+        branchId: decrypted.branchId,
         firstName: userData.first_name,
         lastName: userData.last_name,
         onboardingCompleted: userData.user_type === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
         roles: userData.roles?.split(',').filter(Boolean) || [],
         permissions: userData.permissions?.split(',').filter(Boolean) || [],
       };
-      
+
       this.logger.log(`JWT validation successful - returning user: ${JSON.stringify(returnUser)}`);
       return returnUser;
     } catch (error) {

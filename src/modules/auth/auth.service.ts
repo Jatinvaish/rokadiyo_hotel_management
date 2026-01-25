@@ -77,6 +77,19 @@ export class AuthService {
 
     const userData = user[0];
 
+    // Fetch default firm and branch
+    const defaultContext = await this.sql.query(
+      `SELECT TOP 1 f.id as firm_id, b.id as branch_id 
+       FROM firms f
+       LEFT JOIN branches b ON b.firm_id = f.id AND b.is_active = 1
+       WHERE f.tenant_id = @tenantId AND f.is_active = 1
+       ORDER BY f.created_at ASC, b.created_at ASC`,
+      { tenantId: userData.tenant_id }
+    );
+
+    const firmId = defaultContext[0]?.firm_id;
+    const branchId = defaultContext[0]?.branch_id;
+
     // Create encrypted JWT payload
     const payload = this.encryption.encrypt(
       JSON.stringify({
@@ -85,6 +98,8 @@ export class AuthService {
         username: userData.username,
         userType: userData.user_type,
         tenantId: userData.tenant_id,
+        firmId,
+        branchId,
         onboardingCompleted: userData.user_type === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
         roles: userData.roles?.split(',').filter(Boolean) || [],
       })
@@ -113,6 +128,8 @@ export class AuthService {
         username: userData.username,
         userType: userData.user_type,
         tenantId: userData.tenant_id,
+        firmId,
+        branchId,
         firstName: userData.first_name,
         lastName: userData.last_name,
         onboardingCompleted: userData.user_type === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,

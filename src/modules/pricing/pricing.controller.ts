@@ -4,7 +4,7 @@ import { CreateHourlyRuleDto, CreateSeasonalRateDto, CalculatePriceDto } from '.
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Pricing') 
+@ApiTags('Pricing')
 @Controller({ path: 'pricing', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class PricingController {
@@ -12,16 +12,16 @@ export class PricingController {
 
   @Post('hourly-rules/create')
   async createHourlyRule(@Request() req, @Body() createHourlyRuleDto: CreateHourlyRuleDto) {
-    return this.pricingService.createHourlyRule(req.user.tenantId, createHourlyRuleDto);
+    return this.pricingService.createHourlyRule(req.user.tenantId, req.user.firmId, req.user.branchId, createHourlyRuleDto);
   }
 
   @Post('seasonal/create')
   async createSeasonalRate(@Request() req, @Body() createSeasonalRateDto: CreateSeasonalRateDto) {
-    return this.pricingService.createSeasonalRate(req.user.tenantId, createSeasonalRateDto);
+    return this.pricingService.createSeasonalRate(req.user.tenantId, req.user.firmId, req.user.branchId, createSeasonalRateDto);
   }
 
   @Post('calculate')
   async calculatePrice(@Request() req, @Body() calculatePriceDto: CalculatePriceDto) {
-    return this.pricingService.calculatePrice(req.user.tenantId, calculatePriceDto);
+    return this.pricingService.calculatePrice(req.user.tenantId, req.user.firmId, req.user.branchId, calculatePriceDto);
   }
 }

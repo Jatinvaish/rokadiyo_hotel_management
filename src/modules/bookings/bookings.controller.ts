@@ -17,12 +17,12 @@ export class BookingsController {
 
   @Post('create')
   async create(@Request() req, @Body() createBookingDto: CreateBookingDto) {
-    return this.bookingsService.create(req.user.tenantId, createBookingDto);
+    return this.bookingsService.create(req.user.tenantId, req.user.firmId, req.user.branchId, createBookingDto);
   }
 
   @Post('list')
-  async findAll(@Request() req, @Body() filters?: { hotel_id?: number; status?: string }) {
-    return this.bookingsService.findAll(req.user.tenantId, filters?.hotel_id, filters?.status);
+  async findAll(@Request() req, @Body() filters?: { firm_id?: number; status?: string }) {
+    return this.bookingsService.findAll(req.user.tenantId, filters?.firm_id || req.user.firmId, filters?.status);
   }
 
   @Post('payment/record')

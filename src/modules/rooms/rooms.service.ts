@@ -7,15 +7,41 @@ import { CreateRoomTypeDto, BulkCreateRoomsDto } from './dto/create-room.dto';
 export class RoomsService {
   constructor(private sql: SqlServerService) { }
 
-  async createRoomType(hotelId: number, createRoomTypeDto: CreateRoomTypeDto) {
+  async createRoomType(tenantId: number, firmId: number, branchId: number, createRoomTypeDto: CreateRoomTypeDto) {
+    // Fallback if firm/branch missing
+    if (!firmId || !branchId) {
+      const defaults = await this.sql.query(`
+        SELECT TOP 1 f.id as firm_id, b.id as branch_id
+        FROM firms f
+        LEFT JOIN branches b ON b.firm_id = f.id
+        WHERE f.tenant_id = @tenantId AND f.is_active = 1
+        ORDER BY f.created_at ASC
+      `, { tenantId });
+
+      if (defaults.length > 0) {
+        firmId = firmId || defaults[0].firm_id;
+        branchId = branchId || defaults[0].branch_id;
+      }
+    }
+
     const typeCode = `RT${Date.now().toString().slice(-6)}`;
 
     const result = await this.sql.query(`
-      INSERT INTO room_types (hotel_id, type_code, type_name, description, base_rate_hourly, base_rate_daily, max_occupancy, max_adults, max_children, is_active, created_at)
+      INSERT INTO room_types (
+        tenant_id, firm_id, branch_id,
+        type_code, type_name, description, 
+        base_rate_hourly, base_rate_daily, max_occupancy, 
+        max_adults, max_children, is_active, created_at
+      )
       OUTPUT INSERTED.*
-      VALUES (@hotelId, @typeCode, @typeName, @description, @baseRateHourly, @baseRateDaily, @maxOccupancy, @maxAdults, @maxChildren, 1, GETUTCDATE())
+      VALUES (
+        @tenantId, @firmId, @branchId,
+        @typeCode, @typeName, @description, 
+        @baseRateHourly, @baseRateDaily, @maxOccupancy, 
+        @maxAdults, @maxChildren, 1, GETUTCDATE()
+      )
     `, {
-      hotelId,
+      tenantId, firmId, branchId,
       typeCode,
       typeName: createRoomTypeDto.name,
       description: createRoomTypeDto.description,
@@ -28,18 +54,43 @@ export class RoomsService {
     return result[0];
   }
 
-  async getRoomTypes(hotelId: number) {
-    return this.sql.query(`
-      SELECT * FROM room_types WHERE hotel_id = @hotelId AND is_active = 1 ORDER BY created_at
-    `, { hotelId });
+  async getRoomTypes(tenantId: number, firmId?: number) {
+    let query = `SELECT * FROM room_types WHERE tenant_id = @tenantId AND is_active = 1`;
+    const params: any = { tenantId };
+
+    if (firmId) {
+      query += ` AND firm_id = @firmId`;
+      params.firmId = firmId;
+    }
+
+    query += ` ORDER BY created_at`;
+    return this.sql.query(query, params);
   }
 
-  async bulkCreateRooms(tenantId: number, bulkCreateDto: BulkCreateRoomsDto) {
+  async bulkCreateRooms(tenantId: number, firmId: number, branchId: number, bulkCreateDto: BulkCreateRoomsDto) {
+    // Fallback logic
+    if (!firmId || !branchId) {
+      const defaults = await this.sql.query(`
+        SELECT TOP 1 f.id as firm_id, b.id as branch_id
+        FROM firms f
+        LEFT JOIN branches b ON b.firm_id = f.id
+        WHERE f.tenant_id = @tenantId AND f.is_active = 1
+        ORDER BY f.created_at ASC
+      `, { tenantId });
+
+      if (defaults.length > 0) {
+        firmId = firmId || defaults[0].firm_id;
+        branchId = branchId || defaults[0].branch_id;
+      }
+    }
+
     const rooms: any[] = [];
     for (let i = bulkCreateDto.start_number; i <= bulkCreateDto.end_number; i++) {
       const roomNumber = `${bulkCreateDto.room_number_prefix}${i.toString().padStart(2, '0')}`;
       rooms.push({
-        hotel_id: bulkCreateDto.hotel_id,
+        tenant_id: tenantId,
+        firm_id: firmId,
+        branch_id: branchId,
         room_type_id: bulkCreateDto.room_type_id,
         room_number: roomNumber,
         floor_number: bulkCreateDto.floor ? parseInt(bulkCreateDto.floor) : Math.floor(i / 100),
@@ -53,19 +104,23 @@ export class RoomsService {
     return { created_count: rooms.length, rooms };
   }
 
-  async getRooms(hotelId?: number, status?: string) {
+  async getRooms(tenantId: number, firmId?: number, branchId?: number, status?: string) {
     let query = `
-      SELECT r.*, rt.type_name as room_type_name, rt.base_rate_hourly, rt.base_rate_daily, h.hotel_name
+      SELECT r.*, rt.type_name as room_type_name, rt.base_rate_hourly, rt.base_rate_daily, f.firm_name
       FROM rooms r
       JOIN room_types rt ON r.room_type_id = rt.id
-      LEFT JOIN hotels h ON r.hotel_id = h.id
-      WHERE r.is_active = 1
+      LEFT JOIN firms f ON r.firm_id = f.id
+      WHERE r.is_active = 1 AND r.tenant_id = @tenantId
     `;
-    const params: any = {};
+    const params: any = { tenantId };
 
-    if (hotelId) {
-      query += ' AND r.hotel_id = @hotelId';
-      params.hotelId = hotelId;
+    if (firmId) {
+      query += ' AND r.firm_id = @firmId';
+      params.firmId = firmId;
+    }
+    if (branchId) {
+      query += ' AND r.branch_id = @branchId';
+      params.branchId = branchId;
     }
     if (status) {
       query += ' AND r.status = @status';
@@ -86,13 +141,35 @@ export class RoomsService {
     return result[0];
   }
 
-  async createRoom(createRoomDto: any) {
+  async createRoom(tenantId: number, firmId: number, branchId: number, createRoomDto: any) {
+    // Fallback if firm/branch missing
+    if (!firmId || !branchId) {
+      const defaults = await this.sql.query(`
+        SELECT TOP 1 f.id as firm_id, b.id as branch_id
+        FROM firms f
+        LEFT JOIN branches b ON b.firm_id = f.id
+        WHERE f.tenant_id = @tenantId AND f.is_active = 1
+        ORDER BY f.created_at ASC
+      `, { tenantId });
+
+      if (defaults.length > 0) {
+        firmId = firmId || defaults[0].firm_id;
+        branchId = branchId || defaults[0].branch_id;
+      }
+    }
+
     const result = await this.sql.query(`
-      INSERT INTO rooms (hotel_id, room_type_id, room_number, floor_number, status, notes, is_active, created_at)
+      INSERT INTO rooms (
+        tenant_id, firm_id, branch_id,
+        room_type_id, room_number, floor_number, status, notes, is_active, created_at
+      )
       OUTPUT INSERTED.*
-      VALUES (@hotelId, @roomTypeId, @roomNumber, @floorNumber, @status, @notes, 1, GETUTCDATE())
+      VALUES (
+        @tenantId, @firmId, @branchId,
+        @roomTypeId, @roomNumber, @floorNumber, @status, @notes, 1, GETUTCDATE()
+      )
     `, {
-      hotelId: createRoomDto.hotel_id,
+      tenantId, firmId, branchId,
       roomTypeId: createRoomDto.room_type_id,
       roomNumber: createRoomDto.room_number,
       floorNumber: createRoomDto.floor || 1,
@@ -106,7 +183,6 @@ export class RoomsService {
     const result = await this.sql.query(`
       UPDATE rooms
       SET 
-        hotel_id = @hotelId,
         room_type_id = @roomTypeId,
         room_number = @roomNumber,
         floor_number = @floorNumber,
@@ -117,7 +193,6 @@ export class RoomsService {
       WHERE id = @roomId
     `, {
       roomId,
-      hotelId: updateRoomDto.hotel_id,
       roomTypeId: updateRoomDto.room_type_id,
       roomNumber: updateRoomDto.room_number,
       floorNumber: updateRoomDto.floor,

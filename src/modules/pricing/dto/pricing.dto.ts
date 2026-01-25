@@ -4,8 +4,17 @@ export class CreateHourlyRuleDto {
   @IsNumber()
   room_type_id: number;
 
+  @IsOptional()
   @IsNumber()
-  hotel_id: number;
+  hotel_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  firm_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  branch_id?: number;
 
   @IsString()
   start_time: string; // HH:mm format
@@ -25,8 +34,17 @@ export class CreateSeasonalRateDto {
   @IsNumber()
   room_type_id: number;
 
+  @IsOptional()
   @IsNumber()
-  hotel_id: number;
+  hotel_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  firm_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  branch_id?: number;
 
   @IsDateString()
   start_date: string;
@@ -45,8 +63,17 @@ export class CalculatePriceDto {
   @IsNumber()
   room_type_id: number;
 
+  @IsOptional()
   @IsNumber()
-  hotel_id: number;
+  hotel_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  firm_id?: number;
+
+  @IsOptional()
+  @IsNumber()
+  branch_id?: number;
 
   @IsDateString()
   check_in: string;

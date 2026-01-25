@@ -20,8 +20,12 @@ export class CheckAvailabilityDto {
 }
 
 export class CreateBookingDto {
+  @IsOptional()
   @IsNumber()
-  guest_id: number;
+  guest_id?: number;
+
+  @IsOptional()
+  guest?: any;
 
   @IsNumber()
   hotel_id: number;
@@ -29,18 +33,44 @@ export class CreateBookingDto {
   @IsNumber()
   room_id: number;
 
+  @IsOptional()
   @IsDateString()
-  check_in_date: string;
+  check_in_date?: string;
 
+  @IsOptional()
   @IsDateString()
-  check_out_date: string;
+  check_out_date?: string;
+
+  @IsOptional()
+  @IsString() // Accepting ISO string for flexibility
+  check_in?: string;
+
+  @IsOptional()
+  @IsString()
+  check_out?: string;
 
   @IsNumber()
   total_amount: number;
 
   @IsOptional()
   @IsString()
-  booking_type?: 'hourly' | 'daily';
+  booking_type?: 'hourly' | 'daily' | 'advance';
+
+  @IsOptional()
+  @IsNumber()
+  total_hours?: number;
+
+  @IsOptional()
+  @IsNumber()
+  total_nights?: number;
+
+  @IsOptional()
+  @IsNumber()
+  adults?: number;
+
+  @IsOptional()
+  @IsNumber()
+  children?: number;
 
   @IsOptional()
   @IsString()

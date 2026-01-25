@@ -12,24 +12,27 @@ export class RoomsController {
 
   @Post('room-types/create')
   async createRoomType(@Request() req, @Body() body: any) {
-    const hotelId = body.hotel_id || 1;
-    return this.roomsService.createRoomType(hotelId, body);
+    return this.roomsService.createRoomType(req.user.tenantId, req.user.firmId, req.user.branchId, body);
   }
 
   @Post('room-types/list')
-  async getRoomTypes(@Request() req, @Body() body: { hotel_id?: number }) {
-    const hotelId = body.hotel_id || 1;
-    return this.roomsService.getRoomTypes(hotelId);
+  async getRoomTypes(@Request() req, @Body() body?: { firm_id?: number }) {
+    return this.roomsService.getRoomTypes(req.user.tenantId, body?.firm_id || req.user.firmId);
   }
 
   @Post('rooms/bulk-create')
   async bulkCreateRooms(@Request() req, @Body() bulkCreateDto: BulkCreateRoomsDto) {
-    return this.roomsService.bulkCreateRooms(req.user.tenantId, bulkCreateDto);
+    return this.roomsService.bulkCreateRooms(req.user.tenantId, req.user.firmId, req.user.branchId, bulkCreateDto);
   }
 
   @Post('list')
-  async getRooms(@Request() req, @Body() filters?: { hotel_id?: number; status?: string }) {
-    return this.roomsService.getRooms(filters?.hotel_id, filters?.status);
+  async getRooms(@Request() req, @Body() filters?: { firm_id?: number; branch_id?: number; status?: string }) {
+    return this.roomsService.getRooms(
+      req.user.tenantId,
+      filters?.firm_id || req.user.firmId,
+      filters?.branch_id || req.user.branchId,
+      filters?.status
+    );
   }
 
   @Post('update-status')
@@ -39,7 +42,7 @@ export class RoomsController {
 
   @Post('create')
   async createRoom(@Request() req, @Body() createRoomDto: any) {
-    return this.roomsService.createRoom(createRoomDto);
+    return this.roomsService.createRoom(req.user.tenantId, req.user.firmId, req.user.branchId, createRoomDto);
   }
 
   @Post('update')
