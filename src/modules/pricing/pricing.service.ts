@@ -10,11 +10,15 @@ export class PricingService {
     const result = await this.sql.query(`
       INSERT INTO pricing_hourly_rules (tenant_id, room_type_id, hotel_id, start_time, end_time, rate_multiplier, days_of_week, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenant_id, @room_type_id, @hotel_id, @start_time, @end_time, @rate_multiplier, @days_of_week, GETUTCDATE())
+      VALUES (@tenantId, @roomTypeId, @hotelId, @startTime, @endTime, @rateMultiplier, @daysOfWeek, GETUTCDATE())
     `, {
-      tenant_id: tenantId,
-      ...createHourlyRuleDto,
-      days_of_week: createHourlyRuleDto.days_of_week || '1,2,3,4,5,6,7'
+      tenantId: tenantId,
+      roomTypeId: createHourlyRuleDto.room_type_id,
+      hotelId: createHourlyRuleDto.hotel_id,
+      startTime: createHourlyRuleDto.start_time,
+      endTime: createHourlyRuleDto.end_time,
+      rateMultiplier: createHourlyRuleDto.rate_multiplier,
+      daysOfWeek: createHourlyRuleDto.days_of_week || '1,2,3,4,5,6,7'
     });
     return result[0];
   }
@@ -23,10 +27,15 @@ export class PricingService {
     const result = await this.sql.query(`
       INSERT INTO pricing_seasonal_rates (tenant_id, room_type_id, hotel_id, start_date, end_date, rate_multiplier, season_name, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenant_id, @room_type_id, @hotel_id, @start_date, @end_date, @rate_multiplier, @season_name, GETUTCDATE())
+      VALUES (@tenantId, @roomTypeId, @hotelId, @startDate, @endDate, @rateMultiplier, @seasonName, GETUTCDATE())
     `, {
-      tenant_id: tenantId,
-      ...createSeasonalRateDto
+      tenantId: tenantId,
+      roomTypeId: createSeasonalRateDto.room_type_id,
+      hotelId: createSeasonalRateDto.hotel_id,
+      startDate: createSeasonalRateDto.start_date,
+      endDate: createSeasonalRateDto.end_date,
+      rateMultiplier: createSeasonalRateDto.rate_multiplier,
+      seasonName: createSeasonalRateDto.season_name
     });
     return result[0];
   }
@@ -35,8 +44,8 @@ export class PricingService {
     // Get base rates
     const roomType = await this.sql.query(`
       SELECT base_rate_hourly, base_rate_daily FROM room_types 
-      WHERE id = @room_type_id AND tenant_id = @tenant_id
-    `, { room_type_id: calculatePriceDto.room_type_id, tenant_id: tenantId });
+      WHERE id = @roomTypeId AND tenant_id = @tenantId
+    `, { roomTypeId: calculatePriceDto.room_type_id, tenantId: tenantId });
 
     if (!roomType.length) {
       throw new Error('Room type not found');

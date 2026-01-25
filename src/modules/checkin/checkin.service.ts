@@ -10,8 +10,8 @@ export class CheckinService {
     return this.sql.transaction(async (transaction) => {
       // Update booking status
       const bookingRequest = transaction.request();
-      bookingRequest.input('booking_id', completeCheckInDto.booking_id);
-      bookingRequest.input('tenant_id', tenantId);
+      bookingRequest.input('bookingId', completeCheckInDto.booking_id);
+      bookingRequest.input('tenantId', tenantId);
       bookingRequest.input('notes', completeCheckInDto.notes);
 
       const bookingResult = await bookingRequest.query(`
@@ -21,7 +21,7 @@ export class CheckinService {
             check_in_notes = @notes,
             updated_at = GETUTCDATE()
         OUTPUT INSERTED.room_id
-        WHERE id = @booking_id AND tenant_id = @tenant_id AND status = 'confirmed'
+        WHERE id = @bookingId AND tenant_id = @tenantId AND status = 'confirmed'
       `);
 
       if (!bookingResult.recordset.length) {
@@ -32,13 +32,13 @@ export class CheckinService {
 
       // Update room status to occupied
       const roomRequest = transaction.request();
-      roomRequest.input('room_id', roomId);
-      roomRequest.input('tenant_id', tenantId);
+      roomRequest.input('roomId', roomId);
+      roomRequest.input('tenantId', tenantId);
 
       await roomRequest.query(`
         UPDATE rooms 
         SET status = 'occupied', updated_at = GETUTCDATE()
-        WHERE id = @room_id AND tenant_id = @tenant_id
+        WHERE id = @roomId AND tenant_id = @tenantId
       `);
 
       return { booking_id: completeCheckInDto.booking_id, room_id: roomId, status: 'checked_in' };
@@ -52,8 +52,8 @@ export class CheckinService {
       FROM bookings b
       JOIN rooms r ON b.room_id = r.id
       JOIN room_types rt ON r.room_type_id = rt.id
-      WHERE b.id = @booking_id AND b.tenant_id = @tenant_id
-    `, { booking_id: calculateBillDto.booking_id, tenant_id: tenantId });
+      WHERE b.id = @bookingId AND b.tenant_id = @tenantId
+    `, { bookingId: calculateBillDto.booking_id, tenantId: tenantId });
 
     if (!booking.length) {
       throw new Error('Booking not found');
@@ -69,10 +69,10 @@ export class CheckinService {
       // Record additional charge
       await this.sql.query(`
         INSERT INTO booking_charges (tenant_id, booking_id, charge_type, amount, description, created_at)
-        VALUES (@tenant_id, @booking_id, 'additional', @amount, @description, GETUTCDATE())
+        VALUES (@tenantId, @bookingId, 'additional', @amount, @description, GETUTCDATE())
       `, {
-        tenant_id: tenantId,
-        booking_id: calculateBillDto.booking_id,
+        tenantId: tenantId,
+        bookingId: calculateBillDto.booking_id,
         amount: calculateBillDto.additional_charges,
         description: calculateBillDto.charge_description || 'Additional charges'
       });
@@ -98,20 +98,20 @@ export class CheckinService {
     return this.sql.transaction(async (transaction) => {
       // Update booking
       const bookingRequest = transaction.request();
-      bookingRequest.input('booking_id', completeCheckOutDto.booking_id);
-      bookingRequest.input('tenant_id', tenantId);
-      bookingRequest.input('final_amount', completeCheckOutDto.final_amount);
-      bookingRequest.input('checkout_notes', completeCheckOutDto.checkout_notes);
+      bookingRequest.input('bookingId', completeCheckOutDto.booking_id);
+      bookingRequest.input('tenantId', tenantId);
+      bookingRequest.input('finalAmount', completeCheckOutDto.final_amount);
+      bookingRequest.input('checkoutNotes', completeCheckOutDto.checkout_notes);
 
       const bookingResult = await bookingRequest.query(`
         UPDATE bookings 
         SET status = 'checked_out',
             actual_check_out = GETUTCDATE(),
-            final_amount = @final_amount,
-            checkout_notes = @checkout_notes,
+            final_amount = @finalAmount,
+            checkout_notes = @checkoutNotes,
             updated_at = GETUTCDATE()
         OUTPUT INSERTED.room_id, INSERTED.hotel_id
-        WHERE id = @booking_id AND tenant_id = @tenant_id AND status = 'checked_in'
+        WHERE id = @bookingId AND tenant_id = @tenantId AND status = 'checked_in'
       `);
 
       if (!bookingResult.recordset.length) {
@@ -122,20 +122,20 @@ export class CheckinService {
 
       // Update room status to dirty (needs housekeeping)
       const roomRequest = transaction.request();
-      roomRequest.input('room_id', roomId);
-      roomRequest.input('tenant_id', tenantId);
+      roomRequest.input('roomId', roomId);
+      roomRequest.input('tenantId', tenantId);
 
       await roomRequest.query(`
         UPDATE rooms 
         SET status = 'dirty', updated_at = GETUTCDATE()
-        WHERE id = @room_id AND tenant_id = @tenant_id
+        WHERE id = @roomId AND tenant_id = @tenantId
       `);
 
       // Auto-create housekeeping task
       const housekeepingRequest = transaction.request();
-      housekeepingRequest.input('tenant_id', tenantId);
-      housekeepingRequest.input('hotel_id', hotelId);
-      housekeepingRequest.input('room_id', roomId);
+      housekeepingRequest.input('tenantId', tenantId);
+      housekeepingRequest.input('hotelId', hotelId);
+      housekeepingRequest.input('roomId', roomId);
 
       await housekeepingRequest.query(`
         INSERT INTO housekeeping_tasks (tenant_id, hotel_id, room_id, task_type, status, priority, created_at)

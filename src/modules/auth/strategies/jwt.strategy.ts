@@ -25,10 +25,16 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: any) {
+    this.logger.log('========== JWT VALIDATION START ==========');
+    this.logger.log(`Payload: ${JSON.stringify(payload)}`);
+    
     try {
       // Decrypt JWT payload
+      this.logger.log('Decrypting JWT payload...');
       const decrypted = JSON.parse(this.encryption.decrypt(payload.data));
+      this.logger.log(`Decrypted payload: ${JSON.stringify(decrypted)}`);
 
+      this.logger.log(`Querying user with ID: ${decrypted.sub}`);
       const user = await this.sql.query(
         `SELECT 
           u.id, u.email, u.username, u.user_type, u.tenant_id, u.status,
@@ -46,13 +52,17 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         { userId: decrypted.sub }
       );
 
+      this.logger.log(`User query result: ${JSON.stringify(user)}`);
+
       if (!user || user.length === 0) {
+        this.logger.error('User not found in database');
         throw new UnauthorizedException('User not found');
       }
 
       const userData = user[0];
+      this.logger.log(`User type: ${userData.user_type}`);
 
-      return {
+      const returnUser = {
         id: userData.id,
         email: userData.email,
         username: userData.username,
@@ -64,8 +74,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         roles: userData.roles?.split(',').filter(Boolean) || [],
         permissions: userData.permissions?.split(',').filter(Boolean) || [],
       };
+      
+      this.logger.log(`JWT validation successful - returning user: ${JSON.stringify(returnUser)}`);
+      return returnUser;
     } catch (error) {
-      this.logger.error('JWT validation failed', error);
+      this.logger.error(`JWT validation failed: ${error.message}`, error.stack);
       throw new UnauthorizedException('Invalid token');
     }
   }

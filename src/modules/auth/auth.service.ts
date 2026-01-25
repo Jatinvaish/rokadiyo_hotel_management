@@ -130,31 +130,51 @@ export class AuthService {
     lastName?: string;
     phone?: string;
   }) {
+    const logger = new (require('@nestjs/common')).Logger('AuthService');
+    logger.log('========== CREATE TENANT WITH USER START ==========');
+    logger.log(`Current User: ${JSON.stringify(currentUser)}`);
+    logger.log(`Data: ${JSON.stringify(data)}`);
+
     // Check super admin permission
+    logger.log(`Checking if user type is SUPER_ADMIN...`);
+    logger.log(`User Type: ${currentUser.userType}, Expected: ${UserType.SUPER_ADMIN}`);
+
     if (currentUser.userType !== UserType.SUPER_ADMIN) {
+      logger.error(`❌ User is not SUPER_ADMIN. User type: ${currentUser.userType}`);
       throw new ForbiddenException('Only super admin can create tenants');
     }
 
+    logger.log('✅ User is SUPER_ADMIN');
+
     // Check if email/username exists
+    logger.log('Checking if email/username already exists...');
     const existing = await this.sql.query(
       'SELECT id FROM users WHERE email = @email OR username = @username',
       { email: data.email, username: data.username }
     );
 
+    logger.log(`Existing user query result: ${JSON.stringify(existing)}`);
+
     if (existing.length > 0) {
+      logger.error(`Email or username already exists`);
       throw new BadRequestException('Email or username already exists');
     }
 
     // Get basic plan ID
+    logger.log('Getting basic subscription plan...');
     const basicPlan = await this.sql.query(
       "SELECT id FROM subscription_plans WHERE plan_slug = 'basic' AND is_active = 1"
     );
 
+    logger.log(`Basic plan query result: ${JSON.stringify(basicPlan)}`);
+
     if (!basicPlan || basicPlan.length === 0) {
+      logger.error('❌ Basic plan not found in database');
       throw new BadRequestException('Basic plan not found');
     }
 
     const basicPlanId = basicPlan[0].id;
+    logger.log(`✅ Basic plan found with ID: ${basicPlanId}`);
 
     // Transaction: Create Tenant + User
     return this.sql.transaction(async (transaction) => {
@@ -239,6 +259,48 @@ export class AuthService {
         VALUES (@user_id, @role_id, 1, GETUTCDATE(), @created_by)
       `);
 
+      // 5. Create Default Firm
+      const firmCode = `FRM-${Date.now()}`;
+      const firmRequest = transaction.request();
+
+      firmRequest.input('tenant_id', tenantId);
+      firmRequest.input('firm_code', firmCode);
+      firmRequest.input('firm_name', data.companyName);
+      firmRequest.input('created_by', currentUser.id);
+
+      const firmResult = await firmRequest.query(`
+        INSERT INTO firms (
+          tenant_id, firm_code, firm_name, is_active, created_at, created_by
+        )
+        OUTPUT INSERTED.id
+        VALUES (
+          @tenant_id, @firm_code, @firm_name, 1, GETUTCDATE(), @created_by
+        )
+      `);
+
+      const firmId = firmResult.recordset[0].id;
+
+      // 6. Create Default Branch
+      const branchCode = `BRN-${Date.now()}`;
+      const branchRequest = transaction.request();
+
+      branchRequest.input('firm_id', firmId);
+      branchRequest.input('branch_code', branchCode);
+      branchRequest.input('branch_name', `${data.companyName} - Main`);
+      branchRequest.input('address', data.phone ? `Main Branch` : null);
+      branchRequest.input('city', '');
+      branchRequest.input('state', '');
+      branchRequest.input('created_by', currentUser.id);
+
+      await branchRequest.query(`
+        INSERT INTO branches (
+          firm_id, branch_code, branch_name, address, city, state, is_active, created_at, created_by
+        )
+        VALUES (
+          @firm_id, @branch_code, @branch_name, @address, @city, @state, 1, GETUTCDATE(), @created_by
+        )
+      `);
+
       // Log activity
       await this.logging.logActivity({
         tenantId,
@@ -246,7 +308,7 @@ export class AuthService {
         activityType: 'tenant',
         action: 'create',
         description: `Created tenant: ${data.companyName}`,
-        metadata: { tenantId, userId },
+        metadata: { tenantId, userId, firmId },
       });
 
       return {
@@ -261,6 +323,11 @@ export class AuthService {
           email: data.email,
           username: data.username,
           userType: UserType.TENANT_ADMIN,
+        },
+        firm: {
+          id: firmId,
+          firmCode,
+          firmName: data.companyName,
         },
       };
     });
@@ -566,6 +633,186 @@ export class AuthService {
       </div>
     `,
     });
+  }
+
+  // ==================== TENANT MANAGEMENT (SUPER ADMIN ONLY) ====================
+
+  async getTenantsList(
+    page: number = 1,
+    limit: number = 10,
+    search?: string,
+    is_active?: boolean
+  ) {
+    const offset = (page - 1) * limit;
+
+    let whereClause = '1=1';
+    const params: any = {};
+
+    if (search) {
+      whereClause += " AND (t.company_name LIKE @search OR t.primary_email LIKE @search)";
+      params.search = `%${search}%`;
+    }
+
+    if (is_active !== undefined) {
+      whereClause += " AND t.is_active = @is_active";
+      params.is_active = is_active ? 1 : 0;
+    }
+
+    const tenants = await this.sql.query(`
+    WITH RankedTenants AS (
+      SELECT 
+        t.id,
+        t.tenant_code,
+        t.company_name,
+        t.primary_email,
+        t.primary_phone,
+        t.is_active,
+        t.created_at,
+        t.updated_at,
+        t.subscription_plan_id,
+        t.subscription_status,
+        ROW_NUMBER() OVER (ORDER BY t.created_at DESC) as RowNum
+      FROM tenants t
+      WHERE ${whereClause}
+    )
+    SELECT 
+      t.id,
+      t.tenant_code,
+      t.company_name as name,
+      t.primary_email as email,
+      t.primary_phone as phone,
+      t.is_active,
+      t.created_at,
+      t.updated_at,
+      sp.plan_name as [plan],
+      t.subscription_status
+    FROM RankedTenants t
+    LEFT JOIN subscription_plans sp ON t.subscription_plan_id = sp.id
+    WHERE RowNum > ${offset} AND RowNum <= ${offset + limit}
+    ORDER BY RowNum
+  `, params);
+
+    const countResult = await this.sql.query(`
+    SELECT COUNT(*) as total FROM tenants t WHERE ${whereClause}
+  `, params);
+
+    return {
+      data: tenants || [],
+      total: countResult[0]?.total || 0,
+      page,
+      limit,
+    };
+  }
+
+  async getTenantById(id: number) {
+    const result = await this.sql.query(`
+      SELECT 
+        t.id,
+        t.tenant_code,
+        t.company_name as name,
+        t.primary_email as email,
+        t.primary_phone as phone,
+        t.is_active,
+        t.created_at,
+        t.updated_at,
+        sp.plan_name as plan,
+        t.subscription_status,
+        u.email as admin_email,
+        u.username as admin_name
+      FROM tenants t
+      LEFT JOIN subscription_plans sp ON t.subscription_plan_id = sp.id
+      LEFT JOIN users u ON t.id = u.tenant_id AND u.user_type = 'tenant_admin'
+      WHERE t.id = @id
+    `, { id });
+
+    if (!result || result.length === 0) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    return result[0];
+  }
+
+  async updateTenant(id: number, data: Partial<any>) {
+    const existing = await this.getTenantById(id);
+    if (!existing) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    const updateFields: string[] = [];
+    const params: any = { id };
+
+    if (data.name) {
+      updateFields.push('company_name = @name');
+      params.name = data.name;
+    }
+    if (data.email) {
+      updateFields.push('primary_email = @email');
+      params.email = data.email;
+    }
+    if (data.phone) {
+      updateFields.push('primary_phone = @phone');
+      params.phone = data.phone;
+    }
+
+    if (updateFields.length === 0) {
+      return existing;
+    }
+
+    updateFields.push('updated_at = GETUTCDATE()');
+
+    await this.sql.query(`
+      UPDATE tenants
+      SET ${updateFields.join(', ')}
+      WHERE id = @id
+    `, params);
+
+    return this.getTenantById(id);
+  }
+
+  async activateTenant(id: number) {
+    const tenant = await this.getTenantById(id);
+    if (!tenant) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    await this.sql.query(`
+      UPDATE tenants
+      SET is_active = 1, updated_at = GETUTCDATE()
+      WHERE id = @id
+    `, { id });
+
+    return this.getTenantById(id);
+  }
+
+  async deactivateTenant(id: number) {
+    const tenant = await this.getTenantById(id);
+    if (!tenant) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    await this.sql.query(`
+      UPDATE tenants
+      SET is_active = 0, updated_at = GETUTCDATE()
+      WHERE id = @id
+    `, { id });
+
+    return this.getTenantById(id);
+  }
+
+  async deleteTenant(id: number) {
+    const tenant = await this.getTenantById(id);
+    if (!tenant) {
+      throw new NotFoundException('Tenant not found');
+    }
+
+    // Soft delete: mark as inactive and move related data
+    await this.sql.query(`
+      UPDATE tenants
+      SET is_active = 0, updated_at = GETUTCDATE()
+      WHERE id = @id
+    `, { id });
+
+    return { message: 'Tenant deleted successfully' };
   }
 
 }

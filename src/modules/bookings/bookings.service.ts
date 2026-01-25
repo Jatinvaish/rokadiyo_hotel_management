@@ -12,22 +12,22 @@ export class BookingsService {
       FROM rooms r
       JOIN hotels h ON r.hotel_id = h.id
       JOIN room_types rt ON r.room_type_id = rt.id
-      WHERE r.tenant_id = @tenant_id 
-        AND r.room_type_id = @room_type_id
+      WHERE r.tenant_id = @tenantId 
+        AND r.room_type_id = @roomTypeId
         AND r.status = 'available'
         AND r.id NOT IN (
           SELECT room_id FROM bookings 
-          WHERE tenant_id = @tenant_id 
+          WHERE tenant_id = @tenantId 
             AND status IN ('confirmed', 'checked_in')
-            AND NOT (check_out_date <= @check_in OR check_in_date >= @check_out)
+            AND NOT (check_out_date <= @checkIn OR check_in_date >= @checkOut)
         )
     `;
 
     const params: any = {
-      tenant_id: tenantId,
-      room_type_id: checkAvailabilityDto.room_type_id,
-      check_in: checkAvailabilityDto.check_in,
-      check_out: checkAvailabilityDto.check_out
+      tenantId: tenantId,
+      roomTypeId: checkAvailabilityDto.room_type_id,
+      checkIn: checkAvailabilityDto.check_in,
+      checkOut: checkAvailabilityDto.check_out
     };
 
     if (checkAvailabilityDto.hotel_ids?.length) {
@@ -43,18 +43,18 @@ export class BookingsService {
     // Check room availability first
     const availability = await this.sql.query(`
       SELECT id FROM rooms 
-      WHERE id = @room_id AND tenant_id = @tenant_id AND status = 'available'
+      WHERE id = @roomId AND tenant_id = @tenantId AND status = 'available'
         AND id NOT IN (
           SELECT room_id FROM bookings 
-          WHERE tenant_id = @tenant_id 
+          WHERE tenant_id = @tenantId 
             AND status IN ('confirmed', 'checked_in')
-            AND NOT (check_out_date <= @check_in OR check_in_date >= @check_out)
+            AND NOT (check_out_date <= @checkIn OR check_in_date >= @checkOut)
         )
     `, {
-      room_id: createBookingDto.room_id,
-      tenant_id: tenantId,
-      check_in: createBookingDto.check_in_date,
-      check_out: createBookingDto.check_out_date
+      roomId: createBookingDto.room_id,
+      tenantId: tenantId,
+      checkIn: createBookingDto.check_in_date,
+      checkOut: createBookingDto.check_out_date
     });
 
     if (!availability.length) {
@@ -64,19 +64,25 @@ export class BookingsService {
     const result = await this.sql.query(`
       INSERT INTO bookings (tenant_id, guest_id, hotel_id, room_id, check_in_date, check_out_date, total_amount, booking_type, special_requests, booking_source, status, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenant_id, @guest_id, @hotel_id, @room_id, @check_in_date, @check_out_date, @total_amount, @booking_type, @special_requests, @booking_source, 'confirmed', GETUTCDATE())
+      VALUES (@tenantId, @guestId, @hotelId, @roomId, @checkInDate, @checkOutDate, @totalAmount, @bookingType, @specialRequests, @bookingSource, 'confirmed', GETUTCDATE())
     `, {
-      tenant_id: tenantId,
-      ...createBookingDto,
-      booking_type: createBookingDto.booking_type || 'daily',
-      booking_source: createBookingDto.booking_source || 'walk_in'
+      tenantId: tenantId,
+      guestId: createBookingDto.guest_id,
+      hotelId: createBookingDto.hotel_id,
+      roomId: createBookingDto.room_id,
+      checkInDate: createBookingDto.check_in_date,
+      checkOutDate: createBookingDto.check_out_date,
+      totalAmount: createBookingDto.total_amount,
+      bookingType: createBookingDto.booking_type || 'daily',
+      specialRequests: createBookingDto.special_requests,
+      bookingSource: createBookingDto.booking_source || 'walk_in'
     });
 
     // Update room status to booked
     await this.sql.query(`
       UPDATE rooms SET status = 'booked', updated_at = GETUTCDATE()
-      WHERE id = @room_id AND tenant_id = @tenant_id
-    `, { room_id: createBookingDto.room_id, tenant_id: tenantId });
+      WHERE id = @roomId AND tenant_id = @tenantId
+    `, { roomId: createBookingDto.room_id, tenantId: tenantId });
 
     return result[0];
   }

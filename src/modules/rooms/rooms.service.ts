@@ -10,10 +10,14 @@ export class RoomsService {
     const result = await this.sql.query(`
       INSERT INTO room_types (tenant_id, name, description, base_rate_hourly, base_rate_daily, max_occupancy, amenities, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenant_id, @name, @description, @base_rate_hourly, @base_rate_daily, @max_occupancy, @amenities, GETUTCDATE())
+      VALUES (@tenantId, @name, @description, @baseRateHourly, @baseRateDaily, @maxOccupancy, @amenities, GETUTCDATE())
     `, {
-      tenant_id: tenantId,
-      ...createRoomTypeDto,
+      tenantId: tenantId,
+      name: createRoomTypeDto.name,
+      description: createRoomTypeDto.description,
+      baseRateHourly: createRoomTypeDto.base_rate_hourly,
+      baseRateDaily: createRoomTypeDto.base_rate_daily,
+      maxOccupancy: createRoomTypeDto.max_occupancy,
       amenities: JSON.stringify(createRoomTypeDto.amenities || [])
     });
     return result[0];
@@ -21,12 +25,12 @@ export class RoomsService {
 
   async getRoomTypes(tenantId: number) {
     return this.sql.query(`
-      SELECT * FROM room_types WHERE tenant_id = @tenant_id ORDER BY created_at
-    `, { tenant_id: tenantId });
+      SELECT * FROM room_types WHERE tenant_id = @tenantId ORDER BY created_at
+    `, { tenantId: tenantId });
   }
 
   async bulkCreateRooms(tenantId: number, bulkCreateDto: BulkCreateRoomsDto) {
-    const rooms = [];
+    const rooms: any[] = [];
     for (let i = bulkCreateDto.start_number; i <= bulkCreateDto.end_number; i++) {
       const roomNumber = `${bulkCreateDto.room_number_prefix}${i.toString().padStart(2, '0')}`;
       rooms.push({
@@ -48,13 +52,13 @@ export class RoomsService {
       SELECT r.*, rt.name as room_type_name, rt.base_rate_hourly, rt.base_rate_daily
       FROM rooms r
       JOIN room_types rt ON r.room_type_id = rt.id
-      WHERE r.tenant_id = @tenant_id
+      WHERE r.tenant_id = @tenantId
     `;
-    const params: any = { tenant_id: tenantId };
+    const params: any = { tenantId: tenantId };
 
     if (hotelId) {
-      query += ' AND r.hotel_id = @hotel_id';
-      params.hotel_id = hotelId;
+      query += ' AND r.hotel_id = @hotelId';
+      params.hotelId = hotelId;
     }
     if (status) {
       query += ' AND r.status = @status';
@@ -70,8 +74,8 @@ export class RoomsService {
       UPDATE rooms 
       SET status = @status, updated_at = GETUTCDATE()
       OUTPUT INSERTED.*
-      WHERE id = @room_id AND tenant_id = @tenant_id
-    `, { room_id: roomId, tenant_id: tenantId, status });
+      WHERE id = @roomId AND tenant_id = @tenantId
+    `, { roomId: roomId, tenantId: tenantId, status });
     return result[0];
   }
 }

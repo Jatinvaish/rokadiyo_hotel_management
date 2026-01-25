@@ -7,11 +7,11 @@ export class DashboardService {
 
   async getOverview(tenantId: number, hotelId?: number) {
     let hotelFilter = '';
-    const params: any = { tenant_id: tenantId };
+    const params: any = { tenantId: tenantId };
     
     if (hotelId) {
-      hotelFilter = 'AND h.id = @hotel_id';
-      params.hotel_id = hotelId;
+      hotelFilter = 'AND h.id = @hotelId';
+      params.hotelId = hotelId;
     }
 
     const stats = await this.sql.query(`
@@ -26,7 +26,7 @@ export class DashboardService {
       FROM hotels h
       LEFT JOIN rooms r ON h.id = r.hotel_id
       LEFT JOIN bookings b ON r.id = b.room_id
-      WHERE h.tenant_id = @tenant_id ${hotelFilter}
+      WHERE h.tenant_id = @tenantId ${hotelFilter}
     `, params);
 
     return stats[0];
@@ -34,11 +34,11 @@ export class DashboardService {
 
   async getRoomsGrid(tenantId: number, hotelId?: number) {
     let hotelFilter = '';
-    const params: any = { tenant_id: tenantId };
+    const params: any = { tenantId: tenantId };
     
     if (hotelId) {
-      hotelFilter = 'AND r.hotel_id = @hotel_id';
-      params.hotel_id = hotelId;
+      hotelFilter = 'AND r.hotel_id = @hotelId';
+      params.hotelId = hotelId;
     }
 
     return this.sql.query(`
@@ -51,7 +51,7 @@ export class DashboardService {
       JOIN hotels h ON r.hotel_id = h.id
       LEFT JOIN bookings b ON r.id = b.room_id AND b.status IN ('confirmed', 'checked_in')
       LEFT JOIN guests g ON b.guest_id = g.id
-      WHERE r.tenant_id = @tenant_id ${hotelFilter}
+      WHERE r.tenant_id = @tenantId ${hotelFilter}
       ORDER BY h.name, r.room_number
     `, params);
   }
@@ -74,10 +74,10 @@ export class DashboardService {
       FROM hotels h
       LEFT JOIN rooms r ON h.id = r.hotel_id
       LEFT JOIN bookings b ON r.id = b.room_id
-      WHERE h.tenant_id = @tenant_id
+      WHERE h.tenant_id = @tenantId
       GROUP BY h.id, h.name, h.is_headquarters
       ORDER BY h.is_headquarters DESC, h.name
-    `, { tenant_id: tenantId });
+    `, { tenantId: tenantId });
   }
 
   async getBranchComparison(tenantId: number, days: number = 30) {

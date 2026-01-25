@@ -10,11 +10,11 @@ export class GuestsService {
     // Check if guest exists by email or ID number
     const existing = await this.sql.query(`
       SELECT id FROM guests 
-      WHERE tenant_id = @tenant_id AND (email = @email OR id_number = @id_number)
+      WHERE tenant_id = @tenantId AND (email = @email OR id_number = @idNumber)
     `, { 
-      tenant_id: tenantId, 
+      tenantId: tenantId, 
       email: createGuestDto.email, 
-      id_number: createGuestDto.id_number 
+      idNumber: createGuestDto.id_number 
     });
 
     if (existing.length > 0) {
@@ -24,10 +24,19 @@ export class GuestsService {
     const result = await this.sql.query(`
       INSERT INTO guests (tenant_id, first_name, last_name, email, phone, id_type, id_number, id_document_url, date_of_birth, nationality, address, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenant_id, @first_name, @last_name, @email, @phone, @id_type, @id_number, @id_document_url, @date_of_birth, @nationality, @address, GETUTCDATE())
+      VALUES (@tenantId, @firstName, @lastName, @email, @phone, @idType, @idNumber, @idDocumentUrl, @dateOfBirth, @nationality, @address, GETUTCDATE())
     `, {
-      tenant_id: tenantId,
-      ...createGuestDto
+      tenantId: tenantId,
+      firstName: createGuestDto.first_name,
+      lastName: createGuestDto.last_name,
+      email: createGuestDto.email,
+      phone: createGuestDto.phone,
+      idType: createGuestDto.id_type,
+      idNumber: createGuestDto.id_number,
+      idDocumentUrl: createGuestDto.id_document_url,
+      dateOfBirth: createGuestDto.date_of_birth,
+      nationality: createGuestDto.nationality,
+      address: createGuestDto.address
     });
 
     return result[0];
@@ -35,8 +44,8 @@ export class GuestsService {
 
   async findByEmail(tenantId: number, email: string) {
     return this.sql.query(`
-      SELECT * FROM guests WHERE tenant_id = @tenant_id AND email = @email
-    `, { tenant_id: tenantId, email });
+      SELECT * FROM guests WHERE tenant_id = @tenantId AND email = @email
+    `, { tenantId: tenantId, email });
   }
 
   async getGuestHistory(tenantId: number, guestId: number) {
@@ -46,8 +55,8 @@ export class GuestsService {
       JOIN hotels h ON b.hotel_id = h.id
       JOIN rooms r ON b.room_id = r.id
       JOIN room_types rt ON r.room_type_id = rt.id
-      WHERE b.tenant_id = @tenant_id AND b.guest_id = @guest_id
+      WHERE b.tenant_id = @tenantId AND b.guest_id = @guestId
       ORDER BY b.check_in_date DESC
-    `, { tenant_id: tenantId, guest_id: guestId });
+    `, { tenantId: tenantId, guestId: guestId });
   }
 }

@@ -10,11 +10,16 @@ export class HotelsService {
     const result = await this.sql.query(`
       INSERT INTO hotels (tenant_id, name, address, city, phone, email, parent_hotel_id, is_headquarters, created_at)
       OUTPUT INSERTED.*
-      VALUES (@tenant_id, @name, @address, @city, @phone, @email, @parent_hotel_id, @is_headquarters, GETUTCDATE())
+      VALUES (@tenantId, @name, @address, @city, @phone, @email, @parentHotelId, @isHeadquarters, GETUTCDATE())
     `, {
-      tenant_id: tenantId,
-      ...createHotelDto,
-      is_headquarters: createHotelDto.is_headquarters || false
+      tenantId: tenantId,
+      name: createHotelDto.name,
+      address: createHotelDto.address,
+      city: createHotelDto.city,
+      phone: createHotelDto.phone,
+      email: createHotelDto.email,
+      parentHotelId: createHotelDto.parent_hotel_id || null,
+      isHeadquarters: createHotelDto.is_headquarters || false
     });
     return result[0];
   }
@@ -24,17 +29,17 @@ export class HotelsService {
       SELECT h.*, 
         (SELECT COUNT(*) FROM hotels WHERE parent_hotel_id = h.id) as branch_count
       FROM hotels h 
-      WHERE h.tenant_id = @tenant_id 
+      WHERE h.tenant_id = @tenantId 
       ORDER BY h.is_headquarters DESC, h.created_at
-    `, { tenant_id: tenantId });
+    `, { tenantId: tenantId });
   }
 
   async findBranches(tenantId: number, parentHotelId: number) {
     return this.sql.query(`
       SELECT * FROM hotels 
-      WHERE tenant_id = @tenant_id AND parent_hotel_id = @parent_hotel_id
+      WHERE tenant_id = @tenantId AND parent_hotel_id = @parentHotelId
       ORDER BY created_at
-    `, { tenant_id: tenantId, parent_hotel_id: parentHotelId });
+    `, { tenantId: tenantId, parentHotelId: parentHotelId });
   }
 
   async update(tenantId: number, hotelId: number, updateData: Partial<CreateHotelDto>) {
@@ -47,8 +52,8 @@ export class HotelsService {
           email = COALESCE(@email, email),
           updated_at = GETUTCDATE()
       OUTPUT INSERTED.*
-      WHERE id = @hotel_id AND tenant_id = @tenant_id
-    `, { hotel_id: hotelId, tenant_id: tenantId, ...updateData });
+      WHERE id = @hotelId AND tenant_id = @tenantId
+    `, { hotelId: hotelId, tenantId: tenantId, name: updateData.name, address: updateData.address, city: updateData.city, phone: updateData.phone, email: updateData.email });
     return result[0];
   }
 }

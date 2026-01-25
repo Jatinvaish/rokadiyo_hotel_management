@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Param, Get, Query, Logger } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from 'src/core/decorators/public.decorator';
 import { Unencrypted } from 'src/core/decorators/unencrypted.decorator';
@@ -15,6 +15,8 @@ import { SendInvitationDto, AcceptInvitationDto, RejectInvitationDto } from './d
 @ApiTags('Authentication')
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
+  private logger = new Logger(AuthController.name);
+
   constructor(private auth: AuthService) { }
 
   // ==================== PUBLIC ENDPOINTS ====================
@@ -60,8 +62,105 @@ export class AuthController {
     @CurrentUser() user: any,
     @Body() dto: CreateTenantDto
   ) {
-    const result = await this.auth.createTenantWithUser(user, dto);
-    return { message: 'Tenant created successfully', data: result };
+    this.logger.log('=====================================');
+    this.logger.log('🚀 CREATE TENANT ENDPOINT CALLED');
+    this.logger.log('=====================================');
+    this.logger.log(`Current User: ${JSON.stringify(user)}`);
+    this.logger.log(`User Type: ${user?.userType}`);
+    this.logger.log(`User ID: ${user?.id}`);
+    this.logger.log(`DTO Received: ${JSON.stringify(dto)}`);
+    
+    try {
+      this.logger.log('📞 Calling auth.createTenantWithUser service...');
+      const result = await this.auth.createTenantWithUser(user, dto);
+      this.logger.log(`✅ Tenant created successfully!`);
+      this.logger.log(`Result: ${JSON.stringify(result)}`);
+      return { message: 'Tenant created successfully', data: result };
+    } catch (error) {
+      this.logger.error(`❌ Error creating tenant: ${error.message}`, error.stack);
+      throw error;
+    }
+  }
+
+  @Post('tenants/list')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Get all tenants with pagination' })
+  @ApiResponse({ status: 200, description: 'Tenants retrieved successfully' })
+  async getTenantsList(
+    @Body() params?: { page?: number; limit?: number; search?: string; is_active?: boolean }
+  ) {
+    const page = params?.page || 1;
+    const limit = params?.limit || 10;
+    const search = params?.search;
+    const is_active = params?.is_active;
+    
+    const result = await this.auth.getTenantsList(
+      page,
+      limit,
+      search,
+      is_active
+    );
+    return { message: 'Tenants retrieved', data: result };
+  }
+
+  @Post('tenants/get/:id')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Get tenant by ID' })
+  @ApiResponse({ status: 200, description: 'Tenant retrieved successfully' })
+  async getTenantById(@Param('id') id: string) {
+    const result = await this.auth.getTenantById(parseInt(id));
+    return { message: 'Tenant retrieved', data: result };
+  }
+
+  @Post('tenants/update/:id')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Update tenant' })
+  @ApiResponse({ status: 200, description: 'Tenant updated successfully' })
+  async updateTenant(
+    @Param('id') id: string,
+    @Body() dto: Partial<CreateTenantDto>
+  ) {
+    const result = await this.auth.updateTenant(parseInt(id), dto);
+    return { message: 'Tenant updated successfully', data: result };
+  }
+
+  @Post('tenants/:id/activate')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Activate tenant' })
+  @ApiResponse({ status: 200, description: 'Tenant activated successfully' })
+  async activateTenant(@Param('id') id: string) {
+    const result = await this.auth.activateTenant(parseInt(id));
+    return { message: 'Tenant activated', data: result };
+  }
+
+  @Post('tenants/:id/deactivate')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Deactivate tenant' })
+  @ApiResponse({ status: 200, description: 'Tenant deactivated successfully' })
+  async deactivateTenant(@Param('id') id: string) {
+    const result = await this.auth.deactivateTenant(parseInt(id));
+    return { message: 'Tenant deactivated', data: result };
+  }
+
+  @Post('tenants/:id/delete')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Delete tenant' })
+  @ApiResponse({ status: 200, description: 'Tenant deleted successfully' })
+  async deleteTenant(@Param('id') id: string) {
+    await this.auth.deleteTenant(parseInt(id));
+    return { message: 'Tenant deleted successfully' };
   }
 
   // ==================== INVITATION ENDPOINTS ====================
@@ -93,7 +192,7 @@ export class AuthController {
   }
 
   @Public()
-  @Patch('invitation/reject/:token')
+  @Post('invitation/reject/:token')
   @ApiOperation({ summary: 'Reject invitation' })
   @ApiResponse({ status: 200, description: 'Invitation rejected' })
   async rejectInvitation(
