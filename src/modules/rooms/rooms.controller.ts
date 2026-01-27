@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
-import { BulkCreateRoomsDto } from './dto/create-room.dto';
+import { CreateRoomTypeDto, CreateRoomDto, BulkCreateRoomsDto } from './dto/create-room.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -11,7 +11,7 @@ export class RoomsController {
   constructor(private roomsService: RoomsService) { }
 
   @Post('room-types/create')
-  async createRoomType(@Request() req, @Body() body: any) {
+  async createRoomType(@Request() req, @Body() body: CreateRoomTypeDto) {
     return this.roomsService.createRoomType(req.user.tenantId, req.user.firmId, req.user.branchId, body);
   }
 
@@ -22,7 +22,7 @@ export class RoomsController {
 
   @Post('rooms/bulk-create')
   async bulkCreateRooms(@Request() req, @Body() bulkCreateDto: BulkCreateRoomsDto) {
-    return this.roomsService.bulkCreateRooms(req.user.tenantId, req.user.firmId, req.user.branchId, bulkCreateDto);
+    return this.roomsService.bulkCreateRooms(req.user.tenantId, bulkCreateDto);
   }
 
   @Post('list')
@@ -33,6 +33,8 @@ export class RoomsController {
     branch_id?: number;
     status?: string;
     search?: string;
+    sortField?: string;
+    sortOrder?: 'ASC' | 'DESC';
   }) {
     return this.roomsService.getRooms(req.user.tenantId, {
       page: filters?.page,
@@ -40,7 +42,9 @@ export class RoomsController {
       firm_id: filters?.firm_id || req.user.firmId,
       branch_id: filters?.branch_id || req.user.branchId,
       status: filters?.status,
-      search: filters?.search
+      search: filters?.search,
+      sortField: filters?.sortField,
+      sortOrder: filters?.sortOrder
     });
   }
 
@@ -50,8 +54,8 @@ export class RoomsController {
   }
 
   @Post('create')
-  async createRoom(@Request() req, @Body() createRoomDto: any) {
-    return this.roomsService.createRoom(req.user.tenantId, req.user.firmId, req.user.branchId, createRoomDto);
+  async createRoom(@Request() req, @Body() createRoomDto: CreateRoomDto) {
+    return this.roomsService.createRoom(req.user.tenantId, createRoomDto);
   }
 
   @Post('update')
