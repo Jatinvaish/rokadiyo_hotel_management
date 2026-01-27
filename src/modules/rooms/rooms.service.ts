@@ -17,7 +17,7 @@ export class RoomsService {
         base_rate_hourly, base_rate_daily, base_rate_weekly, base_rate_monthly,
         extra_bed_rate, extra_person_rate, child_rate,
         size_sqft, bed_type, bed_count, view_type,
-        is_active, created_at
+        images, is_active, created_at
       )
       OUTPUT INSERTED.*
       VALUES (
@@ -27,12 +27,12 @@ export class RoomsService {
         @baseRateHourly, @baseRateDaily, @baseRateWeekly, @baseRateMonthly,
         @extraBed_rate, @extraPerson_rate, @childRate,
         @sizeSqft, @bedType, @bedCount, @viewType,
-        1, GETUTCDATE()
+        @images, 1, GETUTCDATE()
       )
     `, {
       tenantId, firmId, branchId: branchId || null,
       typeCode,
-      typeName: dto.name,
+      typeName: dto.type_name || dto.name,
       description: dto.description || null,
       maxAdults: dto.max_adults || 2,
       maxChildren: dto.max_children || 0,
@@ -40,6 +40,7 @@ export class RoomsService {
       maxExtraBeds: dto.max_extra_beds || 0,
       baseRateHourly: dto.base_rate_hourly || null,
       baseRateDaily: dto.base_rate_daily,
+      images: dto.images || null,
       baseRateWeekly: dto.base_rate_weekly || null,
       baseRateMonthly: dto.base_rate_monthly || null,
       extraBed_rate: dto.extra_bed_rate || null,
@@ -255,12 +256,13 @@ export class RoomsService {
         bed_type = ISNULL(@bedType, bed_type),
         bed_count = ISNULL(@bedCount, bed_count),
         view_type = ISNULL(@viewType, view_type),
+        images = ISNULL(@images, images),
         updated_at = GETUTCDATE()
       OUTPUT INSERTED.*
       WHERE id = @roomTypeId
     `, {
       roomTypeId,
-      typeName: dto.name || null,
+      typeName: dto.type_name || dto.name || null,
       description: dto.description || null,
       maxAdults: dto.max_adults || null,
       maxChildren: dto.max_children || null,
@@ -276,7 +278,8 @@ export class RoomsService {
       sizeSqft: dto.size_sqft || null,
       bedType: dto.bed_type || null,
       bedCount: dto.bed_count || null,
-      viewType: dto.view_type || null
+      viewType: dto.view_type || null,
+      images: dto.images || null
     });
     return result[0];
   }

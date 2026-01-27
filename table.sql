@@ -2155,6 +2155,7 @@ CREATE TABLE [dbo].[guests](
 	[nationality] [nvarchar](100) NULL,
 	[id_proof_type] [nvarchar](50) NULL,
 	[id_proof_number] [nvarchar](100) NULL,
+	[id_proof_url] [nvarchar](max) NULL,
 	[company_name] [nvarchar](255) NULL,
 	[gst_number] [nvarchar](50) NULL,
 	[vip_status] [nvarchar](30) NULL,

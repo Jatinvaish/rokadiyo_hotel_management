@@ -6,6 +6,10 @@ export class CreateRoomTypeDto {
 
   @IsString()
   @IsOptional()
+  type_name?: string;
+
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @IsNumber()
@@ -65,6 +69,10 @@ export class CreateRoomTypeDto {
   @IsString()
   @IsOptional()
   view_type?: string;
+
+  @IsString()
+  @IsOptional()
+  images?: string;
 }
 
 export class CreateRoomDto {

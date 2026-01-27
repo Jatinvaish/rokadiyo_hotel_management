@@ -18,12 +18,14 @@ import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import encryptionConfig from './config/encryption.config';
 import jwtConfig from './config/jwt.config';
+import r2Config from './config/r2.config';
+import { R2Module } from './core/r2/r2.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, encryptionConfig, jwtConfig],
+      load: [appConfig, databaseConfig, encryptionConfig, jwtConfig, r2Config],
     }),
     DatabaseModule,
     AuthModule,
@@ -35,6 +37,7 @@ import jwtConfig from './config/jwt.config';
     BookingsModule,
     CheckinModule,
     DashboardModule,
+    R2Module,
   ],
   providers: [
     EncryptionService,

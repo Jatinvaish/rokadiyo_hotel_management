@@ -14,11 +14,14 @@ export class GuestsService {
     // Check if guest exists
     const existing = await this.sql.query(`
       SELECT id FROM guests 
-      WHERE tenant_id = @tenantId AND (email = @email OR id_proof_number = @idProofNumber)
+      WHERE tenant_id = @tenantId AND (
+        (@email IS NOT NULL AND email = @email) OR 
+        (@idProofNumber IS NOT NULL AND id_proof_number = @idProofNumber)
+      )
     `, {
       tenantId,
-      email: createGuestDto.email,
-      idProofNumber: createGuestDto.id_number
+      email: createGuestDto.email || null,
+      idProofNumber: createGuestDto.id_number || null
     });
 
     // Fallback: If firmId/branchId are missing, fetch defaults from Tenant
@@ -41,23 +44,41 @@ export class GuestsService {
     }
 
     const result = await this.sql.query(`
-      INSERT INTO guests (tenant_id, firm_id, branch_id, guest_code, first_name, last_name, email, phone, id_proof_type, id_proof_number, date_of_birth, nationality, notes, created_at)
+      INSERT INTO guests (
+        tenant_id, firm_id, branch_id, guest_code, first_name, last_name, 
+        email, phone, phone_secondary, id_proof_type, id_proof_number, id_proof_url,
+        date_of_birth, gender, nationality, company_name, gst_number, 
+        vip_status, notes, blacklisted, blacklist_reason, created_at
+      )
       OUTPUT INSERTED.*
-      VALUES (@tenantId, @firmId, @branchId, @guestCode, @firstName, @lastName, @email, @phone, @idProofType, @idProofNumber, @dateOfBirth, @nationality, @notes, GETUTCDATE())
+      VALUES (
+        @tenantId, @firmId, @branchId, @guestCode, @firstName, @lastName, 
+        @email, @phone, @phoneSecondary, @idProofType, @idProofNumber, @idProofUrl,
+        @dateOfBirth, @gender, @nationality, @companyName, @gstNumber, 
+        @vipStatus, @notes, @blacklisted, @blacklistReason, GETUTCDATE()
+      )
     `, {
       tenantId,
       firmId: finalFirmId || null,
       branchId: finalBranchId || null,
       guestCode,
       firstName: createGuestDto.first_name,
-      lastName: createGuestDto.last_name,
-      email: createGuestDto.email,
+      lastName: createGuestDto.last_name || null,
+      email: createGuestDto.email || null,
       phone: createGuestDto.phone,
-      idProofType: createGuestDto.id_type,
-      idProofNumber: createGuestDto.id_number,
+      phoneSecondary: createGuestDto.phone_secondary || null,
+      idProofType: createGuestDto.id_type || null,
+      idProofNumber: createGuestDto.id_number || null,
+      idProofUrl: createGuestDto.id_document_url || null,
       dateOfBirth: createGuestDto.date_of_birth || null,
+      gender: createGuestDto.gender || null,
       nationality: createGuestDto.nationality || null,
-      notes: createGuestDto.address || null
+      companyName: createGuestDto.company_name || null,
+      gstNumber: createGuestDto.gst_number || null,
+      vipStatus: createGuestDto.vip_status || null,
+      notes: createGuestDto.notes || createGuestDto.address || null,
+      blacklisted: createGuestDto.blacklisted ? 1 : 0,
+      blacklistReason: createGuestDto.blacklist_reason || null
     });
 
     return result[0];
@@ -138,11 +159,19 @@ export class GuestsService {
         last_name = @lastName,
         email = @email,
         phone = @phone,
+        phone_secondary = @phoneSecondary,
         id_proof_type = @idProofType,
         id_proof_number = @idProofNumber,
+        id_proof_url = @idProofUrl,
         date_of_birth = @dateOfBirth,
+        gender = @gender,
         nationality = @nationality,
+        company_name = @companyName,
+        gst_number = @gstNumber,
+        vip_status = @vipStatus,
         notes = @notes,
+        blacklisted = @blacklisted,
+        blacklist_reason = @blacklistReason,
         updated_at = GETUTCDATE()
       OUTPUT INSERTED.*
       WHERE id = @guestId AND tenant_id = @tenantId
@@ -150,14 +179,22 @@ export class GuestsService {
       guestId,
       tenantId,
       firstName: updateGuestDto.first_name,
-      lastName: updateGuestDto.last_name,
-      email: updateGuestDto.email,
+      lastName: updateGuestDto.last_name || null,
+      email: updateGuestDto.email || null,
       phone: updateGuestDto.phone,
-      idProofType: updateGuestDto.id_type,
-      idProofNumber: updateGuestDto.id_number,
-      dateOfBirth: updateGuestDto.date_of_birth,
-      nationality: updateGuestDto.nationality,
-      notes: updateGuestDto.address
+      phoneSecondary: updateGuestDto.phone_secondary || null,
+      idProofType: updateGuestDto.id_type || null,
+      idProofNumber: updateGuestDto.id_number || null,
+      idProofUrl: updateGuestDto.id_document_url || null,
+      dateOfBirth: updateGuestDto.date_of_birth || null,
+      gender: updateGuestDto.gender || null,
+      nationality: updateGuestDto.nationality || null,
+      companyName: updateGuestDto.company_name || null,
+      gstNumber: updateGuestDto.gst_number || null,
+      vipStatus: updateGuestDto.vip_status || null,
+      notes: updateGuestDto.notes || updateGuestDto.address || null,
+      blacklisted: updateGuestDto.blacklisted ? 1 : 0,
+      blacklistReason: updateGuestDto.blacklist_reason || null
     });
     return result[0];
   }
