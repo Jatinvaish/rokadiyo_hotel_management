@@ -1,22 +1,126 @@
-USE [rokadiyo_hotel_mgmt]
-GO
+ GO
 
-/****** Object:  Table [dbo].[occupancy_reports]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[menu_permissions]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[occupancy_reports](
+CREATE TABLE [dbo].[menu_permissions](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[menu_key] [nvarchar](100) NOT NULL,
+	[menu_name] [nvarchar](255) NULL,
+	[parent_menu_key] [nvarchar](100) NULL,
+	[permission_ids] [nvarchar](max) NULL,
+	[match_type] [nvarchar](20) NOT NULL,
+	[display_order] [int] NULL,
+	[icon] [nvarchar](100) NULL,
+	[route] [nvarchar](500) NULL,
+	[status] [nvarchar](20) NOT NULL,
+	[is_active] [bit] NOT NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[menu_key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[policies]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[policies](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[policy_key] [nvarchar](100) NOT NULL,
+	[policy_name] [nvarchar](255) NULL,
+	[permission_id] [bigint] NULL,
+	[role_id] [bigint] NULL,
+	[policy_type] [nvarchar](50) NOT NULL,
+	[effect] [nvarchar](10) NOT NULL,
+	[condition] [nvarchar](max) NOT NULL,
+	[priority] [int] NOT NULL,
+	[tenant_id] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
+	[status] [nvarchar](20) NOT NULL,
+	[is_active] [bit] NOT NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[policy_key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[resources]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[resources](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[resource_key] [nvarchar](100) NOT NULL,
+	[resource_name] [nvarchar](255) NULL,
+	[parent_id] [bigint] NULL,
+	[module] [nvarchar](100) NULL,
+	[status] [nvarchar](20) NOT NULL,
+	[is_active] [bit] NOT NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[resource_key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[revenue_reports]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[revenue_reports](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[hotel_id] [bigint] NOT NULL,
-	[report_date] [date] NOT NULL,
-	[room_type_id] [bigint] NULL,
-	[total_rooms] [int] NOT NULL,
-	[occupied] [int] NOT NULL,
-	[available] [int] NOT NULL,
-	[occupancy_percent] [decimal](5, 2) NULL,
+	[report_period] [nvarchar](20) NOT NULL,
+	[period_start] [date] NOT NULL,
+	[period_end] [date] NOT NULL,
+	[room_revenue] [decimal](10, 2) NULL,
+	[fb_revenue] [decimal](10, 2) NULL,
+	[service_revenue] [decimal](10, 2) NULL,
+	[other_revenue] [decimal](10, 2) NULL,
+	[total_revenue] [decimal](10, 2) NULL,
+	[taxes] [decimal](10, 2) NULL,
+	[net_revenue] [decimal](10, 2) NULL,
 	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -25,7 +129,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[daily_reports]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[daily_reports]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -59,26 +163,22 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[revenue_reports]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[occupancy_reports]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[revenue_reports](
+CREATE TABLE [dbo].[occupancy_reports](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[hotel_id] [bigint] NOT NULL,
-	[report_period] [nvarchar](20) NOT NULL,
-	[period_start] [date] NOT NULL,
-	[period_end] [date] NOT NULL,
-	[room_revenue] [decimal](10, 2) NULL,
-	[fb_revenue] [decimal](10, 2) NULL,
-	[service_revenue] [decimal](10, 2) NULL,
-	[other_revenue] [decimal](10, 2) NULL,
-	[total_revenue] [decimal](10, 2) NULL,
-	[taxes] [decimal](10, 2) NULL,
-	[net_revenue] [decimal](10, 2) NULL,
+	[report_date] [date] NOT NULL,
+	[room_type_id] [bigint] NULL,
+	[total_rooms] [int] NOT NULL,
+	[occupied] [int] NOT NULL,
+	[available] [int] NOT NULL,
+	[occupancy_percent] [decimal](5, 2) NULL,
 	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -87,7 +187,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[loyalty_transactions]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[loyalty_transactions]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -111,7 +211,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_blocks]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[room_blocks]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -138,7 +238,31 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[notifications]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[email_logs]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[email_logs](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[recipient_email] [nvarchar](320) NOT NULL,
+	[subject] [nvarchar](255) NOT NULL,
+	[body] [nvarchar](max) NOT NULL,
+	[provider] [nvarchar](50) NULL,
+	[message_id] [nvarchar](100) NULL,
+	[status] [nvarchar](20) NULL,
+	[sent_at] [datetime2](7) NULL,
+	[opened_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[notifications]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -163,7 +287,55 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[lost_and_found]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[sms_logs]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[sms_logs](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[recipient_phone] [nvarchar](20) NOT NULL,
+	[message] [nvarchar](max) NOT NULL,
+	[provider] [nvarchar](50) NULL,
+	[message_id] [nvarchar](100) NULL,
+	[status] [nvarchar](20) NULL,
+	[sent_at] [datetime2](7) NULL,
+	[delivered_at] [datetime2](7) NULL,
+	[cost] [decimal](10, 4) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[loyalty_programs]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[loyalty_programs](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NULL,
+	[program_name] [nvarchar](100) NOT NULL,
+	[tier_name] [nvarchar](50) NOT NULL,
+	[points_per_currency] [decimal](10, 2) NULL,
+	[min_points_required] [int] NULL,
+	[benefits] [nvarchar](max) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[lost_and_found]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -198,79 +370,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[loyalty_programs]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[loyalty_programs](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NULL,
-	[program_name] [nvarchar](100) NOT NULL,
-	[tier_name] [nvarchar](50) NOT NULL,
-	[points_per_currency] [decimal](10, 2) NULL,
-	[min_points_required] [int] NULL,
-	[benefits] [nvarchar](max) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[email_logs]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[email_logs](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[recipient_email] [nvarchar](320) NOT NULL,
-	[subject] [nvarchar](255) NOT NULL,
-	[body] [nvarchar](max) NOT NULL,
-	[provider] [nvarchar](50) NULL,
-	[message_id] [nvarchar](100) NULL,
-	[status] [nvarchar](20) NULL,
-	[sent_at] [datetime2](7) NULL,
-	[opened_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[sms_logs]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[sms_logs](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[recipient_phone] [nvarchar](20) NOT NULL,
-	[message] [nvarchar](max) NOT NULL,
-	[provider] [nvarchar](50) NULL,
-	[message_id] [nvarchar](100) NULL,
-	[status] [nvarchar](20) NULL,
-	[sent_at] [datetime2](7) NULL,
-	[delivered_at] [datetime2](7) NULL,
-	[cost] [decimal](10, 4) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[corporate_contracts]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[corporate_contracts]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -300,7 +400,54 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_communications]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[promo_usage]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[promo_usage](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[promotion_id] [bigint] NOT NULL,
+	[booking_id] [bigint] NOT NULL,
+	[guest_id] [bigint] NOT NULL,
+	[discount_applied] [decimal](10, 2) NOT NULL,
+	[used_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[travel_agent_commissions]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[travel_agent_commissions](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[agent_name] [nvarchar](255) NOT NULL,
+	[agent_code] [nvarchar](50) NOT NULL,
+	[contact_person] [nvarchar](255) NULL,
+	[contact_email] [nvarchar](320) NULL,
+	[contact_phone] [nvarchar](20) NULL,
+	[commission_percent] [decimal](5, 2) NOT NULL,
+	[payment_terms] [nvarchar](100) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[guest_communications]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -327,28 +474,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[promo_usage]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[promo_usage](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[promotion_id] [bigint] NOT NULL,
-	[booking_id] [bigint] NOT NULL,
-	[guest_id] [bigint] NOT NULL,
-	[discount_applied] [decimal](10, 2) NOT NULL,
-	[used_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[guest_reviews]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[guest_reviews]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -384,33 +510,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[travel_agent_commissions]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[travel_agent_commissions](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[agent_name] [nvarchar](255) NOT NULL,
-	[agent_code] [nvarchar](50) NOT NULL,
-	[contact_person] [nvarchar](255) NULL,
-	[contact_email] [nvarchar](320) NULL,
-	[contact_phone] [nvarchar](20) NULL,
-	[commission_percent] [decimal](5, 2) NOT NULL,
-	[payment_terms] [nvarchar](100) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[staff_attendance]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[staff_attendance]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -434,7 +534,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[promotions]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[promotions]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -470,30 +570,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[staff_schedules]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[staff_schedules](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[staff_id] [bigint] NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[shift_id] [bigint] NOT NULL,
-	[schedule_date] [date] NOT NULL,
-	[status] [nvarchar](20) NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[staff_leaves]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[staff_leaves]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -519,7 +596,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[shifts]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[shifts]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -541,67 +618,22 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[laundry_items]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[staff_schedules]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[laundry_items](
+CREATE TABLE [dbo].[staff_schedules](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[laundry_service_id] [bigint] NOT NULL,
-	[item_name] [nvarchar](100) NOT NULL,
-	[quantity] [int] NOT NULL,
-	[service_type] [nvarchar](30) NOT NULL,
-	[unit_price] [decimal](10, 2) NOT NULL,
-	[amount] [decimal](10, 2) NOT NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[laundry_services]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[laundry_services](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[guest_service_id] [bigint] NOT NULL,
-	[pickup_at] [datetime2](7) NULL,
-	[delivery_at] [datetime2](7) NULL,
-	[urgency] [nvarchar](20) NULL,
-	[express_charges] [decimal](10, 2) NULL,
-	[total_items] [int] NULL,
-	[total_charges] [decimal](10, 2) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[departments]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[departments](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[staff_id] [bigint] NOT NULL,
 	[hotel_id] [bigint] NOT NULL,
-	[department_name] [nvarchar](100) NOT NULL,
-	[department_head_id] [bigint] NULL,
-	[is_active] [bit] NULL,
+	[shift_id] [bigint] NOT NULL,
+	[schedule_date] [date] NOT NULL,
+	[status] [nvarchar](20) NULL,
 	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -609,29 +641,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[spa_services]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[spa_services](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[service_name] [nvarchar](255) NOT NULL,
-	[duration_minutes] [int] NOT NULL,
-	[price] [decimal](10, 2) NOT NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[guest_services]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[guest_services]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -665,7 +675,97 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[transport_services]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[laundry_items]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[laundry_items](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[laundry_service_id] [bigint] NOT NULL,
+	[item_name] [nvarchar](100) NOT NULL,
+	[quantity] [int] NOT NULL,
+	[service_type] [nvarchar](30) NOT NULL,
+	[unit_price] [decimal](10, 2) NOT NULL,
+	[amount] [decimal](10, 2) NOT NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[spa_services]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[spa_services](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[service_name] [nvarchar](255) NOT NULL,
+	[duration_minutes] [int] NOT NULL,
+	[price] [decimal](10, 2) NOT NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[departments]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[departments](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[department_name] [nvarchar](100) NOT NULL,
+	[department_head_id] [bigint] NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[laundry_services]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[laundry_services](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[guest_service_id] [bigint] NOT NULL,
+	[pickup_at] [datetime2](7) NULL,
+	[delivery_at] [datetime2](7) NULL,
+	[urgency] [nvarchar](20) NULL,
+	[express_charges] [decimal](10, 2) NULL,
+	[total_items] [int] NULL,
+	[total_charges] [decimal](10, 2) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[transport_services]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -692,7 +792,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[services]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[services]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -720,7 +820,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[service_categories]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[service_categories]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -740,30 +840,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[kitchen_orders]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[kitchen_orders](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[food_order_id] [bigint] NOT NULL,
-	[assigned_to] [bigint] NULL,
-	[started_at] [datetime2](7) NULL,
-	[completed_at] [datetime2](7) NULL,
-	[status] [nvarchar](30) NULL,
-	[notes] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[food_order_items]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[food_order_items]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -788,7 +865,108 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[food_orders]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[kitchen_orders]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[kitchen_orders](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[food_order_id] [bigint] NOT NULL,
+	[assigned_to] [bigint] NULL,
+	[started_at] [datetime2](7) NULL,
+	[completed_at] [datetime2](7) NULL,
+	[status] [nvarchar](30) NULL,
+	[notes] [nvarchar](max) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[menu_item_variants]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[menu_item_variants](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[menu_item_id] [bigint] NOT NULL,
+	[variant_name] [nvarchar](100) NOT NULL,
+	[price] [decimal](10, 2) NOT NULL,
+	[is_available] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[menu_items]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[menu_items](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[category_id] [bigint] NOT NULL,
+	[item_code] [nvarchar](50) NULL,
+	[item_name] [nvarchar](255) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[price] [decimal](10, 2) NOT NULL,
+	[preparation_time_minutes] [int] NULL,
+	[is_vegetarian] [bit] NULL,
+	[is_vegan] [bit] NULL,
+	[is_spicy] [bit] NULL,
+	[allergens] [nvarchar](max) NULL,
+	[image_url] [nvarchar](500) NULL,
+	[is_available] [bit] NULL,
+	[display_order] [int] NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[restaurants]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[restaurants](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[restaurant_name] [nvarchar](100) NOT NULL,
+	[cuisine_type] [nvarchar](100) NULL,
+	[seating_capacity] [int] NULL,
+	[opening_time] [time](7) NULL,
+	[closing_time] [time](7) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[food_orders]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -828,31 +1006,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[restaurants]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[restaurants](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[restaurant_name] [nvarchar](100) NOT NULL,
-	[cuisine_type] [nvarchar](100) NULL,
-	[seating_capacity] [int] NULL,
-	[opening_time] [time](7) NULL,
-	[closing_time] [time](7) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[menu_categories]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[menu_categories]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -873,108 +1027,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[menu_item_variants]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[menu_item_variants](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[menu_item_id] [bigint] NOT NULL,
-	[variant_name] [nvarchar](100) NOT NULL,
-	[price] [decimal](10, 2) NOT NULL,
-	[is_available] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[menu_items]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[menu_items](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[category_id] [bigint] NOT NULL,
-	[item_code] [nvarchar](50) NULL,
-	[item_name] [nvarchar](255) NOT NULL,
-	[description] [nvarchar](max) NULL,
-	[price] [decimal](10, 2) NOT NULL,
-	[preparation_time_minutes] [int] NULL,
-	[is_vegetarian] [bit] NULL,
-	[is_vegan] [bit] NULL,
-	[is_spicy] [bit] NULL,
-	[allergens] [nvarchar](max) NULL,
-	[image_url] [nvarchar](500) NULL,
-	[is_available] [bit] NULL,
-	[display_order] [int] NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[inventory_suppliers]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[inventory_suppliers](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[tenant_id] [bigint] NOT NULL,
-	[supplier_name] [nvarchar](255) NOT NULL,
-	[contact_person] [nvarchar](255) NULL,
-	[phone] [nvarchar](20) NOT NULL,
-	[email] [nvarchar](320) NULL,
-	[address] [nvarchar](max) NULL,
-	[payment_terms] [nvarchar](100) NULL,
-	[rating] [decimal](2, 1) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[inventory_categories]    Script Date: 26-01-2026 00:55:19 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[inventory_categories](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[category_name] [nvarchar](100) NOT NULL,
-	[parent_category_id] [bigint] NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[inventory_alerts]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[inventory_alerts]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -997,7 +1050,28 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_items]    Script Date: 26-01-2026 00:55:19 ******/
+/****** Object:  Table [dbo].[inventory_categories]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[inventory_categories](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[category_name] [nvarchar](100) NOT NULL,
+	[parent_category_id] [bigint] NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[inventory_items]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1032,7 +1106,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[inventory_transactions]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[inventory_transactions]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1060,7 +1134,33 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[maintenance_vendors]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[inventory_suppliers]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[inventory_suppliers](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[tenant_id] [bigint] NOT NULL,
+	[supplier_name] [nvarchar](255) NOT NULL,
+	[contact_person] [nvarchar](255) NULL,
+	[phone] [nvarchar](20) NOT NULL,
+	[email] [nvarchar](320) NULL,
+	[address] [nvarchar](max) NULL,
+	[payment_terms] [nvarchar](100) NULL,
+	[rating] [decimal](2, 1) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[maintenance_vendors]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1088,33 +1188,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[maintenance_schedules]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[maintenance_schedules](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[room_id] [bigint] NULL,
-	[equipment_name] [nvarchar](255) NOT NULL,
-	[maintenance_type] [nvarchar](50) NOT NULL,
-	[frequency] [nvarchar](30) NOT NULL,
-	[last_done_at] [date] NULL,
-	[next_due_at] [date] NOT NULL,
-	[assigned_to] [bigint] NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[housekeeping_staff_assignments]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[housekeeping_staff_assignments]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1139,7 +1213,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_maintenance]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[room_maintenance]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1176,19 +1250,24 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[cleaning_checklist_items]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[maintenance_schedules]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[cleaning_checklist_items](
+CREATE TABLE [dbo].[maintenance_schedules](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[checklist_id] [bigint] NOT NULL,
-	[item_description] [nvarchar](255) NOT NULL,
-	[is_mandatory] [bit] NULL,
-	[display_order] [int] NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[room_id] [bigint] NULL,
+	[equipment_name] [nvarchar](255) NOT NULL,
+	[maintenance_type] [nvarchar](50) NOT NULL,
+	[frequency] [nvarchar](30) NOT NULL,
+	[last_done_at] [date] NULL,
+	[next_due_at] [date] NOT NULL,
+	[assigned_to] [bigint] NULL,
+	[is_active] [bit] NULL,
 	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -1197,7 +1276,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[cleaning_checklist_logs]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[cleaning_checklist_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1218,28 +1297,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[cleaning_checklists]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[cleaning_checklists](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[checklist_name] [nvarchar](100) NOT NULL,
-	[cleaning_type] [nvarchar](30) NOT NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[room_cleaning_logs]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[room_cleaning_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1275,7 +1333,49 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_inventory]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[cleaning_checklist_items]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[cleaning_checklist_items](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[checklist_id] [bigint] NOT NULL,
+	[item_description] [nvarchar](255) NOT NULL,
+	[is_mandatory] [bit] NULL,
+	[display_order] [int] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[cleaning_checklists]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[cleaning_checklists](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[checklist_name] [nvarchar](100) NOT NULL,
+	[cleaning_type] [nvarchar](30) NOT NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[channel_inventory]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1297,24 +1397,22 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_rates]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[channel_rate_mappings]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[channel_rates](
+CREATE TABLE [dbo].[channel_rate_mappings](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[channel_rate_mapping_id] [bigint] NOT NULL,
-	[date] [date] NOT NULL,
-	[rate] [decimal](10, 2) NOT NULL,
-	[min_stay] [int] NULL,
-	[max_stay] [int] NULL,
-	[closed_to_arrival] [bit] NULL,
-	[closed_to_departure] [bit] NULL,
-	[stop_sell] [bit] NULL,
-	[last_updated_at] [datetime2](7) NULL,
+	[channel_integration_id] [bigint] NOT NULL,
+	[rate_plan_id] [bigint] NOT NULL,
+	[channel_rate_id] [nvarchar](100) NOT NULL,
+	[channel_rate_name] [nvarchar](255) NULL,
+	[markup_percent] [decimal](5, 2) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -1322,32 +1420,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_sync_logs]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[channel_sync_logs](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[channel_integration_id] [bigint] NOT NULL,
-	[sync_type] [nvarchar](30) NOT NULL,
-	[sync_direction] [nvarchar](20) NOT NULL,
-	[status] [nvarchar](20) NOT NULL,
-	[records_processed] [int] NULL,
-	[records_failed] [int] NULL,
-	[error_message] [nvarchar](max) NULL,
-	[started_at] [datetime2](7) NULL,
-	[completed_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[channel_bookings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[channel_bookings]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1380,22 +1453,24 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_rate_mappings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[channel_rates]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[channel_rate_mappings](
+CREATE TABLE [dbo].[channel_rates](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[channel_integration_id] [bigint] NOT NULL,
-	[rate_plan_id] [bigint] NOT NULL,
-	[channel_rate_id] [nvarchar](100) NOT NULL,
-	[channel_rate_name] [nvarchar](255) NULL,
-	[markup_percent] [decimal](5, 2) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
+	[channel_rate_mapping_id] [bigint] NOT NULL,
+	[date] [date] NOT NULL,
+	[rate] [decimal](10, 2) NOT NULL,
+	[min_stay] [int] NULL,
+	[max_stay] [int] NULL,
+	[closed_to_arrival] [bit] NULL,
+	[closed_to_departure] [bit] NULL,
+	[stop_sell] [bit] NULL,
+	[last_updated_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -1403,7 +1478,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[housekeeping_tasks]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[housekeeping_tasks]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1426,48 +1501,24 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_room_mappings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[channel_sync_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[channel_room_mappings](
+CREATE TABLE [dbo].[channel_sync_logs](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[channel_integration_id] [bigint] NOT NULL,
-	[room_type_id] [bigint] NOT NULL,
-	[channel_room_id] [nvarchar](100) NOT NULL,
-	[channel_room_name] [nvarchar](255) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[payment_gateways]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[payment_gateways](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[gateway_name] [nvarchar](50) NOT NULL,
-	[gateway_type] [nvarchar](30) NOT NULL,
-	[api_key] [nvarchar](500) NULL,
-	[api_secret] [nvarchar](500) NULL,
-	[merchant_id] [nvarchar](100) NULL,
-	[is_active] [bit] NULL,
-	[is_default] [bit] NULL,
-	[config] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
+	[sync_type] [nvarchar](30) NOT NULL,
+	[sync_direction] [nvarchar](20) NOT NULL,
+	[status] [nvarchar](20) NOT NULL,
+	[records_processed] [int] NULL,
+	[records_failed] [int] NULL,
+	[error_message] [nvarchar](max) NULL,
+	[started_at] [datetime2](7) NULL,
+	[completed_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -1475,7 +1526,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channel_integrations]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[channel_integrations]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1503,7 +1554,56 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[channels]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[channel_room_mappings]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[channel_room_mappings](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[channel_integration_id] [bigint] NOT NULL,
+	[room_type_id] [bigint] NOT NULL,
+	[channel_room_id] [nvarchar](100) NOT NULL,
+	[channel_room_name] [nvarchar](255) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[payment_gateways]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[payment_gateways](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[gateway_name] [nvarchar](50) NOT NULL,
+	[gateway_type] [nvarchar](30) NOT NULL,
+	[api_key] [nvarchar](500) NULL,
+	[api_secret] [nvarchar](500) NULL,
+	[merchant_id] [nvarchar](100) NULL,
+	[is_active] [bit] NULL,
+	[is_default] [bit] NULL,
+	[config] [nvarchar](max) NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[channels]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1527,7 +1627,59 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[invoices]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[refunds]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[refunds](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[booking_id] [bigint] NOT NULL,
+	[payment_id] [bigint] NULL,
+	[refund_amount] [decimal](10, 2) NOT NULL,
+	[refund_reason] [nvarchar](max) NULL,
+	[refund_method] [nvarchar](30) NOT NULL,
+	[refund_status] [nvarchar](20) NULL,
+	[transaction_id] [nvarchar](100) NULL,
+	[processed_at] [datetime2](7) NULL,
+	[processed_by] [bigint] NULL,
+	[notes] [nvarchar](max) NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[invoice_items]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[invoice_items](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[invoice_id] [bigint] NOT NULL,
+	[item_type] [nvarchar](50) NOT NULL,
+	[description] [nvarchar](max) NOT NULL,
+	[quantity] [decimal](10, 2) NULL,
+	[rate] [decimal](10, 2) NOT NULL,
+	[amount] [decimal](10, 2) NOT NULL,
+	[tax_percent] [decimal](5, 2) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[invoices]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1559,112 +1711,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[invoice_items]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[invoice_items](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[invoice_id] [bigint] NOT NULL,
-	[item_type] [nvarchar](50) NOT NULL,
-	[description] [nvarchar](max) NOT NULL,
-	[quantity] [decimal](10, 2) NULL,
-	[rate] [decimal](10, 2) NOT NULL,
-	[amount] [decimal](10, 2) NOT NULL,
-	[tax_percent] [decimal](5, 2) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[refunds]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[refunds](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[booking_id] [bigint] NOT NULL,
-	[payment_id] [bigint] NULL,
-	[refund_amount] [decimal](10, 2) NOT NULL,
-	[refund_reason] [nvarchar](max) NULL,
-	[refund_method] [nvarchar](30) NOT NULL,
-	[refund_status] [nvarchar](20) NULL,
-	[transaction_id] [nvarchar](100) NULL,
-	[processed_at] [datetime2](7) NULL,
-	[processed_by] [bigint] NULL,
-	[notes] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[check_in_logs]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[check_in_logs](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[booking_id] [bigint] NOT NULL,
-	[room_id] [bigint] NOT NULL,
-	[guest_id] [bigint] NOT NULL,
-	[scheduled_check_in] [datetime2](7) NOT NULL,
-	[actual_check_in] [datetime2](7) NULL,
-	[is_early] [bit] NULL,
-	[early_checkin_fee] [decimal](10, 2) NULL,
-	[checked_in_by] [bigint] NULL,
-	[id_verified] [bit] NULL,
-	[advance_collected] [decimal](10, 2) NULL,
-	[key_card_number] [nvarchar](50) NULL,
-	[special_instructions] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[room_status_transitions]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[room_status_transitions](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[room_id] [bigint] NOT NULL,
-	[from_status] [nvarchar](30) NOT NULL,
-	[to_status] [nvarchar](30) NOT NULL,
-	[trigger_type] [nvarchar](30) NOT NULL,
-	[trigger_event] [nvarchar](100) NULL,
-	[triggered_by] [bigint] NULL,
-	[notes] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[check_out_logs]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[check_out_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1695,32 +1742,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[early_late_requests]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[early_late_requests](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[booking_id] [bigint] NOT NULL,
-	[request_type] [nvarchar](20) NOT NULL,
-	[requested_time] [datetime2](7) NOT NULL,
-	[approved] [bit] NULL,
-	[approved_by] [bigint] NULL,
-	[approved_at] [datetime2](7) NULL,
-	[charges] [decimal](10, 2) NULL,
-	[reason] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[booking_payments]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[booking_payments]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1751,24 +1773,28 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_cancellations]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[check_in_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[booking_cancellations](
+CREATE TABLE [dbo].[check_in_logs](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[booking_id] [bigint] NOT NULL,
-	[cancellation_type] [nvarchar](30) NOT NULL,
-	[cancellation_reason] [nvarchar](max) NULL,
-	[cancelled_at] [datetime2](7) NULL,
-	[cancelled_by] [bigint] NULL,
-	[cancellation_fee] [decimal](10, 2) NULL,
-	[refund_amount] [decimal](10, 2) NULL,
-	[refund_status] [nvarchar](30) NULL,
-	[refund_processed_at] [datetime2](7) NULL,
+	[room_id] [bigint] NOT NULL,
+	[guest_id] [bigint] NOT NULL,
+	[scheduled_check_in] [datetime2](7) NOT NULL,
+	[actual_check_in] [datetime2](7) NULL,
+	[is_early] [bit] NULL,
+	[early_checkin_fee] [decimal](10, 2) NULL,
+	[checked_in_by] [bigint] NULL,
+	[id_verified] [bit] NULL,
+	[advance_collected] [decimal](10, 2) NULL,
+	[key_card_number] [nvarchar](50) NULL,
+	[special_instructions] [nvarchar](max) NULL,
+	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -1776,35 +1802,56 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_waitlist]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[early_late_requests]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[booking_waitlist](
+CREATE TABLE [dbo].[early_late_requests](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[guest_id] [bigint] NOT NULL,
-	[room_type_id] [bigint] NOT NULL,
-	[check_in] [date] NOT NULL,
-	[check_out] [date] NOT NULL,
-	[adults] [int] NOT NULL,
-	[children] [int] NULL,
-	[priority] [int] NULL,
-	[status] [nvarchar](30) NULL,
-	[allocated_at] [datetime2](7) NULL,
-	[expires_at] [datetime2](7) NULL,
+	[booking_id] [bigint] NOT NULL,
+	[request_type] [nvarchar](20) NOT NULL,
+	[requested_time] [datetime2](7) NOT NULL,
+	[approved] [bit] NULL,
+	[approved_by] [bigint] NULL,
+	[approved_at] [datetime2](7) NULL,
+	[charges] [decimal](10, 2) NULL,
+	[reason] [nvarchar](max) NULL,
 	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_amendments]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[room_status_transitions]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[room_status_transitions](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[room_id] [bigint] NOT NULL,
+	[from_status] [nvarchar](30) NOT NULL,
+	[to_status] [nvarchar](30) NOT NULL,
+	[trigger_type] [nvarchar](30) NOT NULL,
+	[trigger_event] [nvarchar](100) NULL,
+	[triggered_by] [bigint] NULL,
+	[notes] [nvarchar](max) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[booking_amendments]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1835,50 +1882,26 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[booking_guests]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[booking_waitlist]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[booking_guests](
+CREATE TABLE [dbo].[booking_waitlist](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[booking_id] [bigint] NOT NULL,
-	[guest_id] [bigint] NULL,
-	[guest_name] [nvarchar](255) NOT NULL,
-	[age] [int] NULL,
-	[guest_type] [nvarchar](20) NULL,
-	[id_proof_type] [nvarchar](50) NULL,
-	[id_proof_number] [nvarchar](100) NULL,
-	[is_primary] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[booking_rooms]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[booking_rooms](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[booking_id] [bigint] NOT NULL,
-	[room_id] [bigint] NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[guest_id] [bigint] NOT NULL,
 	[room_type_id] [bigint] NOT NULL,
-	[room_rate] [decimal](10, 2) NOT NULL,
-	[extra_beds] [int] NULL,
-	[check_in] [datetime2](7) NOT NULL,
-	[check_out] [datetime2](7) NOT NULL,
-	[actual_check_in] [datetime2](7) NULL,
-	[actual_check_out] [datetime2](7) NULL,
+	[check_in] [date] NOT NULL,
+	[check_out] [date] NOT NULL,
+	[adults] [int] NOT NULL,
+	[children] [int] NULL,
+	[priority] [int] NULL,
 	[status] [nvarchar](30) NULL,
+	[allocated_at] [datetime2](7) NULL,
+	[expires_at] [datetime2](7) NULL,
 	[created_at] [datetime2](7) NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -1887,7 +1910,32 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[advance_bookings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[booking_cancellations]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[booking_cancellations](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[booking_id] [bigint] NOT NULL,
+	[cancellation_type] [nvarchar](30) NOT NULL,
+	[cancellation_reason] [nvarchar](max) NULL,
+	[cancelled_at] [datetime2](7) NULL,
+	[cancelled_by] [bigint] NULL,
+	[cancellation_fee] [decimal](10, 2) NULL,
+	[refund_amount] [decimal](10, 2) NULL,
+	[refund_status] [nvarchar](30) NULL,
+	[refund_processed_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[advance_bookings]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1916,7 +1964,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[group_bookings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[group_bookings]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -1951,7 +1999,126 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[bookings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[booking_rooms]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[booking_rooms](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[booking_id] [bigint] NOT NULL,
+	[room_id] [bigint] NOT NULL,
+	[room_type_id] [bigint] NOT NULL,
+	[room_rate] [decimal](10, 2) NOT NULL,
+	[extra_beds] [int] NULL,
+	[check_in] [datetime2](7) NOT NULL,
+	[check_out] [datetime2](7) NOT NULL,
+	[actual_check_in] [datetime2](7) NULL,
+	[actual_check_out] [datetime2](7) NULL,
+	[status] [nvarchar](30) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[booking_guests]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[booking_guests](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[booking_id] [bigint] NOT NULL,
+	[guest_id] [bigint] NULL,
+	[guest_name] [nvarchar](255) NOT NULL,
+	[age] [int] NULL,
+	[guest_type] [nvarchar](20) NULL,
+	[id_proof_type] [nvarchar](50) NULL,
+	[id_proof_number] [nvarchar](100) NULL,
+	[is_primary] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[guest_companions]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[guest_companions](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[guest_id] [bigint] NOT NULL,
+	[companion_name] [nvarchar](255) NOT NULL,
+	[relation] [nvarchar](50) NULL,
+	[age] [int] NULL,
+	[id_proof_type] [nvarchar](50) NULL,
+	[id_proof_number] [nvarchar](100) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[guest_documents]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[guest_documents](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[guest_id] [bigint] NOT NULL,
+	[document_type] [nvarchar](50) NOT NULL,
+	[document_number] [nvarchar](100) NOT NULL,
+	[document_file] [nvarchar](500) NULL,
+	[issue_date] [date] NULL,
+	[expiry_date] [date] NULL,
+	[issued_by] [nvarchar](100) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[guest_preferences]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[guest_preferences](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[guest_id] [bigint] NOT NULL,
+	[preference_type] [nvarchar](50) NOT NULL,
+	[preference_value] [nvarchar](max) NOT NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[bookings]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2016,19 +2183,69 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_preferences]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[seasonal_rates]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[guest_preferences](
+CREATE TABLE [dbo].[seasonal_rates](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[guest_id] [bigint] NOT NULL,
-	[preference_type] [nvarchar](50) NOT NULL,
-	[preference_value] [nvarchar](max) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[season_name] [nvarchar](100) NOT NULL,
+	[season_type] [nvarchar](30) NULL,
+	[start_date] [date] NOT NULL,
+	[end_date] [date] NOT NULL,
+	[markup_percent] [decimal](5, 2) NULL,
+	[is_active] [bit] NULL,
 	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[guests]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[guests](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[tenant_id] [bigint] NOT NULL,
+	[guest_code] [nvarchar](50) NOT NULL,
+	[first_name] [nvarchar](100) NOT NULL,
+	[last_name] [nvarchar](100) NULL,
+	[email] [nvarchar](320) NULL,
+	[phone] [nvarchar](20) NOT NULL,
+	[phone_secondary] [nvarchar](20) NULL,
+	[date_of_birth] [date] NULL,
+	[gender] [nvarchar](20) NULL,
+	[nationality] [nvarchar](100) NULL,
+	[id_proof_type] [nvarchar](50) NULL,
+	[id_proof_number] [nvarchar](100) NULL,
+	[company_name] [nvarchar](255) NULL,
+	[gst_number] [nvarchar](50) NULL,
+	[vip_status] [nvarchar](30) NULL,
+	[loyalty_tier] [nvarchar](30) NULL,
+	[loyalty_points] [int] NULL,
+	[total_bookings] [int] NULL,
+	[total_spent] [decimal](10, 2) NULL,
+	[average_rating] [decimal](2, 1) NULL,
+	[blacklisted] [bit] NULL,
+	[blacklist_reason] [nvarchar](max) NULL,
+	[notes] [nvarchar](max) NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2036,54 +2253,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[guest_documents]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[guest_documents](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[guest_id] [bigint] NOT NULL,
-	[document_type] [nvarchar](50) NOT NULL,
-	[document_number] [nvarchar](100) NOT NULL,
-	[document_file] [nvarchar](500) NULL,
-	[issue_date] [date] NULL,
-	[expiry_date] [date] NULL,
-	[issued_by] [nvarchar](100) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[guest_companions]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[guest_companions](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[guest_id] [bigint] NOT NULL,
-	[companion_name] [nvarchar](255) NOT NULL,
-	[relation] [nvarchar](50) NULL,
-	[age] [int] NULL,
-	[id_proof_type] [nvarchar](50) NULL,
-	[id_proof_number] [nvarchar](100) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[guest_addresses]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[guest_addresses]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2109,126 +2279,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[seasonal_rates]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[seasonal_rates](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[season_name] [nvarchar](100) NOT NULL,
-	[season_type] [nvarchar](30) NULL,
-	[start_date] [date] NOT NULL,
-	[end_date] [date] NOT NULL,
-	[markup_percent] [decimal](5, 2) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[guests]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[guests](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[tenant_id] [bigint] NOT NULL,
-	[guest_code] [nvarchar](50) NOT NULL,
-	[first_name] [nvarchar](100) NOT NULL,
-	[last_name] [nvarchar](100) NULL,
-	[email] [nvarchar](320) NULL,
-	[phone] [nvarchar](20) NOT NULL,
-	[phone_secondary] [nvarchar](20) NULL,
-	[date_of_birth] [date] NULL,
-	[gender] [nvarchar](20) NULL,
-	[nationality] [nvarchar](100) NULL,
-	[id_proof_type] [nvarchar](50) NULL,
-	[id_proof_number] [nvarchar](100) NULL,
-	[id_proof_url] [nvarchar](max) NULL,
-	[company_name] [nvarchar](255) NULL,
-	[gst_number] [nvarchar](50) NULL,
-	[vip_status] [nvarchar](30) NULL,
-	[loyalty_tier] [nvarchar](30) NULL,
-	[loyalty_points] [int] NULL,
-	[total_bookings] [int] NULL,
-	[total_spent] [decimal](10, 2) NULL,
-	[average_rating] [decimal](2, 1) NULL,
-	[blacklisted] [bit] NULL,
-	[blacklist_reason] [nvarchar](max) NULL,
-	[notes] [nvarchar](max) NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-	[firm_id] [bigint] NULL,
-	[branch_id] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[room_amenity_inventory]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[room_amenity_inventory](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[room_id] [bigint] NOT NULL,
-	[amenity_name] [nvarchar](100) NOT NULL,
-	[quantity] [int] NOT NULL,
-	[condition] [nvarchar](30) NULL,
-	[last_checked_at] [datetime2](7) NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[hourly_pricing_rules]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[hourly_pricing_rules](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[room_type_id] [bigint] NOT NULL,
-	[min_hours] [int] NOT NULL,
-	[max_hours] [int] NULL,
-	[hour_rate] [decimal](10, 2) NOT NULL,
-	[time_slot_start] [time](7) NULL,
-	[time_slot_end] [time](7) NULL,
-	[days_of_week] [nvarchar](50) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[rate_schedules]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[rate_schedules]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2266,7 +2317,58 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[rate_plans]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[dynamic_pricing_rules]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[dynamic_pricing_rules](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[rule_name] [nvarchar](100) NOT NULL,
+	[rule_type] [nvarchar](30) NOT NULL,
+	[trigger_condition] [nvarchar](max) NULL,
+	[occupancy_threshold_min] [int] NULL,
+	[occupancy_threshold_max] [int] NULL,
+	[price_adjustment_type] [nvarchar](20) NOT NULL,
+	[adjustment_value] [decimal](10, 2) NOT NULL,
+	[applicable_room_types] [nvarchar](max) NULL,
+	[priority] [int] NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[room_amenity_inventory]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[room_amenity_inventory](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[room_id] [bigint] NOT NULL,
+	[amenity_name] [nvarchar](100) NOT NULL,
+	[quantity] [int] NOT NULL,
+	[condition] [nvarchar](30) NULL,
+	[last_checked_at] [datetime2](7) NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[rate_plans]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2299,25 +2401,22 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[dynamic_pricing_rules]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[hourly_pricing_rules]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[dynamic_pricing_rules](
+CREATE TABLE [dbo].[hourly_pricing_rules](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[rule_name] [nvarchar](100) NOT NULL,
-	[rule_type] [nvarchar](30) NOT NULL,
-	[trigger_condition] [nvarchar](max) NULL,
-	[occupancy_threshold_min] [int] NULL,
-	[occupancy_threshold_max] [int] NULL,
-	[price_adjustment_type] [nvarchar](20) NOT NULL,
-	[adjustment_value] [decimal](10, 2) NOT NULL,
-	[applicable_room_types] [nvarchar](max) NULL,
-	[priority] [int] NULL,
+	[room_type_id] [bigint] NOT NULL,
+	[min_hours] [int] NOT NULL,
+	[max_hours] [int] NULL,
+	[hour_rate] [decimal](10, 2) NOT NULL,
+	[time_slot_start] [time](7) NULL,
+	[time_slot_end] [time](7) NULL,
+	[days_of_week] [nvarchar](50) NULL,
 	[is_active] [bit] NULL,
 	[created_at] [datetime2](7) NULL,
 	[created_by] [bigint] NULL,
@@ -2325,52 +2424,46 @@ PRIMARY KEY CLUSTERED
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[rooms]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[rooms](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[room_type_id] [bigint] NOT NULL,
+	[room_number] [nvarchar](20) NOT NULL,
+	[floor_number] [int] NULL,
+	[block_name] [nvarchar](50) NULL,
+	[status] [nvarchar](30) NULL,
+	[condition] [nvarchar](30) NULL,
+	[is_accessible] [bit] NULL,
+	[connecting_rooms] [nvarchar](max) NULL,
+	[last_cleaned_at] [datetime2](7) NULL,
+	[last_maintenance_at] [datetime2](7) NULL,
+	[next_maintenance_due] [date] NULL,
+	[notes] [nvarchar](max) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+	[tenant_id] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[room_type_amenities]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[room_type_amenities](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[room_type_id] [bigint] NOT NULL,
-	[amenity_name] [nvarchar](100) NOT NULL,
-	[icon] [nvarchar](100) NULL,
-	[quantity] [int] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[room_type_images]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[room_type_images](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[room_type_id] [bigint] NOT NULL,
-	[image_url] [nvarchar](500) NOT NULL,
-	[display_order] [int] NULL,
-	[is_primary] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[room_types]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[room_types]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2415,43 +2508,49 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[rooms]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[room_type_amenities]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[rooms](
+CREATE TABLE [dbo].[room_type_amenities](
 	[id] [bigint] IDENTITY(1,1) NOT NULL,
 	[room_type_id] [bigint] NOT NULL,
-	[room_number] [nvarchar](20) NOT NULL,
-	[floor_number] [int] NULL,
-	[block_name] [nvarchar](50) NULL,
-	[status] [nvarchar](30) NULL,
-	[condition] [nvarchar](30) NULL,
-	[is_accessible] [bit] NULL,
-	[connecting_rooms] [nvarchar](max) NULL,
-	[last_cleaned_at] [datetime2](7) NULL,
-	[last_maintenance_at] [datetime2](7) NULL,
-	[next_maintenance_due] [date] NULL,
-	[notes] [nvarchar](max) NULL,
-	[is_active] [bit] NULL,
+	[amenity_name] [nvarchar](100) NOT NULL,
+	[icon] [nvarchar](100) NULL,
+	[quantity] [int] NULL,
 	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-	[tenant_id] [bigint] NULL,
-	[firm_id] [bigint] NULL,
-	[branch_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotel_amenities]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[room_type_images]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[room_type_images](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[room_type_id] [bigint] NOT NULL,
+	[image_url] [nvarchar](500) NOT NULL,
+	[display_order] [int] NULL,
+	[is_primary] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[hotel_amenities]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2474,29 +2573,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotel_images]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[hotel_images](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[hotel_id] [bigint] NOT NULL,
-	[image_url] [nvarchar](500) NOT NULL,
-	[image_type] [nvarchar](50) NULL,
-	[display_order] [int] NULL,
-	[is_primary] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[hotel_policies]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[hotel_policies]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2520,7 +2597,29 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[hotels]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[hotel_images]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[hotel_images](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[hotel_id] [bigint] NOT NULL,
+	[image_url] [nvarchar](500) NOT NULL,
+	[image_type] [nvarchar](50) NULL,
+	[display_order] [int] NULL,
+	[is_primary] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[hotels]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2572,7 +2671,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[branches]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[branches]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2604,7 +2703,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[firms]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[firms]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2645,7 +2744,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[password_resets]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[password_resets]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2671,37 +2770,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[activities]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[activities](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[tenant_id] [bigint] NOT NULL,
-	[user_id] [bigint] NOT NULL,
-	[activity_type] [nvarchar](50) NOT NULL,
-	[subject_type] [nvarchar](50) NULL,
-	[subject_id] [bigint] NULL,
-	[action] [nvarchar](50) NOT NULL,
-	[description] [nvarchar](max) NULL,
-	[metadata] [nvarchar](max) NULL,
-	[is_read] [bit] NULL,
-	[read_at] [datetime2](7) NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[audit_logs]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[audit_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2732,7 +2801,37 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[error_logs]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[activities]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[activities](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[tenant_id] [bigint] NOT NULL,
+	[user_id] [bigint] NOT NULL,
+	[activity_type] [nvarchar](50) NOT NULL,
+	[subject_type] [nvarchar](50) NULL,
+	[subject_id] [bigint] NULL,
+	[action] [nvarchar](50) NOT NULL,
+	[description] [nvarchar](max) NULL,
+	[metadata] [nvarchar](max) NULL,
+	[is_read] [bit] NULL,
+	[read_at] [datetime2](7) NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[error_logs]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2771,7 +2870,33 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_features]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[subscription_feature_permissions]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[subscription_feature_permissions](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[subscription_id] [int] NOT NULL,
+	[feature_id] [int] NOT NULL,
+	[permission_id] [int] NOT NULL,
+	[permission_price] [decimal](18, 2) NULL,
+	[restricted_to] [nvarchar](50) NULL,
+	[is_deleted] [bit] NOT NULL,
+	[created_at] [datetime] NOT NULL,
+	[created_by] [int] NULL,
+	[updated_at] [datetime] NULL,
+	[updated_by] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[subscription_features]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2796,7 +2921,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[invitations]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[invitations]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2831,33 +2956,36 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_feature_permissions]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[subscription_history]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[subscription_feature_permissions](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[subscription_id] [int] NOT NULL,
-	[feature_id] [int] NOT NULL,
-	[permission_id] [int] NOT NULL,
-	[permission_price] [decimal](18, 2) NULL,
-	[restricted_to] [nvarchar](50) NULL,
-	[is_deleted] [bit] NOT NULL,
-	[created_at] [datetime] NOT NULL,
-	[created_by] [int] NULL,
-	[updated_at] [datetime] NULL,
-	[updated_by] [int] NULL,
+CREATE TABLE [dbo].[subscription_history](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[tenant_id] [bigint] NOT NULL,
+	[from_plan_id] [bigint] NULL,
+	[to_plan_id] [bigint] NOT NULL,
+	[change_type] [nvarchar](20) NOT NULL,
+	[change_reason] [nvarchar](max) NULL,
+	[price_at_change] [decimal](10, 2) NULL,
+	[currency] [nvarchar](3) NULL,
+	[billing_cycle] [nvarchar](20) NULL,
+	[effective_date] [date] NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_offers]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[subscription_offers]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2897,60 +3025,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_history]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[subscription_history](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[tenant_id] [bigint] NOT NULL,
-	[from_plan_id] [bigint] NULL,
-	[to_plan_id] [bigint] NOT NULL,
-	[change_type] [nvarchar](20) NOT NULL,
-	[change_reason] [nvarchar](max) NULL,
-	[price_at_change] [decimal](10, 2) NULL,
-	[currency] [nvarchar](3) NULL,
-	[billing_cycle] [nvarchar](20) NULL,
-	[effective_date] [date] NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[menu_permissions]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[menu_permissions](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[menu_key] [nvarchar](100) NOT NULL,
-	[permission_id] [bigint] NOT NULL,
-	[applicable_to] [nvarchar](max) NULL,
-	[is_required] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[role_permissions]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[role_permissions]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2965,6 +3040,8 @@ CREATE TABLE [dbo].[role_permissions](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[granted] [bit] NOT NULL,
+	[status] [nvarchar](20) NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -2972,7 +3049,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[permissions]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[permissions]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -2992,6 +3069,9 @@ CREATE TABLE [dbo].[permissions](
 	[created_by] [bigint] NULL,
 	[updated_at] [datetime2](7) NULL,
 	[updated_by] [bigint] NULL,
+	[resource_id] [bigint] NULL,
+	[scope] [nvarchar](50) NULL,
+	[fields] [nvarchar](max) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -3003,7 +3083,34 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[roles]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[user_roles]    Script Date: 31-01-2026 13:48:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[user_roles](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[user_id] [bigint] NOT NULL,
+	[role_id] [bigint] NOT NULL,
+	[assigned_at] [datetime2](7) NULL,
+	[expires_at] [datetime2](7) NULL,
+	[is_active] [bit] NULL,
+	[created_at] [datetime2](7) NULL,
+	[created_by] [bigint] NULL,
+	[updated_at] [datetime2](7) NULL,
+	[updated_by] [bigint] NULL,
+	[firm_id] [bigint] NULL,
+	[branch_id] [bigint] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+/****** Object:  Table [dbo].[roles]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3031,32 +3138,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[user_roles]    Script Date: 26-01-2026 00:55:20 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[user_roles](
-	[id] [bigint] IDENTITY(1,1) NOT NULL,
-	[user_id] [bigint] NOT NULL,
-	[role_id] [bigint] NOT NULL,
-	[assigned_at] [datetime2](7) NULL,
-	[expires_at] [datetime2](7) NULL,
-	[is_active] [bit] NULL,
-	[created_at] [datetime2](7) NULL,
-	[created_by] [bigint] NULL,
-	[updated_at] [datetime2](7) NULL,
-	[updated_by] [bigint] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-/****** Object:  Table [dbo].[users]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[users]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3103,7 +3185,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[subscription_plans]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[subscription_plans]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3153,7 +3235,7 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[tenant_settings]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[tenant_settings]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3179,7 +3261,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-/****** Object:  Table [dbo].[tenants]    Script Date: 26-01-2026 00:55:20 ******/
+/****** Object:  Table [dbo].[tenants]    Script Date: 31-01-2026 13:48:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -3225,6 +3307,39 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+ALTER TABLE [dbo].[menu_permissions] ADD  DEFAULT ('any') FOR [match_type]
+GO
+
+ALTER TABLE [dbo].[menu_permissions] ADD  DEFAULT ('active') FOR [status]
+GO
+
+ALTER TABLE [dbo].[menu_permissions] ADD  DEFAULT ((1)) FOR [is_active]
+GO
+
+ALTER TABLE [dbo].[menu_permissions] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
+ALTER TABLE [dbo].[policies] ADD  DEFAULT ((0)) FOR [priority]
+GO
+
+ALTER TABLE [dbo].[policies] ADD  DEFAULT ('active') FOR [status]
+GO
+
+ALTER TABLE [dbo].[policies] ADD  DEFAULT ((1)) FOR [is_active]
+GO
+
+ALTER TABLE [dbo].[policies] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
+ALTER TABLE [dbo].[resources] ADD  DEFAULT ('active') FOR [status]
+GO
+
+ALTER TABLE [dbo].[resources] ADD  DEFAULT ((1)) FOR [is_active]
+GO
+
+ALTER TABLE [dbo].[resources] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
 ALTER TABLE [dbo].[branches] ADD  DEFAULT ((1)) FOR [is_active]
 GO
 
@@ -3243,13 +3358,19 @@ GO
 ALTER TABLE [dbo].[password_resets] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
-ALTER TABLE [dbo].[activities] ADD  DEFAULT (getutcdate()) FOR [created_at]
-GO
-
 ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
+ALTER TABLE [dbo].[activities] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
 ALTER TABLE [dbo].[error_logs] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
+ALTER TABLE [dbo].[subscription_feature_permissions] ADD  DEFAULT ((0)) FOR [is_deleted]
+GO
+
+ALTER TABLE [dbo].[subscription_feature_permissions] ADD  DEFAULT (getdate()) FOR [created_at]
 GO
 
 ALTER TABLE [dbo].[subscription_features] ADD  DEFAULT ((0)) FOR [is_deleted]
@@ -3264,10 +3385,7 @@ GO
 ALTER TABLE [dbo].[invitations] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
-ALTER TABLE [dbo].[subscription_feature_permissions] ADD  DEFAULT ((0)) FOR [is_deleted]
-GO
-
-ALTER TABLE [dbo].[subscription_feature_permissions] ADD  DEFAULT (getdate()) FOR [created_at]
+ALTER TABLE [dbo].[subscription_history] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
 ALTER TABLE [dbo].[subscription_offers] ADD  DEFAULT ((0)) FOR [usage_count]
@@ -3282,22 +3400,28 @@ GO
 ALTER TABLE [dbo].[subscription_offers] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
-ALTER TABLE [dbo].[subscription_history] ADD  DEFAULT (getutcdate()) FOR [created_at]
-GO
-
-ALTER TABLE [dbo].[menu_permissions] ADD  DEFAULT ((0)) FOR [is_required]
-GO
-
-ALTER TABLE [dbo].[menu_permissions] ADD  DEFAULT (getutcdate()) FOR [created_at]
-GO
-
 ALTER TABLE [dbo].[role_permissions] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
+ALTER TABLE [dbo].[role_permissions] ADD  DEFAULT ((1)) FOR [granted]
+GO
+
+ALTER TABLE [dbo].[role_permissions] ADD  DEFAULT ('active') FOR [status]
 GO
 
 ALTER TABLE [dbo].[permissions] ADD  DEFAULT ((0)) FOR [is_system_permission]
 GO
 
 ALTER TABLE [dbo].[permissions] ADD  DEFAULT (getutcdate()) FOR [created_at]
+GO
+
+ALTER TABLE [dbo].[user_roles] ADD  DEFAULT (getutcdate()) FOR [assigned_at]
+GO
+
+ALTER TABLE [dbo].[user_roles] ADD  DEFAULT ((1)) FOR [is_active]
+GO
+
+ALTER TABLE [dbo].[user_roles] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
 ALTER TABLE [dbo].[roles] ADD  DEFAULT ((0)) FOR [is_system_role]
@@ -3310,15 +3434,6 @@ ALTER TABLE [dbo].[roles] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
 ALTER TABLE [dbo].[roles] ADD  DEFAULT ((0)) FOR [is_visible_to_all]
-GO
-
-ALTER TABLE [dbo].[user_roles] ADD  DEFAULT (getutcdate()) FOR [assigned_at]
-GO
-
-ALTER TABLE [dbo].[user_roles] ADD  DEFAULT ((1)) FOR [is_active]
-GO
-
-ALTER TABLE [dbo].[user_roles] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
 
 ALTER TABLE [dbo].[users] ADD  DEFAULT ((0)) FOR [login_count]
@@ -3389,3 +3504,142 @@ GO
 
 ALTER TABLE [dbo].[tenants] ADD  DEFAULT (getutcdate()) FOR [created_at]
 GO
+ 
+
+
+
+ ---
+ 
+-- ============================================================
+-- STEP 3: Seed initial data
+-- ============================================================
+
+-- Seed core resources
+INSERT INTO [dbo].[resources] ([resource_key], [resource_name], [module], [created_by])
+VALUES
+    ('bookings', 'Bookings', 'reservations', 1),
+    ('guests', 'Guests', 'reservations', 1),
+    ('rooms', 'Rooms', 'property', 1),
+    ('room_types', 'Room Types', 'property', 1),
+    ('invoices', 'Invoices', 'finance', 1),
+    ('payments', 'Payments', 'finance', 1),
+    ('reports', 'Reports', 'analytics', 1),
+    ('users', 'Users', 'administration', 1),
+    ('roles', 'Roles', 'administration', 1),
+    ('settings', 'Settings', 'administration', 1);
+GO
+
+-- Seed core permissions (basic CRUD for each resource)
+DECLARE @resourceId BIGINT;
+
+-- Bookings permissions
+SELECT @resourceId = id FROM [dbo].[resources] WHERE resource_key = 'bookings';
+INSERT INTO [dbo].[permissions] ([permission_key], [resource_id], [action], [scope], [description], [created_by])
+VALUES
+    ('bookings.create', @resourceId, 'create', 'all', 'Create new bookings', 1),
+    ('bookings.read', @resourceId, 'read', 'all', 'View bookings', 1),
+    ('bookings.read.own', @resourceId, 'read', 'own', 'View own bookings only', 1),
+    ('bookings.update', @resourceId, 'update', 'all', 'Edit bookings', 1),
+    ('bookings.delete', @resourceId, 'delete', 'all', 'Cancel/delete bookings', 1),
+    ('bookings.export', @resourceId, 'export', 'all', 'Export booking data', 1);
+
+-- Guests permissions
+SELECT @resourceId = id FROM [dbo].[resources] WHERE resource_key = 'guests';
+INSERT INTO [dbo].[permissions] ([permission_key], [resource_id], [action], [scope], [created_by])
+VALUES
+    ('guests.create', @resourceId, 'create', 'all', 1),
+    ('guests.read', @resourceId, 'read', 'all', 1),
+    ('guests.update', @resourceId, 'update', 'all', 1),
+    ('guests.delete', @resourceId, 'delete', 'all', 1);
+
+-- Reports permissions
+SELECT @resourceId = id FROM [dbo].[resources] WHERE resource_key = 'reports';
+INSERT INTO [dbo].[permissions] ([permission_key], [resource_id], [action], [scope], [created_by])
+VALUES
+    ('reports.revenue', @resourceId, 'read', 'all', 1),
+    ('reports.occupancy', @resourceId, 'read', 'all', 1),
+    ('reports.financial', @resourceId, 'read', 'all', 1),
+    ('reports.export', @resourceId, 'export', 'all', 1);
+
+-- Users & Roles permissions
+SELECT @resourceId = id FROM [dbo].[resources] WHERE resource_key = 'users';
+INSERT INTO [dbo].[permissions] ([permission_key], [resource_id], [action], [scope], [created_by])
+VALUES
+    ('users.create', @resourceId, 'create', 'all', 1),
+    ('users.read', @resourceId, 'read', 'all', 1),
+    ('users.update', @resourceId, 'update', 'all', 1),
+    ('users.delete', @resourceId, 'delete', 'all', 1);
+
+SELECT @resourceId = id FROM [dbo].[resources] WHERE resource_key = 'roles';
+INSERT INTO [dbo].[permissions] ([permission_key], [resource_id], [action], [scope], [created_by])
+VALUES
+    ('roles.create', @resourceId, 'create', 'all', 1),
+    ('roles.read', @resourceId, 'read', 'all', 1),
+    ('roles.update', @resourceId, 'update', 'all', 1),
+    ('roles.delete', @resourceId, 'delete', 'all', 1);
+GO
+
+-- Seed menu items
+INSERT INTO [dbo].[menu_permissions] ([menu_key], [menu_name], [permission_ids], [match_type], [route], [icon], [display_order], [created_by])
+VALUES
+    ('dashboard', 'Dashboard', NULL, 'any', '/dashboard', 'dashboard', 1, 1),
+    ('bookings', 'Bookings', '[1,2]', 'any', '/bookings', 'calendar', 2, 1),
+    ('guests', 'Guests', '[7,8]', 'any', '/guests', 'users', 3, 1),
+    ('rooms', 'Rooms', NULL, 'any', '/rooms', 'bed', 4, 1),
+    ('reports', 'Reports', '[13,14,15]', 'any', '/reports', 'chart', 5, 1),
+    ('finance', 'Finance', NULL, 'any', '/finance', 'dollar', 6, 1),
+    ('settings', 'Settings', '[17,18,19,20,21,22]', 'any', '/settings', 'settings', 10, 1);
+GO
+
+-- ============================================================
+-- STEP 4: Example policy (optional - for reference)
+-- ============================================================
+
+-- Example: Restrict booking modifications after 6 PM
+INSERT INTO [dbo].[policies]
+    ([policy_key], [policy_name], [permission_id], [policy_type], [effect], [condition], [priority], [created_by])
+VALUES
+    ('booking_time_restriction',
+     'No booking edits after 6 PM',
+     (SELECT id FROM [dbo].[permissions] WHERE permission_key = 'bookings.update'),
+     'time_based',
+     'deny',
+     '{"start_time": "18:00", "end_time": "23:59", "days": ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]}',
+     100,
+     1);
+
+-- Example: Only allow access from office IP
+INSERT INTO [dbo].[policies]
+    ([policy_key], [policy_name], [policy_type], [effect], [condition], [priority], [created_by])
+VALUES
+    ('office_ip_only',
+     'Only office IP allowed',
+     'ip_based',
+     'deny',
+     '{"not_in": ["192.168.1.0/24", "10.0.0.0/8"]}',
+     50,
+     1);
+GO
+
+-- ============================================================
+-- STEP 5: Indexes for performance
+-- ============================================================
+
+CREATE NONCLUSTERED INDEX [IX_user_roles_scope]
+ON [dbo].[user_roles] ([user_id], [tenant_id], [firm_id], [branch_id])
+INCLUDE ([role_id], [is_active]);
+GO
+
+CREATE NONCLUSTERED INDEX [IX_policies_active]
+ON [dbo].[policies] ([is_active], [priority] DESC)
+INCLUDE ([policy_type], [effect], [condition]);
+GO
+
+CREATE NONCLUSTERED INDEX [IX_permissions_resource]
+ON [dbo].[permissions] ([resource_id], [is_active])
+INCLUDE ([permission_key], [action], [scope]);
+GO
+
+-- ============================================================
+-- END OF MIGRATION
+-- ============================================================

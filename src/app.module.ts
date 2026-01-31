@@ -20,6 +20,8 @@ import encryptionConfig from './config/encryption.config';
 import jwtConfig from './config/jwt.config';
 import r2Config from './config/r2.config';
 import { R2Module } from './core/r2/r2.module';
+import { AccessControlModule } from './modules/access-control/access-control.module';
+import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { R2Module } from './core/r2/r2.module';
     CheckinModule,
     DashboardModule,
     R2Module,
+    AccessControlModule,
+    SubscriptionsModule,
   ],
   providers: [
     EncryptionService,
