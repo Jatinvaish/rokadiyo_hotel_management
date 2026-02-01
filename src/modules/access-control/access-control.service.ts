@@ -552,26 +552,32 @@ export class AccessControlService {
   }
 
   async getEffectivePermissions(tenantId: number, userId: number) {
-    // Get tenant's subscription permissions
-    const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
-    
-    // Get user's role permissions
-    const userPermissions = await this.sql.query(`
-      SELECT DISTINCT p.id, p.permission_key, p.resource, p.action, p.category
-      FROM permissions p
-      JOIN role_permissions rp ON p.id = rp.permission_id
-      JOIN user_roles ur ON rp.role_id = ur.role_id
-      WHERE ur.user_id = @userId AND ur.is_active = 1 AND rp.granted = 1 AND rp.status = 'active'
-    `, { userId });
-    
-    // Filter by subscription permissions
-    return userPermissions.filter(p => subscriptionPermissions.includes(p.id));
+    try {
+      // Use the stored procedure for subscription-filtered permissions
+      return await this.sql.query('EXEC sp_get_user_permissions_with_subscription @user_id = @userId', { userId });
+    } catch (error) {
+      // Fallback to manual query if stored procedure doesn't exist
+      // Get tenant's subscription permissions
+      const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
+      
+      // Get user's role permissions
+      const userPermissions = await this.sql.query(`
+        SELECT DISTINCT p.id, p.permission_key, p.resource, p.action, p.category
+        FROM permissions p
+        JOIN role_permissions rp ON p.id = rp.permission_id
+        JOIN user_roles ur ON rp.role_id = ur.role_id
+        WHERE ur.user_id = @userId AND ur.is_active = 1 AND rp.granted = 1 AND rp.status = 'active'
+      `, { userId });
+      
+      // Filter by subscription permissions
+      return userPermissions.filter(p => subscriptionPermissions.includes(p.id));
+    }
   }
 
   // ==================== USER MENUS ====================
   async getUserMenus(userId: number) {
     try {
-      return await this.sql.query('EXEC sp_api_get_user_menus @user_id = @userId', { userId });
+      return await this.sql.query('EXEC sp_get_user_menus @user_id = @userId', { userId });
     } catch (error) {
       // Fallback to direct query if stored procedure doesn't exist
       return this.sql.query(`
@@ -593,7 +599,7 @@ export class AccessControlService {
 
   async checkMenuAccess(userId: number, menuKey: string) {
     try {
-      const result = await this.sql.query('EXEC sp_api_check_menu_access @user_id = @userId, @menu_key = @menuKey', { 
+      const result = await this.sql.query('EXEC sp_check_menu_access @user_id = @userId, @menu_key = @menuKey', { 
         userId, 
         menuKey 
       });
