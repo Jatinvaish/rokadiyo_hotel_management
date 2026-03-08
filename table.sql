@@ -1,7 +1,11 @@
 USE [rokadiyo_hotel_mgmt]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[menu_permissions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[menu_permissions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -35,7 +39,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[policies]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[policies]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -72,7 +80,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[resources]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[resources]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -102,7 +114,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[daily_reports]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[daily_reports]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -136,7 +152,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[loyalty_transactions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[loyalty_transactions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -160,7 +180,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[revenue_reports]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[revenue_reports]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -188,7 +212,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[occupancy_reports]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[occupancy_reports]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -212,7 +240,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[lost_and_found]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[lost_and_found]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -247,7 +279,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[email_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[email_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -271,7 +307,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_blocks]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_blocks]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -298,7 +338,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[sms_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[sms_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -322,7 +366,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[loyalty_programs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[loyalty_programs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -346,7 +394,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[notifications]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[notifications]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -371,7 +423,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_communications]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_communications]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -398,7 +454,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[travel_agent_commissions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[travel_agent_commissions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -424,7 +484,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[corporate_contracts]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[corporate_contracts]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -454,7 +518,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_reviews]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_reviews]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -490,7 +558,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[promo_usage]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[promo_usage]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -511,7 +583,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[shifts]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[shifts]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -533,7 +609,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[staff_schedules]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[staff_schedules]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -556,7 +636,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[staff_leaves]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[staff_leaves]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -582,7 +666,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[promotions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[promotions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -618,7 +706,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[staff_attendance]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[staff_attendance]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -642,7 +734,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[departments]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[departments]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -663,7 +759,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[spa_services]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[spa_services]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -685,7 +785,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[laundry_items]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[laundry_items]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -708,7 +812,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[laundry_services]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[laundry_services]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -732,7 +840,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[transport_services]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[transport_services]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -759,7 +871,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_services]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_services]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -793,7 +909,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[kitchen_orders]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[kitchen_orders]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -816,7 +936,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[service_categories]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[service_categories]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -836,7 +960,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[food_order_items]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[food_order_items]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -861,7 +989,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[services]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[services]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -889,7 +1021,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[food_orders]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[food_orders]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -929,7 +1065,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[restaurants]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[restaurants]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -953,7 +1093,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[inventory_transactions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[inventory_transactions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -981,7 +1125,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[inventory_items]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[inventory_items]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1016,7 +1164,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[inventory_categories]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[inventory_categories]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1037,7 +1189,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[inventory_alerts]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[inventory_alerts]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1060,7 +1216,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[inventory_suppliers]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[inventory_suppliers]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1086,7 +1246,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_maintenance]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_maintenance]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1123,7 +1287,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[maintenance_vendors]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[maintenance_vendors]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1151,7 +1319,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[housekeeping_staff_assignments]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[housekeeping_staff_assignments]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1176,7 +1348,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[maintenance_schedules]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[maintenance_schedules]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1202,7 +1378,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[cleaning_checklists]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[cleaning_checklists]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1223,7 +1403,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_cleaning_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_cleaning_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1259,7 +1443,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[cleaning_checklist_items]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[cleaning_checklist_items]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1280,7 +1468,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[cleaning_checklist_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[cleaning_checklist_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1301,7 +1493,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_inventory]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_inventory]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1323,7 +1519,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_rate_mappings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_rate_mappings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1346,7 +1546,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_rates]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_rates]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1371,7 +1575,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_sync_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_sync_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1396,7 +1604,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_bookings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_bookings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1429,7 +1641,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[housekeeping_tasks]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[housekeeping_tasks]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1452,7 +1668,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_room_mappings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_room_mappings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1474,7 +1694,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channel_integrations]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channel_integrations]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1502,7 +1726,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[payment_gateways]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[payment_gateways]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1529,7 +1757,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[channels]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[channels]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1553,7 +1785,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[refunds]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[refunds]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1581,7 +1817,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[invoice_items]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[invoice_items]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1605,7 +1845,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[invoices]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[invoices]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1637,7 +1881,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[check_in_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[check_in_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1666,7 +1914,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[early_late_requests]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[early_late_requests]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1691,7 +1943,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_status_transitions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_status_transitions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1715,7 +1971,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[check_out_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[check_out_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1746,7 +2006,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[booking_payments]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[booking_payments]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1777,7 +2041,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[booking_amendments]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[booking_amendments]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1808,7 +2076,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[booking_cancellations]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[booking_cancellations]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1833,7 +2105,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[booking_waitlist]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[booking_waitlist]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1861,7 +2137,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[booking_rooms]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[booking_rooms]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1888,7 +2168,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[group_bookings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[group_bookings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1923,7 +2207,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[advance_bookings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[advance_bookings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1952,7 +2240,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[booking_guests]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[booking_guests]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1977,7 +2269,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_preferences]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_preferences]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -1997,7 +2293,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[bookings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[bookings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2062,7 +2362,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_companions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_companions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2085,7 +2389,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_documents]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_documents]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2109,7 +2417,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guest_addresses]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guest_addresses]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2135,7 +2447,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[seasonal_rates]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[seasonal_rates]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2160,7 +2476,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[guests]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[guests]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2205,7 +2525,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_amenity_inventory]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_amenity_inventory]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2227,7 +2551,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[rate_plans]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[rate_plans]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2260,7 +2588,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[hourly_pricing_rules]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[hourly_pricing_rules]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2286,7 +2618,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[rate_schedules]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[rate_schedules]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2324,7 +2660,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[dynamic_pricing_rules]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[dynamic_pricing_rules]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2353,7 +2693,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_type_amenities]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_type_amenities]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2374,7 +2718,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_type_images]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_type_images]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2395,7 +2743,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[room_types]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[room_types]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2440,7 +2792,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[rooms]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[rooms]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2476,7 +2832,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[hotel_images]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[hotel_images]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2498,7 +2858,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[hotel_amenities]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[hotel_amenities]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2521,7 +2885,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[hotel_policies]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[hotel_policies]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2545,7 +2913,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[hotels]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[hotels]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2597,7 +2969,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[branches]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[branches]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2629,7 +3005,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[firms]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[firms]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2670,7 +3050,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[password_resets]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[password_resets]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2696,7 +3080,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[activities]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[activities]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2726,7 +3114,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[audit_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[audit_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2757,7 +3149,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[error_logs]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[error_logs]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2796,7 +3192,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[invitations]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[invitations]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2831,7 +3231,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[subscription_feature_permissions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[subscription_feature_permissions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2857,7 +3261,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[subscription_features]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[subscription_features]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2882,7 +3290,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[subscription_history]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[subscription_history]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2911,7 +3323,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[subscription_offers]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[subscription_offers]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2951,7 +3367,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[role_permissions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[role_permissions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -2975,7 +3395,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[roles]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[roles]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3003,7 +3427,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[user_roles]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[user_roles]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3030,7 +3458,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[permissions]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[permissions]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3064,7 +3496,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[users]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[users]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3111,7 +3547,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[tenant_settings]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[tenant_settings]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3137,7 +3577,11 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[subscription_plans]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[subscription_plans]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3187,7 +3631,11 @@ UNIQUE NONCLUSTERED
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+<<<<<<< HEAD
 /****** Object:  Table [dbo].[tenants]    Script Date: 04-03-2026 23:59:47 ******/
+=======
+/****** Object:  Table [dbo].[tenants]    Script Date: 01-02-2026 23:29:57 ******/
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
 SET ANSI_NULLS ON
 GO
 
@@ -3429,6 +3877,7 @@ ALTER TABLE [dbo].[tenants] ADD  DEFAULT ((1)) FOR [is_active]
 GO
 
 ALTER TABLE [dbo].[tenants] ADD  DEFAULT (getutcdate()) FOR [created_at]
+<<<<<<< HEAD
 GO
 
 
@@ -4159,3 +4608,6 @@ END;
 GO
 
 
+=======
+GO
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259

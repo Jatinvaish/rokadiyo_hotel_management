@@ -567,6 +567,7 @@ export class AccessControlService {
   }
 
   async getEffectivePermissions(tenantId: number, userId: number) {
+<<<<<<< HEAD
     // Get user type first to handle super admin
     const user = await this.sql.query('SELECT user_type FROM users WHERE id = @userId', { userId });
     if (!user.length) return [];
@@ -604,10 +605,33 @@ export class AccessControlService {
     }
 
     return this.sql.query(query, params);
+=======
+    try {
+      // Use the stored procedure for subscription-filtered permissions
+      return await this.sql.query('EXEC sp_get_user_permissions_with_subscription @user_id = @userId', { userId });
+    } catch (error) {
+      // Fallback to manual query if stored procedure doesn't exist
+      // Get tenant's subscription permissions
+      const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
+      
+      // Get user's role permissions
+      const userPermissions = await this.sql.query(`
+        SELECT DISTINCT p.id, p.permission_key, p.resource, p.action, p.category
+        FROM permissions p
+        JOIN role_permissions rp ON p.id = rp.permission_id
+        JOIN user_roles ur ON rp.role_id = ur.role_id
+        WHERE ur.user_id = @userId AND ur.is_active = 1 AND rp.granted = 1 AND rp.status = 'active'
+      `, { userId });
+      
+      // Filter by subscription permissions
+      return userPermissions.filter(p => subscriptionPermissions.includes(p.id));
+    }
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
   }
 
   // ==================== USER MENUS ====================
   async getUserMenus(userId: number) {
+<<<<<<< HEAD
     const user = await this.sql.query(`
       SELECT u.id, u.user_type, u.tenant_id, r.name as role_name
       FROM users u
@@ -645,6 +669,26 @@ export class AccessControlService {
     } else {
       // For everyone else, strictly show tenant_ prefixed menus
       menuQuery += " AND (mp.menu_key LIKE 'tenant_%')";
+=======
+    try {
+      return await this.sql.query('EXEC sp_get_user_menus @user_id = @userId', { userId });
+    } catch (error) {
+      // Fallback to direct query if stored procedure doesn't exist
+      return this.sql.query(`
+        SELECT 
+          menu_key,
+          menu_name,
+          parent_menu_key,
+          display_order,
+          icon,
+          route
+        FROM menu_permissions
+        WHERE is_active = 1 
+        AND status = 'active'
+        AND menu_key NOT LIKE 'tenant_%'
+        ORDER BY display_order, menu_key
+      `);
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
     }
 
     // Permission check for non-super admins
@@ -675,8 +719,22 @@ export class AccessControlService {
   }
 
   async checkMenuAccess(userId: number, menuKey: string) {
+<<<<<<< HEAD
     const menus = await this.getUserMenus(userId);
     const hasAccess = menus.some(m => m.menu_key === menuKey);
     return { has_access: hasAccess };
+=======
+    try {
+      const result = await this.sql.query('EXEC sp_check_menu_access @user_id = @userId, @menu_key = @menuKey', { 
+        userId, 
+        menuKey 
+      });
+      return result[0] || { has_access: false };
+    } catch (error) {
+      // Fallback: grant access to non-tenant menus
+      const hasAccess = !menuKey.startsWith('tenant_');
+      return { has_access: hasAccess };
+    }
+>>>>>>> 61a8996c7378ab916d9ca45cbbd276dbcc253259
   }
 }
