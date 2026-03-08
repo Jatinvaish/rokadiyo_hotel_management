@@ -105,29 +105,51 @@ export class GuestsService {
   async list(tenantId: number, options: {
     page?: number;
     limit?: number;
+    firm_id?: number;
+    branch_id?: number;
     search?: string;
   }) {
     const page = options.page || 1;
     const limit = options.limit || 10;
     const offset = (page - 1) * limit;
 
-    let query = `SELECT * FROM guests WHERE tenant_id = @tenantId`;
-    const countQuery = `SELECT COUNT(*) as total FROM guests WHERE tenant_id = @tenantId`;
+    let query = `
+      SELECT g.*, f.firm_name, b.branch_name 
+      FROM guests g
+      LEFT JOIN firms f ON g.firm_id = f.id
+      LEFT JOIN branches b ON g.branch_id = b.id
+      WHERE g.tenant_id = @tenantId
+    `;
+    const countQuery = `SELECT COUNT(*) as total FROM guests g WHERE g.tenant_id = @tenantId`;
     const params: any = { tenantId };
 
     let filterClause = '';
+
+    // Firm filtering is mandatory if provided
+    if (options.firm_id) {
+      filterClause += ` AND g.firm_id = @firmId`;
+      params.firmId = options.firm_id;
+    }
+
+    // Branch filtering is optional
+    if (options.branch_id) {
+      filterClause += ` AND g.branch_id = @branchId`;
+      params.branchId = options.branch_id;
+    }
+
     if (options.search) {
       filterClause += ` AND (
-        first_name LIKE @search OR 
-        last_name LIKE @search OR 
-        email LIKE @search OR 
-        phone LIKE @search OR
-        guest_code LIKE @search
+        g.first_name LIKE @search OR 
+        g.last_name LIKE @search OR 
+        g.email LIKE @search OR 
+        g.phone LIKE @search OR
+        g.guest_code LIKE @search OR
+        g.id_proof_number LIKE @search
       )`;
       params.search = `%${options.search}%`;
     }
 
-    const fullQuery = query + filterClause + ` ORDER BY created_at DESC OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY`;
+    const fullQuery = query + filterClause + ` ORDER BY g.created_at DESC OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY`;
     const fullCountQuery = countQuery + filterClause;
 
     params.offset = offset;
@@ -149,6 +171,23 @@ export class GuestsService {
         totalPages: Math.ceil(total / limit)
       }
     };
+  }
+
+  async search(tenantId: number, firmId: number, query: string) {
+    // Search within the entire firm (as requested: "firm condition is ther 100% mandatory")
+    return this.sql.query(`
+      SELECT id, first_name, last_name, email, phone, guest_code, id_proof_number
+      FROM guests 
+      WHERE tenant_id = @tenantId 
+        AND firm_id = @firmId
+        AND (
+          first_name LIKE @query OR 
+          last_name LIKE @query OR 
+          email LIKE @query OR 
+          phone LIKE @query
+        )
+      ORDER BY first_name ASC
+    `, { tenantId, firmId, query: `%${query}%` });
   }
 
   async update(tenantId: number, guestId: number, updateGuestDto: Partial<CreateGuestDto>) {

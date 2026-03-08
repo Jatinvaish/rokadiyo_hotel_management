@@ -19,6 +19,8 @@ export class RoomsController {
   @ApiConsumes('multipart/form-data')
   async createRoomType(@Request() req) {
     const isMultipart = req.isMultipart();
+    const firmId = req.user.firmId;
+    const branchId = req.user.branchId;
 
     if (isMultipart) {
       const { fields, files } = await parseMultipartRequest<any>(req);
@@ -40,9 +42,10 @@ export class RoomsController {
         images: JSON.stringify(totalUrls)
       };
 
-      return this.roomsService.createRoomType(req.user.tenantId, req.user.firmId, req.user.branchId, payload);
+      return this.roomsService.createRoomType(req.user.tenantId, fields.firm_id || firmId, fields.branch_id || branchId, payload);
     } else {
-      return this.roomsService.createRoomType(req.user.tenantId, req.user.firmId, req.user.branchId, req.body);
+      const body = req.body;
+      return this.roomsService.createRoomType(req.user.tenantId, body.firm_id || firmId, body.branch_id || branchId, body);
     }
   }
 
@@ -53,6 +56,8 @@ export class RoomsController {
 
   @Post('rooms/bulk-create')
   async bulkCreateRooms(@Request() req, @Body() bulkCreateDto: BulkCreateRoomsDto) {
+    if (!bulkCreateDto.firm_id) bulkCreateDto.firm_id = req.user.firmId;
+    if (!bulkCreateDto.branch_id) bulkCreateDto.branch_id = req.user.branchId;
     return this.roomsService.bulkCreateRooms(req.user.tenantId, bulkCreateDto);
   }
 
@@ -86,6 +91,8 @@ export class RoomsController {
 
   @Post('create')
   async createRoom(@Request() req, @Body() createRoomDto: CreateRoomDto) {
+    if (!createRoomDto.firm_id) createRoomDto.firm_id = req.user.firmId;
+    if (!createRoomDto.branch_id) createRoomDto.branch_id = req.user.branchId;
     return this.roomsService.createRoom(req.user.tenantId, createRoomDto);
   }
 

@@ -91,8 +91,8 @@ export class GuestsController {
   }
 
   @Post('search')
-  async findByEmail(@Request() req, @Body('email') email: string) {
-    return this.guestsService.findByEmail(req.user.tenantId, email);
+  async search(@Request() req, @Body() body: { query: string }) {
+    return this.guestsService.search(req.user.tenantId, req.user.firmId, body.query);
   }
 
   @Post('history/:id')
@@ -101,11 +101,13 @@ export class GuestsController {
   }
 
   @Post('list')
-  async list(@Request() req, @Body() filters?: { page?: number; limit?: number; search?: string }) {
+  async list(@Request() req, @Body() filters?: { page?: number; limit?: number; search?: string; firm_id?: number; branch_id?: number }) {
     return this.guestsService.list(req.user.tenantId, {
       page: filters?.page,
       limit: filters?.limit,
-      search: filters?.search
+      search: filters?.search,
+      firm_id: filters?.firm_id || req.user.firmId,
+      branch_id: filters?.branch_id || req.user.branchId
     });
   }
 

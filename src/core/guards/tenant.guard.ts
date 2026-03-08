@@ -3,18 +3,19 @@
 // tenant.guard.ts
 // ============================================
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+import { UserType } from '../../common/constants/user-types.constant';
 import { SqlServerService } from '../database/sql-server.service';
 
 @Injectable()
 export class TenantGuard implements CanActivate {
-  constructor(private sql: SqlServerService) {}
+  constructor(private sql: SqlServerService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
     // Super admins bypass tenant check
-    if (user.userType === 'super_admin' || user.userType === 'owner') {
+    if (user.userType === UserType.SUPER_ADMIN) {
       return true;
     }
 

@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { SqlServerService } from 'src/core/database/sql-server.service';
+import { UserType } from 'src/common/constants/user-types.constant';
 import {
   CreateRoleDto,
   UpdateRoleDto,
@@ -49,32 +50,33 @@ export class AccessControlService {
   }
 
   async getRoles(tenantId?: number, dto?: GetRolesDto) {
-    let query = 'SELECT * FROM roles WHERE is_visible_to_all = 1';
+    let query = 'SELECT * FROM roles WHERE (is_visible_to_all = 1';
     const params: any = {};
-    
+
     if (tenantId) {
       query += ' OR tenant_id = @tenantId';
       params.tenantId = tenantId;
     }
-    
+    query += ')';
+
     if (dto?.search) {
       query += ' AND (name LIKE @search OR display_name LIKE @search)';
       params.search = `%${dto.search}%`;
     }
-    
-    if (!dto?.include_system_roles) {
+
+    if (dto?.include_system_roles === false) {
       query += ' AND is_system_role = 0';
     }
-    
+
     query += ' ORDER BY display_name';
-    
+
     if (dto?.page && dto?.limit) {
       const offset = (dto.page - 1) * dto.limit;
       query += ' OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY';
       params.offset = offset;
       params.limit = dto.limit;
     }
-    
+
     return this.sql.query(query, params);
   }
 
@@ -82,19 +84,19 @@ export class AccessControlService {
     // Check if role exists and belongs to tenant
     const roleCheck = await this.sql.query('SELECT * FROM roles WHERE id = @id', { id: dto.id });
     if (roleCheck.length === 0) throw new NotFoundException('Role not found');
-    
+
     const role = roleCheck[0];
     if (tenantId && role.tenant_id !== tenantId && role.tenant_id !== null) {
       throw new ForbiddenException('Cannot update role from another tenant');
     }
-    
+
     if (role.is_system_role) {
       throw new ForbiddenException('Cannot update system role');
     }
 
     const updateFields: string[] = [];
     const params: any = { id: dto.id, updated_by: createdBy };
-    
+
     if (dto.name !== undefined) {
       updateFields.push('name = @name');
       params.name = dto.name;
@@ -111,20 +113,20 @@ export class AccessControlService {
       updateFields.push('is_visible_to_all = @is_active');
       params.is_active = dto.is_active;
     }
-    
+
     if (updateFields.length === 0) {
       throw new BadRequestException('No fields to update');
     }
-    
+
     updateFields.push('updated_at = GETUTCDATE()', 'updated_by = @updated_by');
-    
+
     const result = await this.sql.query(`
       UPDATE roles 
       SET ${updateFields.join(', ')}
       OUTPUT INSERTED.*
       WHERE id = @id
     `, params);
-    
+
     return result[0];
   }
 
@@ -132,25 +134,25 @@ export class AccessControlService {
     // Check if role exists and belongs to tenant
     const roleCheck = await this.sql.query('SELECT * FROM roles WHERE id = @id', { id: dto.id });
     if (roleCheck.length === 0) throw new NotFoundException('Role not found');
-    
+
     const role = roleCheck[0];
     if (tenantId && role.tenant_id !== tenantId && role.tenant_id !== null) {
       throw new ForbiddenException('Cannot delete role from another tenant');
     }
-    
+
     if (role.is_system_role) {
       throw new ForbiddenException('Cannot delete system role');
     }
-    
+
     // Check if role is assigned to any users
     const userRoleCheck = await this.sql.query('SELECT COUNT(*) as count FROM user_roles WHERE role_id = @id', { id: dto.id });
     if (userRoleCheck[0].count > 0) {
       throw new BadRequestException('Cannot delete role that is assigned to users');
     }
-    
+
     await this.sql.query('DELETE FROM role_permissions WHERE role_id = @id', { id: dto.id });
     await this.sql.query('DELETE FROM roles WHERE id = @id', { id: dto.id });
-    
+
     return { message: 'Role deleted successfully' };
   }
 
@@ -158,12 +160,12 @@ export class AccessControlService {
     // Get source role
     const sourceRole = await this.sql.query('SELECT * FROM roles WHERE id = @source_role_id', { source_role_id: dto.source_role_id });
     if (sourceRole.length === 0) throw new NotFoundException('Source role not found');
-    
+
     const source = sourceRole[0];
     if (tenantId && source.tenant_id !== tenantId && source.tenant_id !== null) {
       throw new ForbiddenException('Cannot clone role from another tenant');
     }
-    
+
     // Create new role
     const newRole = await this.createRole({
       name: dto.new_name,
@@ -173,17 +175,17 @@ export class AccessControlService {
       is_system_role: false,
       is_default: false
     }, createdBy);
-    
+
     // Clone permissions
     const sourcePermissions = await this.sql.query('SELECT permission_id FROM role_permissions WHERE role_id = @source_role_id', { source_role_id: dto.source_role_id });
-    
+
     if (sourcePermissions.length > 0) {
       await this.assignRolePermissions({
         role_id: newRole.id,
         permission_ids: sourcePermissions.map(p => p.permission_id)
       }, createdBy);
     }
-    
+
     return newRole;
   }
 
@@ -214,50 +216,50 @@ export class AccessControlService {
   async getPermissions(tenantId?: number, dto?: GetPermissionsDto) {
     let query = 'SELECT * FROM permissions WHERE 1=1';
     const params: any = {};
-    
+
     if (dto?.search) {
       query += ' AND (permission_key LIKE @search OR resource LIKE @search OR action LIKE @search OR description LIKE @search)';
       params.search = `%${dto.search}%`;
     }
-    
+
     if (dto?.category) {
       query += ' AND category = @category';
       params.category = dto.category;
     }
-    
+
     if (dto?.resource) {
       query += ' AND resource = @resource';
       params.resource = dto.resource;
     }
-    
+
     if (!dto?.include_system_permissions) {
       query += ' AND is_system_permission = 0';
     }
-    
+
     query += ' ORDER BY category, resource, action';
-    
+
     if (dto?.page && dto?.limit) {
       const offset = (dto.page - 1) * dto.limit;
       query += ' OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY';
       params.offset = offset;
       params.limit = dto.limit;
     }
-    
+
     return this.sql.query(query, params);
   }
 
   async updatePermission(dto: UpdatePermissionDto, createdBy?: number) {
     const existing = await this.sql.query('SELECT * FROM permissions WHERE id = @id', { id: dto.id });
     if (existing.length === 0) throw new NotFoundException('Permission not found');
-    
+
     const permission = existing[0];
     if (permission.is_system_permission) {
       throw new ForbiddenException('Cannot update system permission');
     }
-    
+
     const updateFields: string[] = [];
     const params: any = { id: dto.id, updated_by: createdBy };
-    
+
     if (dto.permission_key !== undefined) {
       // Check if new key already exists
       const keyCheck = await this.sql.query('SELECT id FROM permissions WHERE permission_key = @permission_key AND id != @id', { permission_key: dto.permission_key, id: dto.id });
@@ -289,38 +291,38 @@ export class AccessControlService {
       updateFields.push('fields = @fields');
       params.fields = dto.fields;
     }
-    
+
     if (updateFields.length === 0) {
       throw new BadRequestException('No fields to update');
     }
-    
+
     updateFields.push('updated_at = GETUTCDATE()', 'updated_by = @updated_by');
-    
+
     const result = await this.sql.query(`
       UPDATE permissions 
       SET ${updateFields.join(', ')}
       OUTPUT INSERTED.*
       WHERE id = @id
     `, params);
-    
+
     return result[0];
   }
 
   async deletePermission(dto: DeletePermissionDto, createdBy?: number) {
     const existing = await this.sql.query('SELECT * FROM permissions WHERE id = @id', { id: dto.id });
     if (existing.length === 0) throw new NotFoundException('Permission not found');
-    
+
     const permission = existing[0];
     if (permission.is_system_permission) {
       throw new ForbiddenException('Cannot delete system permission');
     }
-    
+
     // Check if permission is assigned to any roles
     const roleCheck = await this.sql.query('SELECT COUNT(*) as count FROM role_permissions WHERE permission_id = @id', { id: dto.id });
     if (roleCheck[0].count > 0) {
       throw new BadRequestException('Cannot delete permission that is assigned to roles');
     }
-    
+
     await this.sql.query('DELETE FROM permissions WHERE id = @id', { id: dto.id });
     return { message: 'Permission deleted successfully' };
   }
@@ -330,19 +332,19 @@ export class AccessControlService {
     // Check if role belongs to tenant
     const roleCheck = await this.sql.query('SELECT * FROM roles WHERE id = @role_id', { role_id: dto.role_id });
     if (roleCheck.length === 0) throw new NotFoundException('Role not found');
-    
+
     const role = roleCheck[0];
     if (tenantId && role.tenant_id !== tenantId && role.tenant_id !== null) {
       throw new ForbiddenException('Cannot manage permissions for role from another tenant');
     }
-    
+
     // If tenant is provided, filter permissions based on subscription
     let availablePermissions = dto.permission_ids;
     if (tenantId) {
       const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
       availablePermissions = dto.permission_ids.filter(pid => subscriptionPermissions.includes(pid));
     }
-    
+
     return this.sql.transaction(async (tx) => {
       // Clear existing
       const deleteRequest = tx.request();
@@ -366,29 +368,42 @@ export class AccessControlService {
     });
   }
 
-  async getRolePermissions(roleId: number, tenantId?: number, dto?: GetRolePermissionsDto) {
+  async getRolePermissions(roleId: number | string, tenantId?: number, dto?: GetRolePermissionsDto) {
+    const id = typeof roleId === 'string' ? parseInt(roleId) : roleId;
     let query = `
       SELECT p.*, rp.granted, rp.status
       FROM permissions p
-      LEFT JOIN role_permissions rp ON p.id = rp.permission_id AND rp.role_id = @roleId
+      LEFT JOIN role_permissions rp ON p.id = rp.permission_id AND rp.role_id = @id
       WHERE 1=1
     `;
-    const params: any = { roleId };
-    
-    // If tenant is specified and subscription filtering is requested, filter by subscription permissions
-    if (tenantId && dto?.include_subscription_permissions) {
+    const params: any = { id };
+
+    // If tenant is specified and filtered check is needed
+    if (tenantId) {
       const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
       if (subscriptionPermissions.length > 0) {
         query += ` AND p.id IN (${subscriptionPermissions.join(',')})`;
       } else {
-        query += ' AND 1=0'; // No permissions available
+        // If they have a subscription but no permissions are allowed, they get nothing
+        // unless they are a tenant_administration which might bypass this? 
+        // For now, let's just filter.
       }
     }
-    
+
     query += ' ORDER BY p.category, p.resource, p.action';
-    
+
     return this.sql.query(query, params);
   }
+
+  async getSubscriptionPermissionsWrapped(tenantId: number) {
+    const allowedIds = await this.getSubscriptionPermissions(tenantId);
+    if (allowedIds.length === 0) return [];
+
+    return this.sql.query(`
+      SELECT * FROM permissions WHERE id IN (${allowedIds.join(',')}) ORDER BY category, resource
+    `);
+  }
+
 
   private async getSubscriptionPermissions(tenantId: number): Promise<number[]> {
     const tenantQueryResult = await this.sql.query('SELECT subscription_plan_id FROM tenants WHERE id = @tenantId', { tenantId });
@@ -457,35 +472,35 @@ export class AccessControlService {
   async getMenuPermissions(tenantId?: number, dto?: GetMenuPermissionsDto) {
     let query = 'SELECT * FROM menu_permissions WHERE 1=1';
     const params: any = {};
-    
+
     if (dto?.search) {
       query += ' AND (menu_key LIKE @search OR menu_name LIKE @search)';
       params.search = `%${dto.search}%`;
     }
-    
+
     if (!dto?.include_inactive) {
       query += ' AND is_active = 1';
     }
-    
+
     query += ' ORDER BY display_order, menu_name';
-    
+
     if (dto?.page && dto?.limit) {
       const offset = (dto.page - 1) * dto.limit;
       query += ' OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY';
       params.offset = offset;
       params.limit = dto.limit;
     }
-    
+
     return this.sql.query(query, params);
   }
 
   async updateMenuPermission(dto: UpdateMenuPermissionDto, createdBy?: number) {
     const existing = await this.sql.query('SELECT * FROM menu_permissions WHERE id = @id', { id: dto.id });
     if (existing.length === 0) throw new NotFoundException('Menu permission not found');
-    
+
     const updateFields: string[] = [];
     const params: any = { id: dto.id, updated_by: createdBy };
-    
+
     if (dto.menu_key !== undefined) {
       updateFields.push('menu_key = @menu_key');
       params.menu_key = dto.menu_key;
@@ -526,88 +541,142 @@ export class AccessControlService {
       updateFields.push('is_active = @is_active');
       params.is_active = dto.is_active;
     }
-    
+
     if (updateFields.length === 0) {
       throw new BadRequestException('No fields to update');
     }
-    
+
     updateFields.push('updated_at = GETUTCDATE()', 'updated_by = @updated_by');
-    
+
     const result = await this.sql.query(`
       UPDATE menu_permissions 
       SET ${updateFields.join(', ')}
       OUTPUT INSERTED.*
       WHERE id = @id
     `, params);
-    
+
     return result[0];
   }
 
   async deleteMenuPermission(dto: DeleteMenuPermissionDto, createdBy?: number) {
     const existing = await this.sql.query('SELECT * FROM menu_permissions WHERE id = @id', { id: dto.id });
     if (existing.length === 0) throw new NotFoundException('Menu permission not found');
-    
+
     await this.sql.query('DELETE FROM menu_permissions WHERE id = @id', { id: dto.id });
     return { message: 'Menu permission deleted successfully' };
   }
 
   async getEffectivePermissions(tenantId: number, userId: number) {
-    try {
-      // Use the stored procedure for subscription-filtered permissions
-      return await this.sql.query('EXEC sp_get_user_permissions_with_subscription @user_id = @userId', { userId });
-    } catch (error) {
-      // Fallback to manual query if stored procedure doesn't exist
-      // Get tenant's subscription permissions
-      const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
-      
-      // Get user's role permissions
-      const userPermissions = await this.sql.query(`
-        SELECT DISTINCT p.id, p.permission_key, p.resource, p.action, p.category
-        FROM permissions p
-        JOIN role_permissions rp ON p.id = rp.permission_id
-        JOIN user_roles ur ON rp.role_id = ur.role_id
-        WHERE ur.user_id = @userId AND ur.is_active = 1 AND rp.granted = 1 AND rp.status = 'active'
-      `, { userId });
-      
-      // Filter by subscription permissions
-      return userPermissions.filter(p => subscriptionPermissions.includes(p.id));
+    // Get user type first to handle super admin
+    const user = await this.sql.query('SELECT user_type FROM users WHERE id = @userId', { userId });
+    if (!user.length) return [];
+
+    const userType = user[0].user_type?.toUpperCase();
+
+    // Check for both UserType.SUPER_ADMIN and UserType.TENANT_ADMIN_ALT for full access
+    if (userType === UserType.SUPER_ADMIN || userType === UserType.TENANT_ADMIN_ALT) {
+      return this.sql.query('SELECT id, permission_key, resource, action, category FROM permissions');
     }
+
+    // Tenant users get permissions based on role permissions
+    // We also join with subscription permissions if tenantId is provided
+    let query = `
+      SELECT DISTINCT p.id, p.permission_key, p.resource, p.action, p.category
+      FROM permissions p
+      JOIN role_permissions rp ON p.id = rp.permission_id
+      JOIN user_roles ur ON rp.role_id = ur.role_id
+      WHERE ur.user_id = @userId 
+        AND ur.is_active = 1 
+        AND rp.granted = 1 
+        AND rp.status = 'active'
+    `;
+
+    const params: any = { userId };
+
+    if (tenantId) {
+      const subscriptionPermissions = await this.getSubscriptionPermissions(tenantId);
+      if (subscriptionPermissions.length > 0) {
+        query += ` AND p.id IN (${subscriptionPermissions.join(',')})`;
+      } else {
+        // If they have a subscription but no permissions are allowed, they get nothing
+        // For now, let's just filter.
+      }
+    }
+
+    return this.sql.query(query, params);
   }
 
   // ==================== USER MENUS ====================
   async getUserMenus(userId: number) {
-    try {
-      return await this.sql.query('EXEC sp_get_user_menus @user_id = @userId', { userId });
-    } catch (error) {
-      // Fallback to direct query if stored procedure doesn't exist
-      return this.sql.query(`
-        SELECT 
-          menu_key,
-          menu_name,
-          parent_menu_key,
-          display_order,
-          icon,
-          route
-        FROM menu_permissions
-        WHERE is_active = 1 
-        AND status = 'active'
-        AND menu_key NOT LIKE 'tenant_%'
-        ORDER BY display_order, menu_key
-      `);
+    const user = await this.sql.query(`
+      SELECT u.id, u.user_type, u.tenant_id, r.name as role_name
+      FROM users u
+      LEFT JOIN user_roles ur ON u.id = ur.user_id AND ur.is_active = 1
+      LEFT JOIN roles r ON ur.role_id = r.id
+      WHERE u.id = @userId
+    `, { userId });
+
+    if (!user.length) return [];
+
+    const userData = user[0];
+    const userType = userData.user_type;
+    const roleName = userData.role_name;
+
+    // Fix for the mismatch in naming conventions
+    const isSuperAdmin = userType?.toUpperCase() === UserType.SUPER_ADMIN || roleName?.toUpperCase() === UserType.SUPER_ADMIN;
+    const isTenantAdmin =
+      userType?.toUpperCase() === UserType.TENANT_ADMIN ||
+      userType?.toUpperCase() === UserType.TENANT_ADMIN_ALT ||
+      roleName?.toUpperCase() === UserType.TENANT_ADMIN ||
+      roleName?.toUpperCase() === UserType.TENANT_ADMIN_ALT;
+
+    // Unified menu fetching logic to prevent duplicates
+    // Super admins get ONLY non-tenant-prefixed menus
+    // Tenant users get ONLY tenant-prefixed menus
+    // If neither, default to tenant prefix if we have a tenantId context
+    let menuQuery = `
+      SELECT DISTINCT mp.menu_key, mp.menu_name, mp.parent_menu_key, mp.display_order, mp.icon, mp.route
+      FROM menu_permissions mp
+      WHERE mp.is_active = 1 AND mp.status = 'active'
+    `;
+
+    if (isSuperAdmin) {
+      menuQuery += " AND (mp.menu_key NOT LIKE 'tenant_%')";
+    } else {
+      // For everyone else, strictly show tenant_ prefixed menus
+      menuQuery += " AND (mp.menu_key LIKE 'tenant_%')";
     }
+
+    // Permission check for non-super admins
+    if (!isSuperAdmin) {
+      menuQuery += `
+        AND (
+          mp.permission_ids IS NULL OR mp.permission_ids = ''
+          OR 
+          EXISTS (
+            SELECT 1 
+            FROM role_permissions rp
+            JOIN user_roles ur ON rp.role_id = ur.role_id
+            WHERE ur.user_id = @userId 
+              AND ur.is_active = 1 
+              AND rp.granted = 1 
+              AND rp.status = 'active'
+              AND EXISTS (
+                SELECT 1 FROM STRING_SPLIT(mp.permission_ids, ',') s 
+                WHERE s.value = CAST(rp.permission_id AS NVARCHAR(MAX))
+              )
+          )
+        )
+      `;
+    }
+
+    menuQuery += ' ORDER BY mp.display_order, mp.menu_key';
+    return this.sql.query(menuQuery, { userId });
   }
 
   async checkMenuAccess(userId: number, menuKey: string) {
-    try {
-      const result = await this.sql.query('EXEC sp_check_menu_access @user_id = @userId, @menu_key = @menuKey', { 
-        userId, 
-        menuKey 
-      });
-      return result[0] || { has_access: false };
-    } catch (error) {
-      // Fallback: grant access to non-tenant menus
-      const hasAccess = !menuKey.startsWith('tenant_');
-      return { has_access: hasAccess };
-    }
+    const menus = await this.getUserMenus(userId);
+    const hasAccess = menus.some(m => m.menu_key === menuKey);
+    return { has_access: hasAccess };
   }
 }

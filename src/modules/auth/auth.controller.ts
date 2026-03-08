@@ -50,6 +50,25 @@ export class AuthController {
     return { message: 'User profile', data: user };
   }
 
+  @Post('switch-context')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Switch active firm/branch' })
+  async switchContext(
+    @CurrentUser() user: any,
+    @Body() dto: { firm_id: number; branch_id?: number }
+  ) {
+    const result = await this.auth.switchContext(user.id, dto.firm_id, dto.branch_id);
+    return { message: 'Context switched successfully', data: result };
+  }
+
+  @Post('context-options')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get available firms and branches for switching' })
+  async getContextOptions(@CurrentUser() user: any) {
+    const result = await this.auth.getContextOptions(user.tenantId);
+    return { message: 'Context options retrieved', data: result };
+  }
+
   // ==================== SUPER ADMIN ONLY ====================
 
   @Post('tenant/create')
@@ -69,7 +88,7 @@ export class AuthController {
     this.logger.log(`User Type: ${user?.userType}`);
     this.logger.log(`User ID: ${user?.id}`);
     this.logger.log(`DTO Received: ${JSON.stringify(dto)}`);
-    
+
     try {
       this.logger.log('📞 Calling auth.createTenantWithUser service...');
       const result = await this.auth.createTenantWithUser(user, dto);
@@ -95,7 +114,7 @@ export class AuthController {
     const limit = params?.limit || 10;
     const search = params?.search;
     const is_active = params?.is_active;
-    
+
     const result = await this.auth.getTenantsList(
       page,
       limit,
@@ -225,5 +244,20 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Logout successful' })
   async logout(@CurrentUser() user: any) {
     return { message: 'Logout successful' };
+  }
+
+  @Post('tenants/:tenantId/assign-plan')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Super Admin: Assign / change subscription plan for a tenant' })
+  @ApiResponse({ status: 200, description: 'Plan assigned successfully' })
+  async assignTenantSubscriptionPlan(
+    @CurrentUser() user: any,
+    @Param('tenantId') tenantId: number,
+    @Body() dto: { plan_id: number }
+  ) {
+    const result = await this.auth.assignSubscriptionPlan(tenantId, dto.plan_id, user.id);
+    return { message: result.message, data: result };
   }
 }

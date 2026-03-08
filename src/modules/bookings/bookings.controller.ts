@@ -27,7 +27,7 @@ export class BookingsController {
     firm_id?: number;
     status?: string;
     fromDate?: string;
-    toDate?: string
+    toDate?: string;
   }) {
     return this.bookingsService.findAll(req.user.tenantId, {
       page: filters?.page,
@@ -42,5 +42,32 @@ export class BookingsController {
   @Post('payment/record')
   async recordPayment(@Request() req, @Body() recordPaymentDto: RecordPaymentDto) {
     return this.bookingsService.recordPayment(req.user.tenantId, recordPaymentDto);
+  }
+
+  // ==================== ANALYTICS ====================
+
+  @Post('analytics/status-breakdown')
+  async getStatusBreakdown(@Request() req, @Body() filters?: { fromDate?: string; toDate?: string }) {
+    return this.bookingsService.getBookingStatusBreakdown(req.user.tenantId, filters?.fromDate, filters?.toDate);
+  }
+
+  @Post('analytics/source-breakdown')
+  async getSourceBreakdown(@Request() req, @Body() filters?: { fromDate?: string; toDate?: string }) {
+    return this.bookingsService.getBookingSourceBreakdown(req.user.tenantId, filters?.fromDate, filters?.toDate);
+  }
+
+  @Post('analytics/revenue-stats')
+  async getRevenueStats(@Request() req, @Body() filters?: { fromDate?: string; toDate?: string }) {
+    return this.bookingsService.getRevenueStats(req.user.tenantId, filters?.fromDate, filters?.toDate);
+  }
+
+  @Post('analytics/occupancy-stats')
+  async getOccupancyStats(@Request() req, @Body() filters?: { fromDate?: string; toDate?: string }) {
+    return this.bookingsService.getOccupancyStats(req.user.tenantId, filters?.fromDate, filters?.toDate);
+  }
+
+  @Post('analytics/full')
+  async getFullAnalytics(@Request() req, @Body() filters?: { fromDate?: string; toDate?: string }) {
+    return this.bookingsService.getFullReportAnalytics(req.user.tenantId, filters?.fromDate, filters?.toDate);
   }
 }

@@ -112,7 +112,9 @@ export class AccessControlController {
   @Post('user-roles')
   assignUserRoles(@CurrentUser() user: any, @Body() dto: AssignUserRolesDto) {
     // Basic check: must be admin
-    if (user.userType !== UserType.SUPER_ADMIN && user.userType !== UserType.TENANT_ADMIN) {
+    if (user.userType !== UserType.SUPER_ADMIN &&
+      user.userType !== UserType.TENANT_ADMIN &&
+      user.userType !== UserType.TENANT_ADMIN_ALT) {
       throw new ForbiddenException();
     }
     return this.service.assignUserRoles(dto, user.id);
@@ -158,5 +160,48 @@ export class AccessControlController {
     // Use current user's ID if not provided
     const targetUserId = dto.user_id || user.id;
     return this.service.checkMenuAccess(targetUserId, dto.menu_key);
+  }
+
+  @Post('get-subscription-permissions')
+  getSubscriptionPermissions(@CurrentUser() user: any, @Body() dto: { tenant_id?: number }) {
+    const targetTenantId = dto.tenant_id || user.tenantId;
+    return this.service.getSubscriptionPermissionsWrapped(targetTenantId);
+  }
+
+  @Post('get-user-permissions-with-subscription')
+  getUserPermissionsWithSubscription(@CurrentUser() user: any, @Body() dto: { user_id?: number }) {
+    const targetUserId = dto.user_id || user.id;
+    return this.service.getEffectivePermissions(user.tenantId, targetUserId);
+  }
+
+  @Post('get-tenant-aware-menus')
+  getTenantAwareMenus(@CurrentUser() user: any, @Body() dto: { user_id?: number }) {
+    const targetUserId = dto.user_id || user.id;
+    return this.service.getUserMenus(targetUserId);
+  }
+
+  @Post('get-role-permissions-with-subscription')
+  getRolePermissionsWithSubscription(@CurrentUser() user: any, @Body() dto: { role_id: string; tenant_id?: number; include_subscription_permissions?: boolean }) {
+    const targetTenantId = dto.tenant_id || user.tenantId;
+    return this.service.getRolePermissions(dto.role_id, targetTenantId);
+  }
+
+  @Post('check-permission')
+  async checkPermission(@CurrentUser() user: any, @Body() dto: { user_id?: number; permission_slug: string }) {
+    const targetUserId = dto.user_id || user.id;
+    const permissions = await this.service.getEffectivePermissions(user.tenantId, targetUserId);
+    const hasAccess = permissions.some(p => p.permission_key === dto.permission_slug);
+    return { has_access: hasAccess };
+  }
+
+  @Post('check-multiple-permissions')
+  async checkMultiplePermissions(@CurrentUser() user: any, @Body() dto: { user_id?: number; permission_slugs: string[] }) {
+    const targetUserId = dto.user_id || user.id;
+    const permissions = await this.service.getEffectivePermissions(user.tenantId, targetUserId);
+    const results: Record<string, boolean> = {};
+    dto.permission_slugs.forEach(slug => {
+      results[slug] = permissions.some(p => p.permission_key === slug);
+    });
+    return results;
   }
 }

@@ -41,6 +41,20 @@ export class BookingsService {
   }
 
   async create(tenantId: number, firmId: number, branchId: number, createBookingDto: any) {
+    // If firmId or branchId are missing (e.g. from super/tenant admin context),
+    // derive them from the room itself as it's the source of truth for the location.
+    if (createBookingDto.room_id) {
+      const roomContext = await this.sql.query(`
+         SELECT firm_id, branch_id FROM rooms WHERE id = @roomId AND tenant_id = @tenantId
+       `, { roomId: createBookingDto.room_id, tenantId });
+
+      if (roomContext.length > 0) {
+        // Prioritize the room's firm and branch
+        firmId = roomContext[0].firm_id;
+        branchId = roomContext[0].branch_id;
+      }
+    }
+
     if (!firmId || !branchId) {
       const defaults = await this.sql.query(`
          SELECT TOP 1 f.id as firm_id, b.id as branch_id
@@ -276,5 +290,182 @@ export class BookingsService {
     console.log('Booking Summary Updated.');
 
     return { success: true, message: 'Payment recorded and history updated' };
+  }
+
+  // ==================== ANALYTICS ====================
+
+  /**
+   * Bookings by Status breakdown — real-time count per status
+   */
+  async getBookingStatusBreakdown(tenantId: number, fromDate?: string, toDate?: string) {
+    const params: any = { tenantId };
+    let dateFilter = '';
+    if (fromDate && toDate) {
+      dateFilter = ' AND b.check_in >= @fromDate AND b.check_in <= @toDate';
+      params.fromDate = fromDate;
+      params.toDate = toDate;
+    }
+
+    const rows = await this.sql.query(`
+      SELECT 
+        b.booking_status as status,
+        COUNT(*) as count,
+        COALESCE(SUM(b.total_amount), 0) as total_amount
+      FROM bookings b
+      WHERE b.tenant_id = @tenantId ${dateFilter}
+      GROUP BY b.booking_status
+      ORDER BY count DESC
+    `, params);
+
+    const total = rows.reduce((s: number, r: any) => s + (r.count || 0), 0);
+    return rows.map((r: any) => ({
+      status: r.status,
+      count: r.count,
+      total_amount: r.total_amount,
+      percentage: total > 0 ? Math.round((r.count / total) * 100) : 0
+    }));
+  }
+
+  /**
+   * Source of bookings breakdown — by booking_type (direct, advance, ota, etc.)
+   */
+  async getBookingSourceBreakdown(tenantId: number, fromDate?: string, toDate?: string) {
+    const params: any = { tenantId };
+    let dateFilter = '';
+    if (fromDate && toDate) {
+      dateFilter = ' AND b.check_in >= @fromDate AND b.check_in <= @toDate';
+      params.fromDate = fromDate;
+      params.toDate = toDate;
+    }
+
+    const rows = await this.sql.query(`
+      SELECT 
+        COALESCE(b.booking_type, 'direct') as source,
+        COUNT(*) as count,
+        COALESCE(SUM(b.total_amount), 0) as total_amount
+      FROM bookings b
+      WHERE b.tenant_id = @tenantId ${dateFilter}
+      GROUP BY b.booking_type
+      ORDER BY count DESC
+    `, params);
+
+    const total = rows.reduce((s: number, r: any) => s + (r.count || 0), 0);
+    return rows.map((r: any) => ({
+      source: r.source,
+      count: r.count,
+      total_amount: r.total_amount,
+      percentage: total > 0 ? Math.round((r.count / total) * 100) : 0
+    }));
+  }
+
+  /**
+   * Revenue stats — net revenue, avg transaction, tax estimate, daily breakdown
+   */
+  async getRevenueStats(tenantId: number, fromDate?: string, toDate?: string) {
+    const params: any = { tenantId };
+    let dateFilter = '';
+    if (fromDate && toDate) {
+      dateFilter = ' AND b.check_in >= @fromDate AND b.check_in <= @toDate';
+      params.fromDate = fromDate;
+      params.toDate = toDate;
+    }
+
+    const result = await this.sql.query(`
+      SELECT
+        COALESCE(SUM(b.total_amount), 0) as net_revenue,
+        COALESCE(AVG(b.total_amount), 0) as avg_transaction,
+        COUNT(b.id) as total_bookings,
+        COALESCE(SUM(b.total_amount) * 0.12, 0) as estimated_tax,
+        COALESCE(SUM(b.paid_amount), 0) as total_collected,
+        COALESCE(SUM(b.total_amount) - SUM(b.paid_amount), 0) as outstanding
+      FROM bookings b
+      WHERE b.tenant_id = @tenantId ${dateFilter}
+    `, params);
+
+    return result[0] || {
+      net_revenue: 0, avg_transaction: 0, total_bookings: 0,
+      estimated_tax: 0, total_collected: 0, outstanding: 0
+    };
+  }
+
+  /**
+   * Occupancy stats — ADR, RevPAR, occupancy% from rooms and bookings
+   */
+  async getOccupancyStats(tenantId: number, fromDate?: string, toDate?: string) {
+    const params: any = { tenantId };
+    let dateFilter = '';
+    if (fromDate && toDate) {
+      dateFilter = ' AND b.check_in >= @fromDate AND b.check_in <= @toDate';
+      params.fromDate = fromDate;
+      params.toDate = toDate;
+    }
+
+    const result = await this.sql.query(`
+      SELECT
+        COUNT(DISTINCT r.id) as total_rooms,
+        COUNT(DISTINCT CASE WHEN r.status = 'occupied' THEN r.id END) as occupied_rooms,
+        ROUND(
+          CASE
+            WHEN COUNT(DISTINCT r.id) > 0
+            THEN (COUNT(DISTINCT CASE WHEN r.status = 'occupied' THEN r.id END) * 100.0) / COUNT(DISTINCT r.id)
+            ELSE 0
+          END, 2
+        ) as occupancy_percentage,
+        COALESCE(AVG(b.total_amount / NULLIF(b.total_nights, 0)), 0) as adr,
+        COALESCE(
+          (SUM(b.total_amount) / NULLIF(COUNT(DISTINCT r.id), 0)) /
+          NULLIF(DATEDIFF(day, MIN(b.check_in), MAX(b.check_out)), 0)
+          , 0
+        ) as revpar
+      FROM firms f
+      LEFT JOIN rooms r ON f.id = r.firm_id
+      LEFT JOIN bookings b ON r.id = b.assigned_to ${dateFilter}
+      WHERE f.tenant_id = @tenantId
+    `, params);
+
+    // Per-room-type breakdown
+    const byType = await this.sql.query(`
+      SELECT 
+        rt.type_name as room_type,
+        COUNT(DISTINCT r.id) as total_rooms,
+        COUNT(DISTINCT CASE WHEN r.status = 'occupied' THEN r.id END) as occupied_rooms,
+        ROUND(
+          CASE WHEN COUNT(DISTINCT r.id) > 0
+          THEN (COUNT(DISTINCT CASE WHEN r.status = 'occupied' THEN r.id END) * 100.0) / COUNT(DISTINCT r.id)
+          ELSE 0 END, 2
+        ) as occupancy_percentage,
+        COALESCE(AVG(b.total_amount / NULLIF(b.total_nights, 0)), 0) as adr
+      FROM rooms r
+      JOIN room_types rt ON r.room_type_id = rt.id
+      JOIN firms f ON r.firm_id = f.id
+      LEFT JOIN bookings b ON r.id = b.assigned_to ${dateFilter}
+      WHERE f.tenant_id = @tenantId
+      GROUP BY rt.type_name
+      ORDER BY occupied_rooms DESC
+    `, params);
+
+    return {
+      summary: result[0] || { total_rooms: 0, occupied_rooms: 0, occupancy_percentage: 0, adr: 0, revpar: 0 },
+      by_room_type: byType || []
+    };
+  }
+
+  /**
+   * Full analytics summary — all in one call
+   */
+  async getFullReportAnalytics(tenantId: number, fromDate?: string, toDate?: string) {
+    const [statusBreakdown, sourceBreakdown, revenueStats, occupancyStats] = await Promise.all([
+      this.getBookingStatusBreakdown(tenantId, fromDate, toDate),
+      this.getBookingSourceBreakdown(tenantId, fromDate, toDate),
+      this.getRevenueStats(tenantId, fromDate, toDate),
+      this.getOccupancyStats(tenantId, fromDate, toDate),
+    ]);
+
+    return {
+      booking_status_breakdown: statusBreakdown,
+      booking_source_breakdown: sourceBreakdown,
+      revenue: revenueStats,
+      occupancy: occupancyStats,
+    };
   }
 }

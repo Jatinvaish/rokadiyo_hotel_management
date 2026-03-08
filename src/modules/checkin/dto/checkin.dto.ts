@@ -37,3 +37,43 @@ export class CompleteCheckOutDto {
   @IsString()
   checkout_notes?: string;
 }
+
+export class QuickCheckInDto {
+  @IsOptional()
+  @IsNumber()
+  guest_id?: number;
+
+  @IsOptional()
+  @IsString()
+  first_name?: string;
+
+  @IsOptional()
+  @IsString()
+  last_name?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+
+  @IsNumber()
+  room_id: number;
+
+  @IsString()
+  check_out_date: string;
+
+  @IsOptional()
+  @IsNumber()
+  total_amount?: number;
+
+  @IsOptional()
+  @IsNumber()
+  paid_amount?: number;
+
+  @IsOptional()
+  @IsString()
+  notes?: string;
+}

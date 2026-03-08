@@ -1,10 +1,10 @@
 import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { CheckinService } from './checkin.service';
-import { CompleteCheckInDto, CalculateBillDto, CompleteCheckOutDto } from './dto/checkin.dto';
+import { CompleteCheckInDto, CalculateBillDto, CompleteCheckOutDto, QuickCheckInDto } from './dto/checkin.dto';
 import { JwtAuthGuard } from 'src/core/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Checkin') 
+@ApiTags('Checkin')
 @Controller({ path: 'checkin', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class CheckinController {
@@ -23,5 +23,10 @@ export class CheckinController {
   @Post('checkout/complete')
   async completeCheckOut(@Request() req, @Body() completeCheckOutDto: CompleteCheckOutDto) {
     return this.checkinService.completeCheckOut(req.user.tenantId, completeCheckOutDto);
+  }
+
+  @Post('quick-checkin')
+  async quickCheckIn(@Request() req, @Body() quickCheckInDto: QuickCheckInDto) {
+    return this.checkinService.quickCheckIn(req.user, quickCheckInDto);
   }
 }

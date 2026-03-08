@@ -77,34 +77,37 @@ export class AuthService {
 
     const userData = user[0];
 
-    // Fetch default firm and branch
-    const defaultContext = await this.sql.query(
-      `SELECT TOP 1 f.id as firm_id, b.id as branch_id 
-       FROM firms f
-       LEFT JOIN branches b ON b.firm_id = f.id AND b.is_active = 1
-       WHERE f.tenant_id = @tenantId AND f.is_active = 1
-       ORDER BY f.created_at ASC, b.created_at ASC`,
-      { tenantId: userData.tenant_id }
-    );
+    // Priority: 1. User specified default, 2. First available in tenant
+    let firmId = userData.firm_id;
+    let branchId = userData.branch_id;
 
-    const firmId = defaultContext[0]?.firm_id;
-    const branchId = defaultContext[0]?.branch_id;
+    if (!firmId) {
+      const defaultContext = await this.sql.query(
+        `SELECT TOP 1 f.id as firm_id, b.id as branch_id 
+         FROM firms f
+         LEFT JOIN branches b ON b.firm_id = f.id AND b.is_active = 1
+         WHERE f.tenant_id = @tenantId AND f.is_active = 1
+         ORDER BY f.created_at ASC, b.created_at ASC`,
+        { tenantId: userData.tenant_id }
+      );
+      firmId = defaultContext[0]?.firm_id;
+      branchId = defaultContext[0]?.branch_id;
+    }
 
     // Create encrypted JWT payload
-    const payload = this.encryption.encrypt(
-      JSON.stringify({
-        sub: userData.id,
-        email: userData.email,
-        username: userData.username,
-        userType: userData.user_type,
-        tenantId: userData.tenant_id,
-        firmId,
-        branchId,
-        onboardingCompleted: userData.user_type === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
-        roles: userData.roles?.split(',').filter(Boolean) || [],
-      })
-    );
+    const payloadData = {
+      sub: userData.id,
+      email: userData.email,
+      username: userData.username,
+      userType: userData.user_type?.toUpperCase(),
+      tenantId: userData.tenant_id,
+      firmId,
+      branchId,
+      onboardingCompleted: userData.user_type?.toUpperCase() === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
+      roles: userData.roles?.split(',').filter(Boolean) || [],
+    };
 
+    const payload = this.encryption.encrypt(JSON.stringify(payloadData));
     const accessToken = this.jwt.sign({ data: payload });
 
     await this.sql.query(
@@ -117,7 +120,7 @@ export class AuthService {
       userId: userData.id,
       activityType: 'auth',
       action: 'login',
-      description: 'User logged in',
+      description: `User logged in to firm ${firmId}, branch ${branchId}`,
     });
 
     return {
@@ -126,15 +129,104 @@ export class AuthService {
         id: userData.id,
         email: userData.email,
         username: userData.username,
-        userType: userData.user_type,
+        userType: userData.user_type?.toUpperCase(),
         tenantId: userData.tenant_id,
         firmId,
         branchId,
         firstName: userData.first_name,
         lastName: userData.last_name,
-        onboardingCompleted: userData.user_type === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
+        onboardingCompleted: userData.user_type?.toUpperCase() === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
+        roles: payloadData.roles,
       },
     };
+  }
+
+  // ==================== SWITCH CONTEXT ====================
+  async switchContext(userId: number, firmId: number, branchId?: number) {
+    const user = await this.sql.query(
+      `SELECT u.*, 
+        (SELECT STRING_AGG(r.name, ',') FROM user_roles ur 
+         JOIN roles r ON ur.role_id = r.id 
+         WHERE ur.user_id = u.id AND ur.is_active = 1) as roles
+       FROM users u WHERE u.id = @userId AND u.status = 'active'`,
+      { userId }
+    );
+
+    if (!user || user.length === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+    const userData = user[0];
+
+    // Verify access to firm/branch
+    // For now, if same tenant, allow. In advanced, check user_roles/permissions for specific branch
+    const accessCheck = await this.sql.query(
+      `SELECT id FROM firms WHERE id = @firmId AND tenant_id = @tenantId AND is_active = 1`,
+      { firmId, tenantId: userData.tenant_id }
+    );
+
+    if (accessCheck.length === 0) {
+      throw new ForbiddenException('You do not have access to this firm');
+    }
+
+    if (branchId) {
+      const branchCheck = await this.sql.query(
+        `SELECT id FROM branches WHERE id = @branchId AND firm_id = @firmId AND is_active = 1`,
+        { branchId, firmId }
+      );
+      if (branchCheck.length === 0) {
+        throw new ForbiddenException('You do not have access to this branch');
+      }
+    }
+
+    const payloadData = {
+      sub: userData.id,
+      email: userData.email,
+      username: userData.username,
+      userType: userData.user_type?.toUpperCase(),
+      tenantId: userData.tenant_id,
+      firmId,
+      branchId,
+      onboardingCompleted: userData.user_type?.toUpperCase() === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
+      roles: userData.roles?.split(',').filter(Boolean) || [],
+    };
+
+    const payload = this.encryption.encrypt(JSON.stringify(payloadData));
+    const accessToken = this.jwt.sign({ data: payload });
+
+    return {
+      accessToken,
+      user: {
+        id: userData.id,
+        email: userData.email,
+        username: userData.username,
+        userType: userData.user_type?.toUpperCase(),
+        tenantId: userData.tenant_id,
+        firmId,
+        branchId,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
+        onboardingCompleted: userData.user_type?.toUpperCase() === UserType.SUPER_ADMIN ? true : !!userData.onboarding_completed_at,
+        roles: payloadData.roles,
+      }
+    };
+  }
+
+  async getContextOptions(tenantId: number) {
+    const firms = await this.sql.query(
+      `SELECT id, firm_name, firm_code FROM firms WHERE tenant_id = @tenantId AND is_active = 1`,
+      { tenantId }
+    );
+
+    const branches = await this.sql.query(
+      `SELECT b.id, b.firm_id, b.branch_name, b.branch_code 
+       FROM branches b
+       JOIN firms f ON b.firm_id = f.id
+       WHERE f.tenant_id = @tenantId AND b.is_active = 1`,
+      { tenantId }
+    );
+
+    return { firms, branches };
   }
 
   // ==================== CREATE TENANT (SUPER ADMIN ONLY) ====================
@@ -832,4 +924,36 @@ export class AuthService {
     return { message: 'Tenant deleted successfully' };
   }
 
+  async assignSubscriptionPlan(tenantId: number, planId: number, updatedBy?: number) {
+    // Verify tenant exists
+    const tenant = await this.getTenantById(tenantId);
+    if (!tenant) throw new NotFoundException('Tenant not found');
+
+    // Verify plan exists and is active
+    const plan = await this.sql.query(
+      'SELECT id, plan_name, plan_slug FROM subscription_plans WHERE id = @planId AND is_active = 1',
+      { planId }
+    );
+    if (!plan || plan.length === 0) throw new BadRequestException('Subscription plan not found or inactive');
+
+    // Update tenant's subscription_plan_id using existing tenants schema
+    await this.sql.query(`
+      UPDATE tenants
+      SET subscription_plan_id = @planId,
+          subscription_status = 'active',
+          subscription_start = GETUTCDATE(),
+          updated_at = GETUTCDATE(),
+          updated_by = @updatedBy
+      WHERE id = @tenantId
+    `, { planId, tenantId, updatedBy: updatedBy || null });
+
+    return {
+      message: `Subscription plan '${plan[0].plan_name}' assigned to tenant successfully`,
+      tenant_id: tenantId,
+      plan_id: planId,
+      plan_name: plan[0].plan_name
+    };
+  }
+
 }
+
